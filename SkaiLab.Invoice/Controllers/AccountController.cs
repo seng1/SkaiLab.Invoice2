@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -30,6 +31,15 @@ namespace SkaiLab.Invoice.Controllers
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             var user = await _userManager.FindByEmailAsync(login.UserName);
+            await _userManager.AddClaimsAsync(user, new List<Claim>
+            {
+                new Claim(ClaimTypes.Name,"Seng"),
+                new Claim(ClaimTypes.Surname,"Orng"),
+                new Claim(ClaimTypes.GivenName,"Seng"),
+                new Claim(ClaimTypes.Email,"sorksengorng@gmail.com"),
+                new Claim(ClaimTypes.Sid,user.Id),
+
+            });
             if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
             {
                 var claims = await _userManager.GetClaimsAsync(user);

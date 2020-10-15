@@ -15,6 +15,7 @@ import { AuthInterceptor } from './auth/authInterceptor';
 import { LoginComponent } from './login/login-component';
 import { AuthGuard } from './auth/auth.guard';
 import { CompanyComponent } from './company/company-component';
+import { ParentComponent } from './parentComponent';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { CompanyComponent } from './company/company-component';
       { path: 'company', component: CompanyComponent, canActivate:[AuthGuard]},
     ])
   ],
-  providers: [BaseService,UserService,{
+  providers: [BaseService,UserService,ParentComponent,{
     provide:HTTP_INTERCEPTORS,
     useClass:AuthInterceptor,
     multi:true
