@@ -1,0 +1,12 @@
+<div *ngIf="isAuthenticate">
+  <nav-bar-component></nav-bar-component>
+  <div id="right-panel" class="right-panel">
+    <top-bar-component></top-bar-component>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<div *ngIf="!isAuthenticate">
+  <router-outlet></router-outlet>
+</div>

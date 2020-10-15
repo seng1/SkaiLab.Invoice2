@@ -1,0 +1,6 @@
+.user-menu.dropdown-menu.show {
+  right: 0;
+}
+.login-form label {
+  text-transform: none;
+}
