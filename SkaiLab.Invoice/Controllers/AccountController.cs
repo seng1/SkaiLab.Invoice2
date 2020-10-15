@@ -8,38 +8,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SkaiLab.Invoice.Dal;
 using SkaiLab.Invoice.Models;
+using SkaiLab.Invoice.Service;
 
 namespace SkaiLab.Invoice.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private UserManager<ApplicationUser> _userManager;
-        private readonly Option _option;
-        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IOptions<Option> option)
+        private readonly IOrganisationService _organisationService;
+        public AccountController(UserManager<ApplicationUser> userManager, IOrganisationService organisationService)
         {
-            _signInManager = signInManager;
             _userManager = userManager;
-            _option = option.Value;
+            _organisationService = organisationService;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             var user = await _userManager.FindByEmailAsync(login.UserName);
-            await _userManager.AddClaimsAsync(user, new List<Claim>
-            {
-                new Claim(ClaimTypes.Name,"Seng"),
-                new Claim(ClaimTypes.Surname,"Orng"),
-                new Claim(ClaimTypes.GivenName,"Seng"),
-                new Claim(ClaimTypes.Email,"sorksengorng@gmail.com"),
-                new Claim(ClaimTypes.Sid,user.Id),
-
-            });
             if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
             {
                 var claims = await _userManager.GetClaimsAsync(user);
@@ -48,8 +37,10 @@ namespace SkaiLab.Invoice.Controllers
                     Subject = new ClaimsIdentity(claims),
                     IssuedAt = DateTime.UtcNow,
                     Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_option.JwtSecret)), SecurityAlgorithms.HmacSha256Signature)
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_organisationService.Option.JwtSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
+                var organisationId = _organisationService.GetOrganisationIdByUserId(user.Id.ToString());
+                claims.Add(new Claim("OrganisationId".ToString(), organisationId));
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);

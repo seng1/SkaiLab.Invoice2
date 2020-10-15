@@ -13,6 +13,8 @@ using System.Text;
 using System;
 using SkaiLab.Invoice.Dal;
 using SkaiLab.Invoice.Dal.Data;
+using SkaiLab.Invoice.Service;
+using Microsoft.AspNetCore.Http;
 
 namespace SkaiLab.Invoice
 {
@@ -61,6 +63,11 @@ namespace SkaiLab.Invoice
             services.AddControllersWithViews();
             services.AddOptions();
             services.Configure<Option>(Configuration.GetSection("Option"));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IDataContext, DataContext>();
+            services.AddSingleton<IService, Service.Service>();
+            services.AddSingleton<IOrganisationService, OrganisationService>();
+            services.AddSingleton<IOrganisationTypeService, OrganisationTypeService>();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
