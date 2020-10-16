@@ -10,9 +10,11 @@ namespace SkaiLab.Invoice.Controllers
     public class OrganisationController : BaseController
     {
         private readonly IOrganisationService organisationService;
-        public OrganisationController(IOrganisationService organisationService, IHttpContextAccessor contextAccessor):base(contextAccessor)
+        public OrganisationController(IOrganisationService organisationService,IHttpContextAccessor context):base()
         {
             this.organisationService = organisationService;
+            var t = context.HttpContext;
+            var s = t.User;
         }
         [HttpGet("[action]")]
         public IActionResult Get()

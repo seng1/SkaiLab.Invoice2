@@ -10,7 +10,7 @@ namespace SkaiLab.Invoice.Controllers
     public class OrganisationTypeController : BaseController
     {
         private readonly IOrganisationTypeService organisationTypeService;
-        public OrganisationTypeController(IOrganisationTypeService organisationTypeService, IHttpContextAccessor contextAccessor):base(contextAccessor)
+        public OrganisationTypeController(IOrganisationTypeService organisationTypeService):base()
         {
             this.organisationTypeService = organisationTypeService;
         }
