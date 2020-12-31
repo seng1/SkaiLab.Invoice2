@@ -1,0 +1,127 @@
+﻿@model SkaiLab.Invoice.Models.PayrollNoneTax
+@{
+    ViewData["Title"] = "PayslipNoneTax";
+    Layout = "~/Pages/Shared/__pdf.cshtml";
+}
+
+<div id="invoice">
+    <div class="invoice">
+        <div style="min-width: 600px">
+            <header>
+                <div style="display:inline">
+                    <div>
+                        @if (!string.IsNullOrEmpty(Model.Organsation.LogoUrl))
+                        {
+                            <img src="@Model.Organsation.LogoUrl" data-holder-rendered="true" style="width:100px;height:100px;" />
+                        }
+                    </div>
+                    <div style="margin-left:150px;margin-top:-100px">
+                        <h2 class="name center khmer-moul">@Model.Organsation.DisplayName</h2>
+                        <h2 class="name center khmer-moul"></h2>
+                    </div>
+                </div>
+
+            </header>
+            <h2 class="name rigth">
+                Pay slip
+            </h2>
+        </div>
+        <h2 class="name">
+            Employee Details:
+        </h2>
+        <table class="no-color-table">
+            <tbody>
+                <tr>
+                    <td class="no-padding"> Employee Name: </td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> @Model.Employee.DisplayName</td>
+                    <td>for month:</td>
+                    <td class="no-padding" style="border-bottom: 1px dotted">@Model.Date.ToString("MMM-yyyy") </td>
+
+                </tr>
+                <tr>
+                    <td>Salary:</td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.Salary, Model.Organsation.BaseCurrency.Symbole)</td>
+                    @if (Model.OtherBenefit != null)
+                    {
+                        <td>Other Benefit</td>
+                        <td class="no-padding" style="border-bottom: 1px dotted">
+                            @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.OtherBenefit.Value, Model.Organsation.BaseCurrency.Symbole)
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+        <h2 class="name">
+            Scale of Payment:
+        </h2>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        Description
+                    </th>
+                    <th class="text-center">
+                        Earnings
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Standard Working in a Month</td>
+                    <td class="center">
+                        @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.Salary, Model.Organsation.BaseCurrency.Symbole)
+                    </td>
+                </tr>
+                <tr>
+                    <td>Other Benefit</td>
+                    <td class="center">
+                        @if (Model.OtherBenefit != null)
+                        {
+                            @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.OtherBenefit.Value, Model.Organsation.BaseCurrency.Symbole)
+                        }
+                        else
+                        {
+                            @SkaiLab.Invoice.Models.Utils.FormatCurrency(0, Model.Organsation.BaseCurrency.Symbole)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td  class="rigth">Total:</td>
+                    <td class="center">
+                        @{
+                            var total = Model.Salary;
+                            if (Model.OtherBenefit != null)
+                            {
+                                total += Model.OtherBenefit.Value;
+                            }
+                            @SkaiLab.Invoice.Models.Utils.FormatCurrency(total, Model.Organsation.BaseCurrency.Symbole)
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="no-color-table">
+            <tbody>
+                <tr style="height:40px">
+                    <td class="no-padding" style="width:170px"> Paid by </td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> </td>
+                </tr>
+                <tr>
+                    <td class="no-padding" style="width:170px">  </td>
+                    <td class="no-padding" colspan="2" style="text-align:center"> (Name, Signature) </td>
+                </tr>
+                <tr style="height:40px">
+                    <td class="no-padding" style="width:170px"> Received by </td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> </td>
+                </tr>
+                <tr>
+                    <td class="no-padding" style="width:170px">  </td>
+                    <td class="no-padding" colspan="2" style="text-align:center"> (Name, Signature) </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

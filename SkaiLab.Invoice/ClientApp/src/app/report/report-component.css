@@ -1,0 +1,12 @@
+.table > tbody > tr{
+    border-bottom:2px solid #e3e5e8
+}
+.star-td{
+    width: 10px !important;
+    padding: 0 !important;
+    padding-right: 5px !important;
+}
+.star-td > i{
+    padding-top: 60%;
+    cursor: pointer;
+}

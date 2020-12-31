@@ -1,0 +1,170 @@
+﻿@model SkaiLab.Invoice.Models.PayrollTax
+@{
+    ViewData["Title"] = "Pay slip";
+    Layout = "~/Pages/Shared/__pdf.cshtml";
+}
+
+<div id="invoice">
+    <div class="invoice">
+        <div style="min-width: 600px">
+            <header>
+                <div style="display:inline">
+                    <div>
+                        @if (!string.IsNullOrEmpty(Model.Organsation.LogoUrl))
+                        {
+                            <img src="@Model.Organsation.LogoUrl" data-holder-rendered="true" style="width:100px;height:100px;" />
+                        }
+                    </div>
+                    <div style="margin-left:150px;margin-top:-100px">
+                        @if (!string.IsNullOrEmpty(Model.Organsation.LegalName) || string.IsNullOrEmpty(Model.Organsation.LegalLocalName))
+                        {
+                            if (!string.IsNullOrEmpty(Model.Organsation.LegalLocalName))
+                            {
+                                <h2 class="name center khmer-moul">@Model.Organsation.LegalLocalName</h2>
+                            }
+                            if (!string.IsNullOrEmpty(Model.Organsation.LegalName))
+                            {
+                                <h2 class="name center khmer-moul">@Model.Organsation.LegalName</h2>
+                            }
+                        }
+                        else
+                        {
+                            <h2 class="name center khmer-moul">@Model.Organsation.DisplayName</h2>
+                        }
+                    </div>
+                </div>
+
+            </header>
+            <h2 class="name rigth">
+                Pay slip
+            </h2>
+        </div>
+        <h2 class="name">
+            Employee Details:
+        </h2>
+        <table class="no-color-table">
+            <tbody>
+                <tr>
+                    <td class="no-padding"> Employee Name: </td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> @Model.Employee.DisplayName</td>
+                    <td>for month:</td>
+                    <td class="no-padding" style="border-bottom: 1px dotted">@Model.Date.ToString("MMM-yyyy") </td>
+
+                </tr>
+                <tr>
+                    <td>Gross Salary:</td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.Salary, Model.Organsation.BaseCurrency.Symbole)</td>
+                    <td>Net salary:</td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.Salary - Model.DeductSalary, Model.Organsation.BaseCurrency.Symbole)</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 class="name">
+            Scale of Payment:
+        </h2>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>
+                        Description
+                    </th>
+                    <th class="text-center">
+                        Earnings
+                    </th>
+                    <th class="text-center">
+                        Deductions
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Standard Working in a Month</td>
+                    <td class="center">
+                        @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.Salary, Model.Organsation.BaseCurrency.Symbole)
+                    </td>
+                    <td class="center">
+                        @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.DeductSalary, Model.Organsation.BaseCurrency.Symbole)
+                    </td>
+                </tr>
+                @if (Model.Employee.IsResidentEmployee)
+                {
+                    <tr>
+                        <td>Fring Benefit</td>
+                        <td class="center">
+                            @if (Model.OtherBenefit != null)
+                            {@SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.OtherBenefit.Value, Model.Organsation.BaseCurrency.Symbole)}
+                    </td>
+                    <td class="center">
+                        @if (Model.OtherBenefit != null)
+                        {@SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.OtherBenefitTaxDeduct.Value, Model.Organsation.BaseCurrency.Symbole)}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Number of Childs and Spouse</td>
+                    <td class="center">
+                        @{
+                            var totalChilde = Model.NumberOfChilds;
+                            if (Model.Employee.IsConfederationThatHosts)
+                            {
+                                totalChilde += 1;
+                            }
+                            @totalChilde
+                        }
+                    </td>
+                </tr>
+            }
+                <tr>
+                    <td colspan="2" class="rigth">Total:</td>
+                    <td class="center">
+                        @if (Model.OtherBenefit != null)
+                        {
+                            @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.Salary + Model.OtherBenefit.Value, Model.Organsation.BaseCurrency.Symbole)
+                        }
+                        else
+                        {
+                            @SkaiLab.Invoice.Models.Utils.FormatCurrency(Model.Salary, Model.Organsation.BaseCurrency.Symbole)
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="rigth">Net Payment:</td>
+                    <td class="center">
+                        @{
+                            var total = Model.Salary - Model.DeductSalary;
+                            if (Model.OtherBenefit != null)
+                            {
+                                total += (Model.OtherBenefit.Value - Model.OtherBenefitTaxDeduct.Value);
+                            }
+                            @SkaiLab.Invoice.Models.Utils.FormatCurrency(total, Model.Organsation.BaseCurrency.Symbole)
+                        }
+                    </td>
+                </tr>
+
+
+            </tbody>
+        </table>
+        <table class="no-color-table">
+            <tbody>
+                <tr style="height:40px">
+                    <td class="no-padding" style="width:170px"> Paid by </td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> </td>
+                </tr>
+                <tr>
+                    <td class="no-padding" style="width:170px">  </td>
+                    <td class="no-padding" colspan="2" style="text-align:center"> (Name, Signature) </td>
+                </tr>
+                <tr style="height:40px">
+                    <td class="no-padding" style="width:170px"> Received by </td>
+                    <td class="no-padding" style="border-bottom: 1px dotted"> </td>
+                </tr>
+                <tr>
+                    <td class="no-padding" style="width:170px">  </td>
+                    <td class="no-padding" colspan="2" style="text-align:center"> (Name, Signature) </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Pages/Shared/_LayoutError.cshtml";
+}
+
+<div id="notfound">
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1>Oops!</h1>
+            <h2>@ViewBag.errorText</h2>
+        </div>
+        <a href="@Url.Content("~/")">Go To Home</a>
+    </div>
+</div>
+

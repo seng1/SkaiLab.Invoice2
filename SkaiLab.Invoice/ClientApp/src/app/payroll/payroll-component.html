@@ -1,0 +1,140 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.month' | translate }}</label>
+                        <select class="form-control"  id="perdiod" (change)="getPayroll()"
+                            [(ngModel)]="filter.monthFilter" name="perdiod">
+                            <option *ngFor="let c of filter.monthFilters" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12" *ngIf="payroll.currency.id !=payroll.taxCurrency.id">
+                    <div class="form-group">
+                        <label>1 {{payroll.currency.code}} = {{payroll.exchangeRate}} {{payroll.taxCurrency.code}}</label>
+                        <input type="number" class="form-control" [(ngModel)]="payroll.exchangeRate" (ngModelChange)="onExchangeRateChange()"/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12" >
+                    <div class="btn-group" style="margin-top: 32px;">
+                        <button type="button" class="btn btn-primary" *ngIf="showGeneratePayroll" (click)="onGeneratePayrollClick()">{{ 'textTranslate.generatePayroll' | translate }}</button>
+                        <button type="button" class="btn btn-primary" (click)="printData()">{{ 'textTranslate.exportThisData' | translate }}</button>
+                        <button type="button" class="btn btn-primary" *ngIf="payroll.id!=0" (click)="onGenerateEmployeePaySlips()">{{ 'textTranslate.exportPayslip' | translate }}</button>
+                        <button type="button" class="btn btn-primary" *ngIf="payroll.id!=0 && !showGeneratePayroll" (click)="onRegeneratePayrollClick()">{{ 'textTranslate.reGeneratePayroll' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class=" table-responsive">
+                    <table class="table ">
+                        <thead>
+                            <tr class="small-font">
+                                <th>{{ 'textTranslate.displayName' | translate }}</th>
+                                <th>{{ 'textTranslate.residentEmployee' | translate }}</th>
+                                <th >{{ 'textTranslate.salary' | translate }}</th>
+                                <th>{{ 'textTranslate.hasSpouse' | translate }}</th>
+                                <th>{{ 'textTranslate.numberOfChild' | translate }}</th>
+                                <th>{{ 'textTranslate.taxSalary' | translate }}</th>
+                                <th>{{ 'textTranslate.netSalary' | translate }}</th>
+                                <th>{{ 'textTranslate.otherBenefit' | translate }}</th>
+                                <th>{{ 'textTranslate.taxOtherBenefit' | translate }}</th>
+                                <th>{{ 'textTranslate.netTotal' | translate }}</th>
+                                <th>{{ 'textTranslate.taxNetTotal' | translate }}</th>
+                                <th *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{ 'textTranslate.netTotalInKHR' | translate }}</th>
+                                <th *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{ 'textTranslate.taxNetTotalInKHR' | translate }}</th>
+                                <th>{{ 'textTranslate.total' | translate }}</th>
+                                <th *ngIf="payroll.id!=0"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of payroll.payrolls">
+                                <td>{{p.employee.displayName}}</td>     
+                                <td><input type="checkbox" [(ngModel)]="p.employee.isResidentEmployee" disabled/></td> 
+                                <td >
+                                     <input type="number" *ngIf="showGeneratePayroll" class="form-control" style="min-width:100px;" [(ngModel)]="p.salary" (ngModelChange)="onSalaryChange(p)"/>
+                                     <span *ngIf="!showGeneratePayroll">{{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}</span>
+                                 </td>    
+                                <td><input type="checkbox" disabled  [(ngModel)]="p.employee.isConfederationThatHosts" *ngIf="p.employee.isResidentEmployee"/><span *ngIf="!p.employee.isResidentEmployee">-</span></td>  
+                                <td><span *ngIf="p.employee.isResidentEmployee">{{p.numberOfChilds}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>      
+                                <td>{{payroll.currency.symbole}}{{p.deductSalary | number:'1.2-2'}}</td>    
+                                <td>{{payroll.currency.symbole}}{{p.salary-p.deductSalary | number:'1.2-2'}}</td>         
+                                <td>
+                                    <input type="number" *ngIf="p.employee.isResidentEmployee&&showGeneratePayroll"  style="min-width:100px;"  class="form-control" [(ngModel)]="p.otherBenefit" (ngModelChange)="onOtherBenefitChange(p)" />
+                                    <span *ngIf="p.employee.isResidentEmployee&&!showGeneratePayroll">{{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}</span>
+                                    <span *ngIf="!p.employee.isResidentEmployee">-</span>
+                                </td>    
+                                <td><span *ngIf="p.employee.isResidentEmployee">{{payroll.currency.symbole}}{{p.otherBenefitTaxDeduct | number:'1.2-2'}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>           
+                                <td>{{payroll.currency.symbole}}{{getTotalNet(p) | number:'1.2-2'}}</td>         
+                                <td>{{payroll.currency.symbole}}{{getTotalTax(p) | number:'1.2-2'}}</td> 
+                                <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalNet(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
+                                <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalTax(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
+                                <td>{{payroll.currency.symbole}}{{getTotalNet(p)+getTotalTax(p) | number:'1.2-2'}}</td>  
+                                <td *ngIf="payroll.id!=0">   <button type="button" class="btn btn-primary" (click)="onGenerateEmployeePaySlip(p)" > <i class="fa fa-download"></i></button></td>
+                            </tr>
+                            <tr class="bold">
+                                <td [attr.colspan]="getTotalColSpan()" class="rigth">{{ 'textTranslate.total' | translate }}:</td>
+                                <td>{{payroll.currency.symbole}}{{getTotalExpense() | number:'1.2-2'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display: none;">
+                <div #content>
+                    <div class=" table-responsive">
+                        <table class="table ">
+                            <thead>
+                                <tr class="small-font">
+                                    <th>{{ 'textTranslate.displayName' | translate }}</th>
+                                    <th>{{ 'textTranslate.residentEmployee' | translate }}</th>
+                                    <th >{{ 'textTranslate.salary' | translate }}</th>
+                                    <th>{{ 'textTranslate.hasSpouse' | translate }}</th>
+                                    <th>{{ 'textTranslate.numberOfChild' | translate }}</th>
+                                    <th>{{ 'textTranslate.taxSalary' | translate }}</th>
+                                    <th>{{ 'textTranslate.netSalary' | translate }}</th>
+                                    <th>{{ 'textTranslate.otherBenefit' | translate }}</th>
+                                    <th>{{ 'textTranslate.taxOtherBenefit' | translate }}</th>
+                                    <th>{{ 'textTranslate.netTotal' | translate }}</th>
+                                    <th>{{ 'textTranslate.taxNetTotal' | translate }}</th>
+                                    <th *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{ 'textTranslate.netTotalInKHR' | translate }}</th>
+                                    <th *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{ 'textTranslate.taxNetTotalInKHR' | translate }}</th>
+                                    <th>{{ 'textTranslate.total' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of payroll.payrolls">
+                                    <td>{{p.employee.displayName}}</td>     
+                                    <td><span *ngIf="p.employee.isResidentEmployee">Yes</span><span *ngIf="!p.employee.isResidentEmployee">No</span>  </td> 
+                                    <td>{{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}</td>  
+                                    <td>
+                                        <span *ngIf="p.employee.isConfederationThatHosts && p.employee.isResidentEmployee">Yes</span>
+                                        <span *ngIf="!p.employee.isConfederationThatHosts && p.employee.isResidentEmployee">No</span> 
+                                        <span *ngIf="!p.employee.isResidentEmployee" class="center">-</span>
+                                     </td> 
+                                    <td><span *ngIf="p.employee.isResidentEmployee">{{p.numberOfChilds}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>      
+                                    <td>{{payroll.currency.symbole}}{{p.deductSalary | number:'1.2-2'}}</td>    
+                                    <td>{{payroll.currency.symbole}}{{p.salary-p.deductSalary | number:'1.2-2'}}</td>         
+                                    <td> <span *ngIf="p.employee.isResidentEmployee">{{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>           
+                                    <td><span *ngIf="p.employee.isResidentEmployee">{{payroll.currency.symbole}}{{p.otherBenefitTaxDeduct | number:'1.2-2'}}</span><span *ngIf="!p.employee.isResidentEmployee"  class="center">-</span></td>           
+                                    <td>{{payroll.currency.symbole}}{{getTotalNet(p) | number:'1.2-2'}}</td>         
+                                    <td>{{payroll.currency.symbole}}{{getTotalTax(p) | number:'1.2-2'}}</td> 
+                                    <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalNet(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
+                                    <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalTax(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
+                                    <td>{{payroll.currency.symbole}}{{getTotalNet(p)+getTotalTax(p) | number:'1.2-2'}}</td>  
+                                </tr>
+                                <tr class="bold">
+                                    <td [attr.colspan]="getTotalColSpan()" class="rigth">{{ 'textTranslate.total' | translate }}:</td>
+                                    <td>{{payroll.currency.symbole}}{{getTotalExpense() | number:'1.2-2'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+         
+        </div>
+    </div>
+</div>

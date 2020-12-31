@@ -1,41 +1,49 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { BaseService } from './base-service';
-import { Login } from '../models/login';
 import { Token } from '../models/token';
+import { Organisation } from '../models/organisation';
+import { Observable } from 'rxjs';
 import { User } from '../models/user';
 
 @Injectable()
 export class UserService {
   constructor(private http: HttpClient,private baseService:BaseService) { }
-
- login(login:Login): Observable<Token> {
-    let url = this.baseService.apiUrl + '/account/login';
-    return this.http.post<Token>(url,login,{headers:this.baseService.getRequestHeader(false)});
-  }
   saveToStorage(token:Token){
     localStorage.setItem("token",token.accessToken);
-    var date=new Date().setHours(new Date().getHours()+token.validHour);
-    localStorage.setItem("expireDate",date.toString());
+    var d =new Date();
+    d.setHours(d.getHours()+token.validHour);
+    localStorage.setItem("expireDate",d.toLocaleString());
   }
-  
-  getUser(){
-    let url = this.baseService.apiUrl + '/account/GetUser';
-    return this.http.get<User>(url,{headers:this.baseService.getRequestHeader(true)});
+  GetOrganisations():Observable<Organisation[]>{
+    let url = this.baseService.apiUrl + '/Account/GetOrganisations';
+    return this.http.get<Organisation[]>(url,{headers:this.baseService.getRequestHeader(true)});
   }
-  isAuthenticate():boolean{
-    if(localStorage.getItem("token")==null){
-      return false;
+  getWorkingOrganisation():Observable<Organisation>{
+    let url = this.baseService.apiUrl + '/Account/GetWorkingOrganisation';
+    return this.http.get<Organisation>(url,{headers:this.baseService.getRequestHeader(true)});
+  }
+  saveWorkingOrganisation(organisation:Organisation){
+    localStorage.setItem("OrganisationId",organisation.id);
+    localStorage.setItem("organisationName",organisation.displayName);
+  }
+  getWorkingOrganisationId(){
+    if(localStorage.getItem("OrganisationId")==null){
+      return null;
     }
-    if(localStorage.getItem("expireDate")==null){
-      return false;
-    }
-    var date=new Date(localStorage.getItem("expireDate"));
-      if(date<new Date()){
-        return false;
-      }
-      return true;
-    }
+    return localStorage.getItem("OrganisationId");
+  }
+  GetLoginUser():Observable<User>{
+    let url = this.baseService.apiUrl + '/OrganisationUser/GetLoginUser';
+    return this.http.get<User>(url);
+  }
+  updateLoginProfile(user:User):Observable<User>{
+    let url = this.baseService.apiUrl + '/OrganisationUser/UpdateLoginProfile';
+    return this.http.post<User>(url,user);
+  }
+  updateUserLanguage(user:User):Observable<User>{
+    let url = this.baseService.apiUrl + '/OrganisationUser/UpdateUserLanguage';
+    return this.http.post<User>(url,user);
+  }
 }

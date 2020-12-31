@@ -1,4 +1,113 @@
-
-<div class="animated fadeIn">
-    Company
-</div>
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" (click)="onSave()">{{ 'textTranslate.save' | translate }}</button>
+                <button type="submit" class="btn btn-primary"  (click)="onNewCompanyClick()">{{ 'textTranslate.newOrganisation' | translate }}</button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="name">{{ 'textTranslate.displayName' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="name"
+                                [(ngModel)]="organisation.displayName" #name="ngModel"
+                                [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+                            <div *ngIf="name.invalid" class="invalid-feedback">
+                                <div *ngIf="name.errors.required">{{ 'textTranslate.displayNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="organisation.declareTax">
+                            <label for="legalLocalName">{{ 'textTranslate.localLegalName' | translate }}</label>
+                            <input type="text" class="form-control" name="legalLocalName"
+                            [(ngModel)]="organisation.legalLocalName" #legalLocalName="ngModel"
+                             />
+                        </div>
+                        <div class="form-group" *ngIf="organisation.declareTax">
+                            <label for="bussinessRegistrationNumber">{{ 'textTranslate.legalName' | translate }}</label>
+                            <input type="text" class="form-control" name="bussinessRegistrationNumber"
+                            [(ngModel)]="organisation.bussinessRegistrationNumber" #legalName="ngModel"
+                             />
+                        </div>
+                        <div class="form-group">
+                            <label for="lineBusiness">{{ 'textTranslate.whatIsYourLineBusiness' | translate }}</label>
+                            <input type="text" class="form-control" name="lineBusiness"
+                            [(ngModel)]="organisation.lineBusiness" #lineBusiness="ngModel"
+                             />
+                        </div>
+                        <div class="form-group">
+                            <label for="contactName1">{{ 'textTranslate.contactName' | translate }}</label>
+                            <input type="text" class="form-control" name="contactName" [(ngModel)]="organisation.contact.contactName" #contactName1="ngModel"
+                             />
+                        </div>
+                        <div class="form-group">
+                            <label for="email1">{{ 'textTranslate.email' | translate }}</label>
+                            <input type="text" class="form-control" name="email1" [(ngModel)]="organisation.contact.email" #email1="ngModel"
+                             />
+                        </div>
+                        <div class="form-group">
+                            <label for="address1">{{ 'textTranslate.address' | translate }}</label>
+                            <textarea name="address1" rows="3" [(ngModel)]="organisation.contact.address" #address1="ngModel" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="organisationTypeId">{{ 'textTranslate.organisationType' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control" id="organisationTypeId" [(ngModel)]="organisation.organisationTypeId" required name="organisationTypeId">
+                                <option *ngFor="let organisationType of organisationTypes" [ngValue]="organisationType.id">{{ organisationType.name }}</option>
+                              </select>
+                        </div>
+                        <div class="form-group" *ngIf="organisation.declareTax">
+                            <label for="legalName">{{ 'textTranslate.legalName' | translate }}</label>
+                            <input type="text" class="form-control" name="legalName"
+                            [(ngModel)]="organisation.legalName" #legalName="ngModel"
+                             />
+                        </div>
+                        <div class="form-group" *ngIf="organisation.declareTax">
+                            <label for="taxNumber">{{ 'textTranslate.taxNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="taxNumber"
+                            [(ngModel)]="organisation.taxNumber" #taxNumber="ngModel"
+                             />
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="phoneNumber1">{{ 'textTranslate.phoneNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="phoneNumber1" [(ngModel)]="organisation.contact.phoneNumber" #phoneNumber1="ngModel"
+                             />
+                        </div>
+                        <div class="form-group">
+                            <label for="website1">{{ 'textTranslate.website' | translate }}</label>
+                            <input type="text" class="form-control" name="website1" [(ngModel)]="organisation.contact.website" #website1="ngModel"
+                             />
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="description">{{ 'textTranslate.organisationDescription' | translate }}</label>
+                            <textarea name="description" rows="3" [(ngModel)]="organisation.description" #description="ngModel" class="form-control"></textarea>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="logo">{{ 'textTranslate.logo' | translate }}</label>
+                            <div class="file-upload">
+                                <div class="image-upload-wrap">
+                                    <input class="file-upload-input" type='file' (change)="fileChange($event)" accept="image/jpeg,image/png" />
+                                    <div class="drag-text">
+                                        <h5 *ngIf="!organisation.logoUrl">Upload Logo</h5>
+                                        <img src="{{organisation.logoUrl}}" *ngIf="organisation.logoUrl" class="logo"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

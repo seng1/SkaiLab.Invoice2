@@ -1,0 +1,38 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="button-panel">
+                <a [routerLink]='["/new-currency"]' class="btn btn-primary">{{ 'textTranslate.new' | translate }}</a>
+            </div>
+            <div class=" table-responsive">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.name' | translate }}</th>
+                            <th>{{ 'textTranslate.note' | translate }}</th>
+                            <th>{{ 'textTranslate.exchangeRate' | translate }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let currency of currencies;let i = index">
+                            <td><a [routerLink]="['/update-currency/',currency.id]">{{currency.name}}</a> </td>
+                            <td>
+                                <span *ngFor="let note of currency.notes">
+                                    {{note}}<br/>
+                                </span>
+                            </td>
+                            <td>
+                                <span *ngFor="let exchangeRate of currency.exchangeRateTexts">
+                                    {{exchangeRate}}<br/>
+                                </span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

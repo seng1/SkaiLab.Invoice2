@@ -1,0 +1,196 @@
+﻿<style type="text/css">
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #2196F3;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    .discount {
+        display: inline-block;
+        background: #c9007a;
+        color: #fff;
+        font-size: 10px;
+        line-height: 22px;
+        font-weight: 400;
+        margin-left: 5px;
+        border-radius: 7px;
+        padding: 0 4px;
+    }
+    .text{
+        padding-left:10px;
+        padding-right:10px;
+    }
+</style>
+@{ 
+    <input type="hidden" id="htSaveExtra" value="@ShareLocalizer.GetResource("Save percent {%} extra")"/>
+    var clientWebUrl = @Startup.StaticConfig.GetSection("Option:InvoiceUrl").Value+ "/Identity/Account/register?culture="+System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+}
+<script src="~/controller/price.js"></script>
+<section id="content" ng-controller="PriceControler as vm" ng-init="vm.init()">
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="about-logo">
+                    <h3>@ShareLocalizer.GetResource("Our Best Pricng")</h3>
+                </div>
+            </div>
+
+        </div>
+        <div class="tt-toggle-switch">
+            <span class="text">@ShareLocalizer.GetResource("Pay monthly") </span>
+            <label class="switch">
+                <input type="checkbox" id="choose_plan" data-di-id="#choose_plan" ng-click="vm.toggleClick()">
+                <span class="slider round"></span>
+            </label>
+            <span class="text"> @ShareLocalizer.GetResource("Pay yearly")</span> <span class="discount">{{vm.saveExtraText}}</span>
+        </div>
+        <!-- end divider -->
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+            <div class="col-lg-4">
+                <div class="pricing-box-item">
+                    <div class="pricing-heading">
+                        <h3><strong>@ShareLocalizer.GetResource("Basic")</strong></h3>
+                    </div>
+                    <div class="pricing-terms" ​ ng-show="vm.monthlySelected">
+                        <h6>&#36;{{vm.items[0].price}} / @ShareLocalizer.GetResource("Month")</h6>
+                    </div>
+                    <div class="pricing-terms" ​ ng-show="!vm.monthlySelected">
+                        <h6>&#36;{{vm.items[0].yearPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[0].yearDiscountRate}}%)</h6>
+                    </div>
+                    <div class="pricing-action" ng-show="vm.monthlySelected">
+                        <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[0].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
+                        <a href="@clientWebUrl&offerType=Trail&planId={{vm.items[0].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Try for free")</a>
+                    </div>
+                    <div class="pricing-action" ng-show="!vm.monthlySelected">
+                        <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[0].id}}&&subscriptionType=yearly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
+                        <a href="@clientWebUrl?&offerType=Trail&planId={{vm.items[0].id}}&&subscriptionType=yearly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Try for free")</a>
+                    </div>
+                    <div class="pricing-container">
+                        <ul>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Unlimited Invoice & Quote")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Unlimited Purchase & Bill")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Tax Support")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Multiple currencies support")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Track inventory")</li>
+                            <li><i class="icon-ok"></i>  @ShareLocalizer.GetResource("Payroll")</li>
+                            <li><i class="icon-ok"></i>  @ShareLocalizer.GetResource("Reports")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Up to 2 companies")</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="pricing-box-item activeItem">
+                    <div class="pricing-heading">
+                        <h3><strong>@ShareLocalizer.GetResource("Standard")</strong></h3>
+                    </div>
+                    <div class="pricing-terms" ng-show="vm.monthlySelected">
+                        <h6>&#36;{{vm.items[1].price}} / @ShareLocalizer.GetResource("Month")</h6>
+                    </div>
+                    <div class="pricing-terms" ​ ng-show="!vm.monthlySelected">
+                        <h6>&#36;{{vm.items[1].yearPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[1].yearDiscountRate}}%)</h6>
+                    </div>
+                    <div class="pricing-action" ng-show="vm.monthlySelected">
+                        <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[1].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
+                        <a href="@clientWebUrl&offerType=Trail&planId={{vm.items[1].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Try for free")</a>
+                    </div>
+                    <div class="pricing-action" ng-show="!vm.monthlySelected">
+                        <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[1].id}}&&subscriptionType=yearly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
+                        <a href="@clientWebUrl&offerType=Trail&planId={{vm.items[1].id}}&&subscriptionType=yearly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Try for free")</a>
+                    </div>
+                    <div class="pricing-container">
+                        <ul>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("All Simple basic features +")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Up to 4 companies")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Up to 4 users")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="pricing-box-item">
+                    <div class="pricing-heading">
+                        <h3><strong>@ShareLocalizer.GetResource("Premium")</strong></h3>
+                    </div>
+                    <div class="pricing-terms" ng-show="vm.monthlySelected">
+                        <h6>&#36;{{vm.items[2].price}} / @ShareLocalizer.GetResource("Month")</h6>
+                    </div>
+                    <div class="pricing-terms" ​ ng-show="!vm.monthlySelected">
+                        <h6>&#36;{{vm.items[2].yearPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[2].yearDiscountRate}}%)</h6>
+                    </div>
+                    <div class="pricing-action" ng-show="vm.monthlySelected">
+                        <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[2].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
+                        <a href="@clientWebUrl&offerType=Trail&planId={{vm.items[2].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Try for free")</a>
+                    </div>
+                    <div class="pricing-action" ng-show="!vm.monthlySelected">
+                        <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[2].id}}&&subscriptionType=yearly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
+                        <a href="@clientWebUrl&offerType=Trail&planId={{vm.items[2].id}}&&subscriptionType=yearly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Try for free")</a>
+                    </div>
+                    <div class="pricing-container">
+                        <ul>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("All Simple basic features +")</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Unlimited companies")s</li>
+                            <li><i class="icon-ok"></i> @ShareLocalizer.GetResource("Unlimited users")</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

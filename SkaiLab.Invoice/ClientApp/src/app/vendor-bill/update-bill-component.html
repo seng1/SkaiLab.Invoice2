@@ -1,0 +1,215 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <div class="btn-group"  *ngIf="allowSubmitForApproval()">
+                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle btn btn-primary">{{ 'textTranslate.saveAs' | translate }}</button>
+                    <div tabindex="-1" aria-hidden="true" role="menu" class="dropdown-menu">
+                        <button type="submit" *ngIf="allowSaveDraw()" (click)="onSaveAsDraw(false)" class="dropdown-item">{{ 'textTranslate.saveAsDrawAndNew' | translate }}</button>
+                        <button type="submit"  *ngIf="allowSaveDraw()"  (click)="onSaveAsDraw(true)" class="dropdown-item">{{ 'textTranslate.saveAsDrawAndClose' | translate }}</button>
+                        <div tabindex="-1"  *ngIf="allowSubmitForApproval()" class="dropdown-divider"></div>
+                        <button type="submit"  *ngIf="allowSubmitForApproval()" (click)="onSaveForApproval(false)" class="dropdown-item">{{ 'textTranslate.saveAndSubmitForApprovalAndNew' | translate }}</button>
+                        <button type="submit"  *ngIf="allowSubmitForApproval()" (click)="onSaveForApproval(true)" class="dropdown-item">{{ 'textTranslate.saveAndSubmitForApprovalAndClose' | translate }}</button>
+                    </div>
+                </div>
+                <div class="btn-group" *ngIf="allowApprove()"  >
+                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle btn btn-primary">{{ 'textTranslate.approveAs' | translate }}</button>
+                    <div tabindex="-1" aria-hidden="true" role="menu" class="dropdown-menu">
+                        <button type="submit" (click)="onSaveApproval(false)" class="dropdown-item">{{ 'textTranslate.approveAndNew' | translate }}</button>
+                        <button type="submit"(click)="onSaveApproval(true)" class="dropdown-item">{{ 'textTranslate.approveAndClose' | translate }}</button>
+                    </div>
+                </div>
+                <button type="button" *ngIf="allowSaveAndPrint()" (click)="onSaveAndPrint()" class="btn btn-primary" >{{ 'textTranslate.saveAndPrint' | translate }} </button>
+                <button type="button" *ngIf="allowBill()" (click)="onMarkAsBill()" class="btn btn-primary" >{{ 'textTranslate.markAsBill' | translate }} </button>
+                <button type="button" *ngIf="allowDelete()" (click)="onMarkAsDelete()" class="btn btn-primary" >{{ 'textTranslate.delete' | translate }} </button>
+                <button type="button"  class="btn btn-primary" (click)="onPrint()" >{{ 'textTranslate.print' | translate }} </button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="vendor">{{ 'textTranslate.vendor' | translate }}<span class="text-danger"> * </span></label>
+                            <ngx-select-dropdown (change)="onSelectedVendor($event)" [(ngModel)]="selectedVendor"  [disabled]="isDisable()"
+                                [config]="dropdownConfig" name="vendor" [options]="billLookup.vendors">
+                            </ngx-select-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="date">{{ 'textTranslate.date' | translate }}<span class="text-danger"> * </span></label>
+                            <angular2-date-picker [(ngModel)]="bill.date" name="orderDate" 
+                                [settings]="datePickerOption"></angular2-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="deliveryDate">{{ 'textTranslate.dueDate' | translate }}</label>
+                            <angular2-date-picker [(ngModel)]="bill.deliveryDate" 
+                                id="delivery" name="deliveryDate"
+                                [settings]="datePickerOption">
+                            </angular2-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="refNo">{{ 'textTranslate.referenceNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="refNo" [(ngModel)]="bill.refNo" [disabled]="isDisable()"
+                                #refNo="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="orderNumber">{{ 'textTranslate.number' | translate }}</label>
+                            <input type="text" class="form-control" name="orderNumber" [disabled]="isDisable()"
+                                [(ngModel)]="bill.orderNumber" #orderNumber="ngModel" disabled />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="currency">{{ 'textTranslate.currency' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control" id="currency" [(ngModel)]="bill.currency" required [disabled]="isDisable()"
+                                name="currency" (change)="onCurrencySelectedChange()">
+                                <option *ngFor="let c of billLookup.currencies" [ngValue]="c">{{ c.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12"
+                        *ngFor="let exchangeRate of bill.currency.exchangeRates;let i = index">
+                        <div class="form-group">
+                            <label for="currency{{i}}">1 {{bill.currency.code}} = {{exchangeRate.exchangeRate}}
+                                {{exchangeRate.currency.code}}<span class="text-danger"> * </span></label>
+                            <input type="number" class="form-control" name="currency{{i}}" [disabled]="isDisable()"
+                                (change)="onExchangeRateChange()" [(ngModel)]="exchangeRate.exchangeRate" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-9 col-sm-12" *ngIf="!isDisable()">
+                        <div class="input-group" >
+                            <ngx-select-dropdown style="min-width: 400px;" [(ngModel)]="selectProduct"
+                                [config]="productDropdownConfig" name="product"
+                                [options]="billLookup.products" >
+                            </ngx-select-dropdown>
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" (click)="addLine()">
+                                    <i class="fa fa-plus"></i> {{ 'textTranslate.addLine' | translate }}
+                                </button>
+                                <button class="btn btn-primary" (click)="addLineWithoutProduct()">
+                                    <i class="fa fa-plus"></i> {{ 'textTranslate.addLineNoProduct' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div  [ngClass]="(isDisable())?'col-md-11 col-sm-12':'col-md-2 col-sm-12'">
+                        <h4>{{ 'textTranslate.status' | translate }}: {{bill.expenseStatus.name}}</h4>
+                    </div>
+                    <div class="col col-md-1 col-sm-3">
+                        <div class="header-menu">
+                            <div class="header-left">
+                                <div class="dropdown for-message">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="files" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-file"></i>
+                                        <span class="count bg-primary">{{bill.attachments.length}}</span>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="files" style="width: 400px;">
+                                        <table class="table table-border">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ 'textTranslate.document' | translate }}</th>
+                                                    <th>{{ 'textTranslate.closeDocument' | translate }}</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let attachment of bill.attachments;let i = index">
+                                                    <td><a href="{{attachment.fileUrl}}" target="blank">{{attachment.fileName}}</a></td>
+                                                    <td><input type="checkbox" name="isFinalOfficalFile{{i}}" [(ngModel)]="attachment.isFinalOfficalFile" (change)="onOfficalFileChange(attachment)"/></td>
+                                                    <td><span class="pointer" (click)="onRemoveAttachment(attachment)"><i class="fa fa-times"></i></span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                              <input type="file" class="custom-file-input" id="inputGroupFile02" type='file' (change)="fileChange($event)"
+                                              accept="image/jpeg,image/png,application/pdf">
+                                              <label class="custom-file-label" for="inputGroupFile02" type='file'>{{ 'textTranslate.chooseFile' | translate }}</label>
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" table-responsive">
+                    <table class="table no-padding-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 450px;">{{ 'textTranslate.description' | translate }}</th>
+                                <th>{{ 'textTranslate.quantity' | translate }}</th>
+                                <th>{{ 'textTranslate.unitPrice' | translate }}</th>
+                                <th  *ngIf="declareTax">{{ 'textTranslate.tax' | translate }}</th>
+                                <th>{{ 'textTranslate.amount' | translate }}</th>
+                                <th *ngIf="!isDisable()"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let orderItem of bill.expenseItems;let i = index">
+                                <td class="data-table-padding">
+                                    
+                                    <textarea name="note" rows="1" style="text-align: left;" [(ngModel)]="orderItem.description" name="description{{i}}"  [disabled]="isDisable()"
+                                    class="small-font form-control text-input-line-item"></textarea>
+                                </td>
+                                <td class="data-table-padding">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="qty{{i}}" [disabled]="isDisable()"
+                                        [(ngModel)]="orderItem.quantity" (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="price{{i}}" [disabled]="isDisable()"
+                                        [(ngModel)]="orderItem.unitPrice" (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding" *ngIf="declareTax">
+                                    <select class="small-font form-control text-select-line-item" name="tax{{i}}" [disabled]="isDisable()"
+                                        [(ngModel)]="orderItem.taxId" required
+                                        (change)="onTaxSelectChange(orderItem)">
+                                        <option *ngFor="let c of billLookup.taxes" [ngValue]="c.id">
+                                            {{ c.name }}</option>
+                                    </select>
+                                </td>
+                                <td class="small-font text-table-padding">{{ orderItem.lineTotal | number:'1.2-2' }}
+                                    {{bill.currency.symbole}}</td>
+                                <td class="small-font text-table-padding" *ngIf="!isDisable()"> <span class="pointer" (click)="onRemvoePurchaseOrderItem(orderItem)"><i
+                                            class="fa fa-times"></i></span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr *ngFor="let subTotal of subTotals">
+                                <td [attr.colspan]="getSubTotalColSpan()" style="text-align: right;" class="small-font">{{subTotal.label}}
+                                </td>
+                                <td class="small-font">{{ subTotal.amount | number:'1.2-2' }}
+                                    {{subTotal.currency.symbole}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label for="note">{{ 'textTranslate.note' | translate }}</label>
+                            <textarea name="note" rows="2" [(ngModel)]="bill.note" [disabled]="isDisable()"
+                                class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>

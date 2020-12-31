@@ -1,0 +1,74 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="button-panel" *ngIf="permission.readWritePurchaseSale">
+                <a [routerLink]='["/customer-new"]' class="btn btn-primary">{{ 'textTranslate.new' | translate }}</a>
+            </div>
+            <div class="row form-group">
+                <div class="col col-md-12">
+                    <div class="input-group">
+                        <input type="text" [(ngModel)]="filter.searchText" placeholder="{{ 'textTranslate.search' | translate }}"
+                            (keyup.enter)="onSearch()" class="form-control">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" (click)="onSearch()">
+                                <i class="fa fa-search"></i> {{ 'textTranslate.search' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" table-responsive">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.displayName' | translate }}</th>
+                            <th>{{ 'textTranslate.email' | translate }}</th>
+                            <th>{{ 'textTranslate.phoneNumber' | translate }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customer of customers">
+                            <td>   <a type="button" [routerLink]="['/customer-update/',customer.id]">{{customer.displayName}}</a></td>
+                            <td> {{customer.contact.email}} </td>
+                            <td> {{customer.contact.phoneNumber}} </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align: left;" *ngIf="customers.length==0" class="text-danger">{{ 'textTranslate.noRecordFound' | translate }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <nav aria-label="Page navigation" *ngIf="pager.totalPages>1">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" [ngClass]="(pager.currentPage === 1)?'page-item disabled':'page-item'">
+                        <a (click)="pageClick(1)" class="page-link">First</a>
+                    </li>
+                    <li class="page-item" [ngClass]="(pager.currentPage === 1)?'page-item disabled':'page-item'">
+                        <a (click)="pageClick(pager.currentPage - 1)" aria-label="Previous" class="page-link">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li *ngFor="let page of pager.pages"
+                        [ngClass]="(pager.currentPage ===page)?'page-item active':'page-item'">
+                        <a (click)="pageClick(page)" class="page-link">{{page}}</a>
+                    </li>
+                    <li class="page-item"
+                        [ngClass]="(pager.currentPage ===pager.totalPages)?'page-item disabled':'page-item'">
+                        <a class="page-link" (click)="pageClick(pager.currentPage + 1)" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="(pager.currentPage ===pager.totalPages)?'page-item disabled':'page-item'">
+                        <a (click)="pageClick(pager.totalPages)" class="page-link">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>

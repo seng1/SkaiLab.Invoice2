@@ -1,0 +1,159 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="reportCategoryTitle"><i class="hi-chevron-down chevron hi navigation"></i>{{ 'textTranslate.finance' | translate }}</h6>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><a [routerLink]='["/report-profitandlostsumarry"]'>{{ 'textTranslate.profitAndLostSummaryReport' | translate }}</a></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-profitandlostdetail"]'>{{ 'textTranslate.profitAndLostDetailReport' | translate }}</a></td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="reportCategoryTitle"><i class="hi-chevron-down chevron hi navigation"></i>{{ 'textTranslate.productOrService' | translate }}</h6>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><a [routerLink]='["/report-productandservicesalesummary"]'>{{ 'textTranslate.productAndServiceSummaryReport' | translate }}</a></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-inventorybalance"]'>{{ 'textTranslate.inventoryBalanceReport' | translate }}</a></td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="declareTax">
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="reportCategoryTitle"><i class="hi-chevron-down chevron hi navigation"></i>{{ 'textTranslate.tax' | translate }}</h6>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><a [routerLink]='["/report-taxmonthly"]'>{{ 'textTranslate.taxMonthlyReport' | translate }}</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="reportCategoryTitle"><i class="hi-chevron-down chevron hi navigation"></i>Sale</h6>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><a [routerLink]='["/report-customerbalancesummary"]'>Customer Balance Summary</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-customerbalancedetail"]'>Customer Balance Detail</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-customerinvoice"]'>Customer Invoice</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="reportCategoryTitle"><i class="hi-chevron-down chevron hi navigation"></i>Purchase</h6>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Vendor Balance Summary</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Vendor Balance Detail</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="reportCategoryTitle"><i class="hi-chevron-down chevron hi navigation"></i>Inventory</h6>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Inventory Item Details</a></td>
+                                <td class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Inventory Item List</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Inventory Item Summary</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Sales By Item</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="reportCategoryTitle"><i class="hi-chevron-down chevron hi navigation"></i>Tax & Payroll</h6>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Taxable Sales Detail</a></td>
+                                <td class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Taxable Sales Summary</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Monthly Tax</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Payroll</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]='["/report-detail"]'>Employee Contact List</a></td>
+                                <td  class="star-td"><i class="fas fa-star"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+           
+        </div>
+    </div>-->
+</div>

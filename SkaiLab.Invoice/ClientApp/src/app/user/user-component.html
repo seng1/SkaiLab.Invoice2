@@ -1,0 +1,36 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="button-panel">
+                <a [routerLink]='["/user-new"]' class="btn btn-primary">{{ 'textTranslate.inviteaUser' | translate }}</a>
+            </div>
+            <div class=" table-responsive">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.email' | translate }}</th>
+                            <th>{{ 'textTranslate.roleName' | translate }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let organisationUser of organisationUsers">
+                            <td> <a  [routerLink]="['/user-update/',organisationUser.user.email]">{{organisationUser.user.email}}</a></td>
+                            <td>{{organisationUser.roleName}}</td>
+                            <td>
+                                <a *ngIf="organisationUser.isInviting" (click)="onResendInviatation(organisationUser)">{{ 'textTranslate.reSend' | translate }}</a>
+                                &nbsp;&nbsp;&nbsp; <a *ngIf="!organisationUser.isOwner" (click)="onRemove(organisationUser)">{{ 'textTranslate.remove' | translate }}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align: left;" *ngIf="organisationUsers.length==0" class="text-danger">{{ 'textTranslate.noRecordFound' | translate }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

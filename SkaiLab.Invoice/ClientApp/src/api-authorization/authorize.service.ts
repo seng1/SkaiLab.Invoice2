@@ -41,13 +41,20 @@ export class AuthorizeService {
   // If you want to enable pop up authentication simply set this flag to false.
 
   private popUpDisabled = true;
-  private userManager: UserManager;
+  public userManager: UserManager;
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
 
   public isAuthenticated(): Observable<boolean> {
     return this.getUser().pipe(map(u => !!u));
   }
+  public isAuthenticatedAuze(): Observable<boolean>{
+    return this.getUser().pipe(map(u => !!u)) &&
+    from(this.ensureUserManagerInitialized())
+      .pipe(mergeMap(() => from(this.userManager.getUser())),
+        map(user => !!user && this.convertUnitToLocalTime(user.expires_at)>new Date()));
 
+  }
+  
   public getUser(): Observable<IUser | null> {
     return concat(
       this.userSubject.pipe(take(1), filter(u => !!u)),
@@ -152,7 +159,18 @@ export class AuthorizeService {
       return this.error(error);
     }
   }
-
+  convertUnitToLocalTime(UNIX_timestamp):Date{
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return new Date(time);
+  }
   private createArguments(state?: any): any {
     return { useReplaceToNavigate: true, data: state };
   }
@@ -169,7 +187,7 @@ export class AuthorizeService {
     return { status: AuthenticationResultStatus.Redirect };
   }
 
-  private async ensureUserManagerInitialized(): Promise<void> {
+  public async ensureUserManagerInitialized(): Promise<void> {
     if (this.userManager !== undefined) {
       return;
     }

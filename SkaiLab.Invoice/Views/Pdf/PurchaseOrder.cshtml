@@ -1,0 +1,305 @@
+﻿@model SkaiLab.Invoice.Models.PurchaseOrder
+@{
+    ViewData["Title"] = "PurchaseOrder";
+    Layout = "~/Pages/Shared/__pdf.cshtml";
+}
+@{
+    var isTax = Model.ExpenseItems.Any(t => t.Tax != null);
+}
+<div id="invoice">
+    <div class="invoice">
+        <div style="min-width: 600px">
+            <header>
+                <div style="display:inline">
+                    <div>
+                        @if (!string.IsNullOrEmpty(Model.Organisation.LogoUrl))
+                        {
+                            <img src="@Model.Organisation.LogoUrl" data-holder-rendered="true" style="width:100px;height:100px;" />
+                        }
+                    </div>
+                    <div style="margin-left:150px;margin-top:-100px">
+                        @if (isTax && (!string.IsNullOrEmpty(Model.Organisation.LegalName) || !string.IsNullOrEmpty(Model.Organisation.LegalLocalName)))
+                        {
+                            if (!string.IsNullOrEmpty(Model.Organisation.LegalLocalName))
+                            {
+                                <h2 class="name center khmer-moul">@Model.Organisation.LegalLocalName</h2>
+                            }
+                            if (!string.IsNullOrEmpty(Model.Organisation.LegalName))
+                            {
+                                <h2 class="name center khmer-moul">@Model.Organisation.LegalName</h2>
+                            }
+                        }
+                        else
+                        {
+                            <h2 class="name center khmer-moul">@Model.Organisation.DisplayName</h2>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Organisation.TaxNumber) && isTax)
+                        {
+                            <div>លេខអត្តសញ្ញាណកម្មសារពើពន្ធ(VATTIN) @Model.Organisation.TaxNumber</div>
+                        }
+                        <table class="no-color-table">
+                            <tbody>
+                                @if (!string.IsNullOrEmpty(Model.Organisation.Contact.PhoneNumber))
+                                {
+                                    <tr>
+                                        <td class="no-padding" style="width:170px"> ទូរស័ព្ទ​លេខ/Telephone:</td>
+                                        <td class="no-padding"> @Model.Organisation.Contact.PhoneNumber</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Organisation.Contact.Email))
+                                {
+                                    <tr>
+                                        <td class="no-padding"> អ៊ីមែល៖/Email:</td>
+                                        <td class="no-padding"> @Model.Organisation.Contact.Email</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Organisation.Contact.Website))
+                                {
+                                    <tr>
+                                        <td class="no-padding"> គេហទំព័រ៖/Website:</td>
+                                        <td class="no-padding"> @Model.Organisation.Contact.Website</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Organisation.Contact.Address))
+                                {
+                                    <tr>
+                                        <td class="no-padding"> អាស័យដ្ឋាន/Address:</td>
+                                        <td class="no-padding"> @Model.Organisation.Contact.Address</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </header>
+            <h2 class="name center">
+                Purchase Order
+            </h2>
+            <main>
+                <table class="no-color-table">
+                    <tr>
+                        <td style="width:70%">
+                            @if (isTax && (!string.IsNullOrEmpty(Model.Vendor.LegalName) || !string.IsNullOrEmpty(Model.Vendor.LocalLegalName)))
+                            {
+                                if (!string.IsNullOrEmpty(Model.Vendor.LocalLegalName))
+                                {
+                                    <h5 class="to khmer-moul">@Model.Vendor.LocalLegalName</h5>
+                                }
+                                if (!string.IsNullOrEmpty(Model.Vendor.LegalName))
+                                {
+                                    <h5 class="to khmer-moul">@Model.Vendor.LegalName</h5>
+                                }
+                            }
+                            else
+                            {
+                                <h5 class="to khmer-moul">@Model.Vendor.DisplayName</h5>
+                            }
+                            <table class="no-color-table">
+                                <tbody>
+                                    @if (!string.IsNullOrEmpty(Model.Vendor.Contact.ContactName))
+                                    {
+                                        <tr>
+                                            <td style="width:170px;" class="no-padding">Attention: </td>
+                                            <td class="no-padding"> @Model.Vendor.Contact.ContactName</td>
+                                        </tr>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.Vendor.Contact.PhoneNumber))
+                                    {
+                                        <tr>
+                                            <td style="width: 170px;" class="no-padding"> ទូរស័ព្ទ​លេខ/Telephone: </td>
+                                            <td class="no-padding"> @Model.Vendor.Contact.PhoneNumber</td>
+                                        </tr>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.Vendor.Contact.Email))
+                                    {
+                                        <tr>
+                                            <td style="        width: 170px;" class="no-padding"> អ៊ីមែល/Email: </td>
+                                            <td class="no-padding"> @Model.Vendor.Contact.Email</td>
+                                        </tr>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.Vendor.Contact.Website))
+                                    {
+                                        <tr>
+                                            <td style="width: 170px;" class="no-padding"> គេហទំព័រ៖/Website </td>
+                                            <td class="no-padding"> @Model.Vendor.Contact.Website</td>
+                                        </tr>
+                                    }
+                                    @if (isTax && !string.IsNullOrEmpty(Model.Vendor.TaxNumber))
+                                    {
+                                        <tr>
+                                            <td style="white-space: pre-wrap; width: 170px;" class="no-padding"> លេខអត្តសញ្ញាណកម្មសារពើពន្ធ<br />(VATTIN) </td>
+                                            <td class="no-padding"> @Model.Vendor.TaxNumber</td>
+                                        </tr>
+                                    }
+                                    @if (!string.IsNullOrEmpty(Model.Vendor.Contact.Address))
+                                    {
+                                        <tr>
+                                            <td style="width: 170px;" class="no-padding">អាស័យដ្ឋាន/Address: </td>
+                                            <td class="no-padding" style="white-space:pre-wrap;text-align:left"> @Model.Vendor.Contact.Address</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                        <td style="text-align:right">
+
+                            <h2 class="invoice-id">@Model.OrderNumber</h2>
+                            <div class="date">កាលបរិច្ឆេទ/Date: @Model.Date.ToString("dd/MM/yyyy")</div>
+                        </td>
+                    </tr>
+                </table>
+                <table border="0" cellspacing="0" cellpadding="0" class="has-border-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                ល.រ
+                                <br />
+                                No.
+                            </th>
+                            <th class="text-center">
+                                បរិយាយ
+                                <br />
+                                Description
+                            </th>
+                            <th class="text-center">
+                                បរិមាណ
+                                <br />
+                                Quantity
+                            </th>
+                            <th class="text-center">
+                                តម្លៃ​ឯកតា
+                                <br />
+                                Unit Price
+                            </th>
+                            @if (Model.ExpenseItems.Any(t => t.DiscountRate != null))
+                            {
+                                <th class="text-center">
+                                    អត្រា​បញ្ចុះតម្លៃ
+                                    <br />
+                                    Discount rate
+                                </th>
+
+                            }
+                            <th class="text-center">
+                                ចំនួន
+                                <br />
+                                Amount
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            @foreach (var quoteItem in Model.ExpenseItems)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @i
+                                    </td>
+                                    <td class="text-left">
+                                        @quoteItem.Product.ProductPurchaseInformation.Title
+                                        <br />
+                                        @quoteItem.Product.ProductPurchaseInformation.Description
+                                    </td>
+                                    <td class="text-center">
+                                        @quoteItem.Quantity
+                                    </td>
+                                    <td class="text-center">
+                                        @SkaiLab.Invoice.Models.Utils.FormatCurrency(@quoteItem.UnitPrice, Model.Currency.Symbole)
+                                    </td>
+                                    @if (Model.ExpenseItems.Any(t => t.DiscountRate != null))
+                                    {
+                                        <td class="text-center">
+                                            @quoteItem.DiscountRate
+                                        </td>
+
+                                    }
+
+                                    <td class="text-right">
+                                        @SkaiLab.Invoice.Models.Utils.FormatCurrency(@quoteItem.LineTotal, Model.Currency.Symbole)
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                        
+                    </tbody>
+                    <tfoot>
+                        @{
+                            int totalRow = 2;
+                            int colSpan = 4;
+                            if (!Model.ExpenseItems.Any(t => t.DiscountRate != null))
+                            {
+                                colSpan = 3;
+                            }
+                            var dic = new Dictionary<string, decimal>();
+                            @if (Model.ExpenseItems.Any(t => t.Tax != null))
+                            {
+                                foreach (var g in Model.ExpenseItems.Where(u => u.Tax != null))
+                                {
+                                    foreach (var t in g.Tax.Components)
+                                    {
+                                        var value = (g.LineTotal * t.Rate) / 100;
+                                        if (dic.ContainsKey(t.Name))
+                                        {
+                                            dic[t.Name] += value;
+                                        }
+                                        else
+                                        {
+                                            dic.Add(t.Name, value);
+                                        }
+                                    }
+                                }
+                            }
+                            totalRow += dic.Count;
+                            @if (Model.ExpenseItems.Any(t => t.Tax != null) && Model.CurrencyId != Model.Organisation.TaxCurrency.Id)
+                            {
+                                totalRow += 2;
+
+                            }
+                            <tr>
+                                <td colspan="@colSpan" rowspan="@totalRow" class="no-border">
+                                    <div style="white-space:pre-wrap;text-align:left">@Model.TermAndCondition</div>
+                                </td>
+                                <td colspan="1">សរុបរង</td>
+                                <td>@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.Total, @Model.Currency.Symbole)</td>
+                            </tr>
+                            foreach (var d in dic)
+                            {
+                                <tr>
+
+                                    <td colspan="1">@d.Key</td>
+                                    <td> @SkaiLab.Invoice.Models.Utils.FormatCurrency(d.Value, @Model.Currency.Symbole)</td>
+                                </tr>
+                            }
+
+                            <tr>
+                                <td colspan="1">សរុប</td>
+                                <td> @SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.TotalIncludeTax, @Model.Currency.Symbole)</td>
+                            </tr>
+                            @if (Model.ExpenseItems.Any(t => t.Tax != null) && Model.CurrencyId != Model.Organisation.TaxCurrency.Id)
+                            {
+                                <tr>
+                                    <td colspan="1">អត្រាប្តូរប្រាក់</td>
+                                    <td> @SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.TaxCurrencyExchangeRate, @Model.Organisation.TaxCurrency.Symbole)</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">សរុបរៀល</td>
+                                    <td>
+                                        @{
+                                            var total = Model.TaxCurrencyExchangeRate * Model.TotalIncludeTax;
+                                        }
+                                        @SkaiLab.Invoice.Models.Utils.FormatCurrency(@total, @Model.Organisation.TaxCurrency.Symbole)
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tfoot>
+                </table>
+
+            </main>
+        </div>
+    </div>
+</div>

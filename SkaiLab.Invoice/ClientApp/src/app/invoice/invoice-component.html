@@ -1,0 +1,141 @@
+<div class="animated fadeIn">
+    <div class="card">
+        
+        <div class="card-body">
+            <div class="button-panel" *ngIf="permission.readWritePurchaseSale">
+                <a [routerLink]='["/invoice-new"]' class="btn btn-primary">{{ 'textTranslate.newInvoice' | translate }}</a>
+            </div>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" *ngFor="let c of statuses">
+                    <a [ngClass]="(c.id === filter.statusId)?'nav-link active':'nav-link'" (click)="onTabStatusClick(c)" data-toggle="tab">{{c.name}} <span class="text-danger">({{c.count}})</span></a>
+                </li>
+            </ul>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="vendor">{{ 'textTranslate.customer' | translate }}</label>
+                        <ngx-select-dropdown (change)="onSelectCustomer($event)" [(ngModel)]="selectCustomer"
+                            [config]="dropdownConfig" [options]="customers"></ngx-select-dropdown>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="within">{{ 'textTranslate.period' | translate }}</label>
+                        <select class="form-control" [(ngModel)]="filter.dateTypeFilter"  name="within">
+                        <option *ngFor="let c of dateTypes" [ngValue]="c">{{ c.name }}
+                        </option>
+                    </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="fromDate">{{ 'textTranslate.start' | translate }}</label>
+                        <angular2-date-picker  [(ngModel)]="filter.fromDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="toDate">{{ 'textTranslate.end' | translate }}</label>
+                        <angular2-date-picker  [(ngModel)]="filter.toDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <input type="text" [(ngModel)]="filter.searchText" placeholder="{{ 'textTranslate.search' | translate }}"
+                            (keyup.enter)="onSearch()" class="form-control">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" (click)="onSearch()">
+                                <i class="fa fa-search"></i> {{ 'textTranslate.search' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-md-8 col-sm-12">
+                    <button type="submit" class="btn btn-primary btn-sm" (click)="onPrint()" *ngIf="showPrintButton()">{{ 'textTranslate.print' | translate }}</button>
+                    <button type="submit" class="btn btn-primary btn-sm" *ngIf="showPayButton()" (click)="pay()">{{ 'textTranslate.print' | translate }}</button>
+                    <button type="submit" class="btn btn-primary btn-sm" (click)="onPrintReceipt()" *ngIf="showPrintReceiptButton()">{{ 'textTranslate.printReceipt' | translate }}</button>
+                </div>
+                <div class="col-md-4 col-sm-12" *ngIf="getTotalSelectedItems()>0">
+                    <div style="float: right;">
+                        {{getTotalSelectedItems()}} items, {{getTotalSelectedAmount() | number:'1.2-2'}}{{baseCurrency.symbole}}
+                    </div>
+                  
+                </div>
+            </div>
+            <div class=" table-responsive">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" [(ngModel)]="selected" (change)="onAllSelectedChange()"/>
+                            </th>
+                            <th>{{ 'textTranslate.number' | translate }}</th>
+                            <th>{{ 'textTranslate.referenceNumber' | translate }}</th>
+                            <th>{{ 'textTranslate.customer' | translate }}</th>
+                            <th>{{ 'textTranslate.date' | translate }}</th>
+                            <th>{{ 'textTranslate.dueDate' | translate }}</th>
+                            <th  *ngIf="filter.statusId==0">{{ 'textTranslate.status' | translate }}</th>
+                            <th>{{ 'textTranslate.amount' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let invoice of invoices">
+                           <td>
+                               <input type="checkbox"  [(ngModel)]="invoice.selected"/>
+                           </td>
+                            <td> <a type="button" 
+                                [routerLink]="['/invoice-update/',invoice.id]">{{invoice.number}}</a>
+                           </td>
+                           <td>{{invoice.refNo}}</td>
+                           <td>{{invoice.customer.displayName}}</td>
+                           <td>{{invoice.date | date:'d/M/yyyy'}}</td>
+                           <td>{{invoice.dueDate | date:'d/M/yyyy'}}</td>
+                           <td *ngIf="filter.statusId==0">{{invoice.status.name}}</td>
+                           <td>{{invoice.totalIncludeTax | number:'1.2-2'}} {{invoice.currency.symbole}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="8" style="text-align: left;" *ngIf="invoices.length==0" class="text-danger">{{ 'textTranslate.noRecordFound' | translate }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <nav aria-label="Page navigation" *ngIf="pager.totalPages>1">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" [ngClass]="(pager.currentPage === 1)?'page-item disabled':'page-item'">
+                        <a (click)="pageClick(1)" class="page-link">{{ 'textTranslate.first' | translate }}</a>
+                    </li>
+                    <li class="page-item" [ngClass]="(pager.currentPage === 1)?'page-item disabled':'page-item'">
+                        <a (click)="pageClick(pager.currentPage - 1)" aria-label="Previous" class="page-link">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">{{ 'textTranslate.previous' | translate }}</span>
+                        </a>
+                    </li>
+                    <li *ngFor="let page of pager.pages"
+                        [ngClass]="(pager.currentPage ===page)?'page-item active':'page-item'">
+                        <a (click)="pageClick(page)" class="page-link">{{page}}</a>
+                    </li>
+                    <li class="page-item"
+                        [ngClass]="(pager.currentPage ===pager.totalPages)?'page-item disabled':'page-item'">
+                        <a class="page-link" (click)="pageClick(pager.currentPage + 1)" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">{{ 'textTranslate.next' | translate }}</span>
+                        </a>
+                    </li>
+                    <li [ngClass]="(pager.currentPage ===pager.totalPages)?'page-item disabled':'page-item'">
+                        <a (click)="pageClick(pager.totalPages)" class="page-link">{{ 'textTranslate.last' | translate }}</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>

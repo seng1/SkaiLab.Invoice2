@@ -12,6 +12,7 @@ namespace SkaiLab.Invoice.Dal.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public string NameKh { get; set; }
 
         public virtual ICollection<Organisation> Organisation { get; set; }
     }

@@ -1,0 +1,54 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary"  (click)="onSave(false)">{{ 'textTranslate.saveAndNew' | translate }}</button>
+                <button type="submit" class="btn btn-primary"  (click)="onSave(true)">{{ 'textTranslate.saveAndClose' | translate }}</button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="name">{{ 'textTranslate.name' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="name"
+                                [(ngModel)]="tax.name" #name="ngModel"
+                                [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+                            <div *ngIf="name.invalid" class="invalid-feedback">
+                                <div *ngIf="name.errors.required">{{ 'textTranslate.nameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th>{{ 'textTranslate.rate' | translate }}</th>
+                                <th>{{ 'textTranslate.componentName' | translate }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let component of tax.components;let i = index">
+                                <td> 
+                                    <input type="text" class="form-control" name="componentName{{i}}" [(ngModel)]="component.name"/>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="componentRate{{i}}" [(ngModel)]="component.rate" />
+                                </td>
+                                <td>
+                                    <a class="badge badge-complete" (click)="onRemoveComponent(component)">{{ 'textTranslate.remove' | translate }}</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                    <button type="button" class="btn btn-sm btn-primary"  (click)="onAddComponent()">{{ 'textTranslate.addComponent' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

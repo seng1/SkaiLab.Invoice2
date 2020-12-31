@@ -1,0 +1,55 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row form-group">
+                <div class="col col-md-12">
+                    <div class="input-group">
+                        <input type="text" [(ngModel)]="searchText" placeholder=" {{ 'textTranslate.search' | translate }}"
+                            (keyup.enter)="onSearch()" class="form-control">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" (click)="onSearch()">
+                                <i class="fa fa-search"></i>  {{ 'textTranslate.search' | translate }}
+                            </button>
+                            <button type="button" class="btn btn-success" (click)="printData()" >
+                                <i class="fa fa-download"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div #content>
+                <div class=" table-responsive">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th  colspan="5" class="center no-border"> {{ 'textTranslate.inventoryBalanceReport' | translate }}</th>
+                            </tr>
+                            <tr>
+                                <th>{{ 'textTranslate.code' | translate }}</th>
+                                <th>{{ 'textTranslate.name' | translate }}</th>
+                                <th>{{ 'textTranslate.purchasePrice' | translate }}</th>
+                                <th>{{ 'textTranslate.salePrice' | translate }}</th>
+                                <th>{{ 'textTranslate.inventoryBalance' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of products">
+                                <td> {{product.code}}</td>
+                                <td>{{product.name}} </td>
+                                <td>{{currency.symbole}}{{product.productPurchaseInformation.price | number:'1.2-2'}}</td>
+                                <td>{{currency.symbole}}{{product.productSaleInformation.price | number:'1.2-2'}}</td>
+                                <td><a (click)="detailClick(product)">{{product.qtyBalance}}</a></td>
+                            </tr>
+                            <tr>
+                                <td class="center no-border" colspan="5">
+                                    {{ 'textTranslate.printOn' | translate }} {{printDate}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+         
+        </div>
+
+    </div>
+</div>

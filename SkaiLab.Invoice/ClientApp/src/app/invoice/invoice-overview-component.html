@@ -1,0 +1,75 @@
+<div class="animated fadeIn">
+    <div class="card" *ngIf="permission.readWritePurchaseSale">
+        <div class="card-body">
+            <div class="btn-group">
+                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    class="dropdown-toggle btn btn-primary">{{ 'textTranslate.new' | translate }}</button>
+                <div tabindex="-1" aria-hidden="true" role="menu" class="dropdown-menu">
+                    <a class="dropdown-item" [routerLink]='["/quote-new"]'>{{ 'textTranslate.newQuote' | translate }}</a>
+                    <a class="dropdown-item" [routerLink]='["/invoice-new"]'>{{ 'textTranslate.newInvoice' | translate }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <a [routerLink]='["/quote"]'>{{ 'textTranslate.quotes' | translate }}</a>
+            <div class="row" *ngIf="quoteOverviews.length==0">
+                <div class="col-md-12 col-sm-12">
+                    <loading-component ></loading-component>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6" *ngFor="let quote of quoteOverviews">
+                    <div class="card" style="cursor: pointer;" (click)="onQuoteNavigate(quote)">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon dib flat-color-1">
+                                    <i class="pe-7s-cash"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left dib">
+                                        <div class="stat-text">{{quote.currencySymbole}}<span
+                                                class="count">{{quote.total | number:'1.2-2'}}</span></div>
+                                        <div class="stat-heading">{{quote.statusName}}({{quote.count}})</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <a [routerLink]='["/invoice"]'>{{ 'textTranslate.invoices' | translate }}</a>
+            <div class="row" *ngIf="invoiceOverviews.length==0">
+                <div class="col-md-12 col-sm-12">
+                    <loading-component ></loading-component>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6" *ngFor="let purchase of invoiceOverviews">
+                    <div class="card" style="cursor: pointer;" (click)="onInvoiceNavigate(purchase)">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon dib flat-color-1">
+                                    <i class="pe-7s-cash"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left dib">
+                                        <div class="stat-text">{{purchase.currencySymbole}}<span
+                                                class="count">{{purchase.total | number:'1.2-2'}}</span></div>
+                                        <div class="stat-heading">{{purchase.statusName}}({{purchase.count}})</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,17 @@
+.product-ngx-select-dropdown > div > button{
+  width: 200px !important;
+  overflow: hidden !important;
+}
+.product-ngx-select-dropdown > div > button > span:first-child{
+  width: 160px !important;
+  overflow: hidden !important;
+}
+.product-ngx-select-dropdown > div > button > span:last-child{
+  padding-top: 0px;
+}
+.product-ngx-select-dropdown > div > div > div:first-child{
+  width: 300px;
+}
+.product-ngx-select-dropdown > div > div:first-child{
+  position: relative !important;
+}

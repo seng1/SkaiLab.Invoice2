@@ -5,6 +5,7 @@ export class User{
     phoneNumber:string;
     lastName:string;
     firstName:string;
+    language:string;
     constructor(){
         this.id="";
         this.email="";
@@ -12,5 +13,6 @@ export class User{
         this.phoneNumber="";
         this.lastName="";
         this.firstName="";
+        this.language="";
     }
 }

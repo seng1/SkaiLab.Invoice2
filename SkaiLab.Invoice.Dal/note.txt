@@ -1,1 +1,3 @@
 ﻿dotnet ef dbcontext scaffold "Server=skaiuatdatabase.database.windows.net;Database=Invoice;User Id=skaiuatdatabase;Password=mast12345@" Microsoft.EntityFrameworkCore.SqlServer -o Models
+
+Scaffold-DbContext "Server=SENG-DELL\SQLDB;Database=Invoice;user=sa;password=12345" Microsoft.EntityFrameworkCore.SqlServer -o Models

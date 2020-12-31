@@ -1,0 +1,115 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.organisation' | translate }}</label>
+                        <angular2-multiselect [data]="organisations" [(ngModel)]="selectedOrganisations"
+                            [settings]="multipleDropDownSetting"></angular2-multiselect>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.displayColumn' | translate }}</label>
+                        <select class="form-control" [(ngModel)]="filter.displayColumn" name="perdiod">
+                            <option *ngFor="let c of filter.displayColumns" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.period' | translate }}</label>
+                        <select class="form-control" (change)="onPeriodChange()" id="perdiod" [(ngModel)]="filter.periodFilter" name="perdiod">
+                            <option *ngFor="let c of filter.periods" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="fromDate">{{ 'textTranslate.start' | translate }}</label>
+                        <angular2-date-picker  [(ngModel)]="filter.fromDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="toDate">{{ 'textTranslate.end' | translate }}</label>
+                        <angular2-date-picker  [(ngModel)]="filter.toDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" (click)="onApplyFilter()" class="btn btn-primary"
+                            style="margin-top: 30px;">{{ 'textTranslate.applyFilter' | translate }}</button>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" (click)="printData()" style="margin-top: 30px;">  
+                            <i class="fa fa-download"></i></button>  
+                    </div>
+                  
+                </div>
+            </div>
+            <div #content>
+                <table class="table table-bordered table-striped table-sm" id="tablerecords">
+                    <thead>
+                        <tr>
+                            <th [attr.colspan]="profitAndLostSummary.headers.length+1"  class="center no-border">{{ 'textTranslate.profitAndLostSummaryReport' | translate }}</th>
+                        </tr>
+                        <tr>
+                            <td  [attr.colspan]="profitAndLostSummary.headers.length+1" class="center  no-border">{{filter.fromDate | date:'d/M/yyyy'}} to {{filter.toDate | date:'d/M/yyyy'}}</td>
+                        </tr>
+                        <tr>
+                            <td  [attr.colspan]="profitAndLostSummary.headers.length+1" class="center  no-border">{{ 'textTranslate.selectedOrganisation' | translate }}: {{getSelectedOrganisationNames()}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th *ngFor="let header of profitAndLostSummary.headers">{{header}}</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let headerRow of profitAndLostSummary.profitAndLostSummaryRowHeaders">
+                        <tr class="bold">
+                            <td [attr.colspan]="profitAndLostSummary.headers.length">
+                                {{headerRow.name}}
+                            </td>
+                            <td>{{currency.symbole}}{{headerRow.total | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr *ngFor="let row of headerRow.profitAndLostSummaryRows">
+                            <td ><span style="padding-left: 10px;">{{row.name}}</span></td>
+                            <td *ngFor="let value of row.values">{{currency.symbole}}{{value | number:'1.2-2'}} </td>
+                        </tr>
+                       
+                    </tbody>
+                    <tbody>
+                        <tr class="bold">
+                            <td>
+                                {{profitAndLostSummary.profitAndLostSummaryToal.name}}
+                            </td>
+                            <td *ngFor="let value of profitAndLostSummary.profitAndLostSummaryToal.values" [ngClass]="{ 'text-danger': value<0 }">
+                                {{currency.symbole}}{{value | number:'1.2-2'}} 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="center no-border" [attr.colspan]="profitAndLostSummary.headers.length+1">
+                                {{ 'textTranslate.printOn' | translate }} {{printDate}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              
+            </div>
+        </div>
+    </div>
+  
+
+</div>

@@ -1,0 +1,198 @@
+
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div role="document" class="modal-dialog modal-full-height modal-notify modal-info">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="heading lead">{{ 'textTranslate.organisation' | translate }} </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+                  <span aria-hidden="true" class="white-text">×</span>
+                </button>
+              </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="name">{{ 'textTranslate.displayName' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="name" [(ngModel)]="organisation.displayName"
+                                #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+                            <div *ngIf="name.invalid" class="invalid-feedback">
+                                <div *ngIf="name.errors.required">{{ 'textTranslate.displayNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="currency">{{ 'textTranslate.currency' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control" id="currency" (change)="baseCurrencyChange()"
+                                [ngClass]="{ 'is-invalid': errorBaseCurrency() }"
+                                [(ngModel)]="organisation.organisationBaseCurrency.baseCurrencyId" required
+                                name="currency">
+                                <option *ngFor="let currency of currencies" [ngValue]="currency.id">{{ currency.name }}
+                                </option>
+                            </select>
+                            <div *ngIf="errorBaseCurrency()" class="text-danger">
+                                <div>{{ 'textTranslate.currencyRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="organisationTypeId">{{ 'textTranslate.organisationType' | translate }} <span class="text-danger"> *
+                                </span></label>
+                            <select class="form-control" id="organisationTypeId"
+                                [ngClass]="{ 'is-invalid': errorOrganisationType() }"
+                                [(ngModel)]="organisation.organisationTypeId" required name="organisationTypeId">
+                                <option *ngFor="let organisationType of organisationTypes"
+                                    [ngValue]="organisationType.id">{{ organisationType.name }}</option>
+                            </select>
+                            <div *ngIf="errorOrganisationType()" class="text-danger">
+                                <div>{{ 'textTranslate.organisationTypeRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="lineBusiness">{{ 'textTranslate.whatIsYourLineBusiness' | translate }}</label>
+                            <input type="text" class="form-control" name="lineBusiness"
+                                [(ngModel)]="organisation.lineBusiness" #lineBusiness="ngModel" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="d-flex flex-row">
+                            <div class="p-2">{{ 'textTranslate.thisOrganisationDeclareTax' | translate }}</div>
+                            <div class="p-2"><input type="checkbox" [(ngModel)]="organisation.declareTax"
+                                    name="declareTax" /></div>
+                            <div class="p-2 organisation-tax-not">({{ 'textTranslate.thisCannotChange' | translate }})</div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="organisation.declareTax">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="legalLocalName">{{ 'textTranslate.localLegalName' | translate }}<span class="text-danger"> * </span></label>
+                                <input type="text" class="form-control" name="legalLocalName" required
+                                    [ngClass]="{ 'is-invalid': f.submitted && legalLocalName.invalid }"
+                                    [(ngModel)]="organisation.legalLocalName" #legalLocalName="ngModel" />
+                                <div *ngIf="legalLocalName.invalid" class="invalid-feedback">
+                                    <div *ngIf="legalLocalName.errors.required">{{ 'textTranslate.localLegalNameRequire' | translate }}</div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="legalName">{{ 'textTranslate.legalName' | translate }} <span class="text-danger"> * </span></label>
+                                <input type="text" class="form-control" id="legalName" name="legalName" required
+                                    [ngClass]="{ 'is-invalid': f.submitted && legalName.invalid }"
+                                    [(ngModel)]="organisation.legalName" #legalName="ngModel" />
+                                <div *ngIf="legalName.invalid" class="invalid-feedback">
+                                    <div *ngIf="legalName.errors.required">{{ 'textTranslate.legalNameRequire' | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="bussinessRegistrationNumber">{{ 'textTranslate.businessRegistrationNumber' | translate }} <span class="text-danger"> * </span></label>
+                                <input type="text" class="form-control" id="bussinessRegistrationNumber" name="bussinessRegistrationNumber" required
+                                    [ngClass]="{ 'is-invalid': f.submitted && bussinessRegistrationNumber.invalid }"
+                                    [(ngModel)]="bussinessRegistrationNumber.bussinessRegistrationNumber" #bussinessRegistrationNumber="ngModel" />
+                                <div *ngIf="bussinessRegistrationNumber.invalid" class="invalid-feedback">
+                                    <div *ngIf="bussinessRegistrationNumber.errors.required">{{ 'textTranslate.businessRegistrationNumberRequire' | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="taxNumber">{{ 'textTranslate.taxNumber' | translate }} <span class="text-danger"> * </span></label>
+                                <input type="text" class="form-control" id="taxNumber" name="taxNumber" required
+                                    [ngClass]="{ 'is-invalid': f.submitted && taxNumber.invalid }"
+                                    [(ngModel)]="taxNumber.taxNumber" #taxNumber="ngModel" />
+                                <div *ngIf="taxNumber.invalid" class="invalid-feedback">
+                                    <div *ngIf="taxNumber.errors.required">{{ 'textTranslate.taxNumberRequire' | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label for="taxcurrency">{{ 'textTranslate.taxCurrency' | translate }} <span class="text-danger"> * </span></label>
+                                <select class="form-control" id="taxcurrency" (change)="taxCurrencyChange()" [ngClass]="{ 'is-invalid': errorTaxCurrency() }"
+                                    [(ngModel)]="organisation.organisationBaseCurrency.taxCurrencyId" required
+                                    name="taxcurrency">
+                                    <option *ngFor="let currency of currencies" [ngValue]="currency.id">
+                                        {{ currency.name }}</option>
+                                </select>
+                                <div *ngIf="errorTaxCurrency()" class="text-danger">
+                                    <div>{{ 'textTranslate.taxCurrencyRequire' | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12" *ngIf="organisation.organisationBaseCurrency.taxCurrencyId!=organisation.organisationBaseCurrency.baseCurrencyId">
+                            <div class="form-group">
+                                <label for="taxcurrency">1
+                                    {{baseCurrency.code}}={{organisation.organisationBaseCurrency.taxExchangeRate}} {{taxCurrency.code}}
+                                     <span class="text-danger"> * </span></label>
+                                <input type="number" class="form-control" name="taxExchangeRate"
+                                    [(ngModel)]="organisation.organisationBaseCurrency.taxExchangeRate"
+                                    #taxExchangeRate="ngModel" [ngClass]="{ 'is-invalid': f.submitted && taxExchangeRate.invalid }"
+                                    required />
+                                <div *ngIf="taxExchangeRate.invalid" class="invalid-feedback">
+                                    <div *ngIf="taxExchangeRate.errors.required">{{ 'textTranslate.exchangeRateRequire' | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="contactName1">{{ 'textTranslate.contactName' | translate }}</label>
+                            <input type="text" class="form-control" name="contactName"
+                                [(ngModel)]="organisation.contact.contactName" #contactName1="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="phoneNumber1">{{ 'textTranslate.phoneNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="phoneNumber1"
+                                [(ngModel)]="organisation.contact.phoneNumber" #phoneNumber1="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <label for="email1">{{ 'textTranslate.email' | translate }}</label>
+                        <input type="text" class="form-control" name="email1" [(ngModel)]="organisation.contact.email"
+                            #email1="ngModel" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-sm-12">
+                        <div class="form-group">
+                            <label for="address1">{{ 'textTranslate.address' | translate }}</label>
+                            <textarea name="address1" rows="2" [(ngModel)]="organisation.contact.address"
+                                #address1="ngModel" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile02" type='file'
+                                (change)="fileChange($event)" accept="image/jpeg,image/png">
+                            <label class="custom-file-label" for="inputGroupFile02" type='file'>{{ 'textTranslate.logo' | translate }}</label>
+                        </div>
+                        <img src="{{organisation.logoUrl}}" *ngIf="organisation.logoUrl" class="logo" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <loading-component *ngIf="showLoading"></loading-component>
+                <button type="submit" *ngIf="!showLoading" class="btn btn-primary" (click)="onCreate()">{{ 'textTranslate.create' | translate }}</button>
+                <button type="button" *ngIf="!showLoading" class="btn btn-outline-dark" (click)="close()">{{ 'textTranslate.close' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</form>

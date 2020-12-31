@@ -1,0 +1,57 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="fromDate">As of </label>
+                        <angular2-date-picker  [(ngModel)]="filter.fromDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary"
+                            style="margin-top: 30px;">Apply Filter</button>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" (click)="printData()" style="margin-top: 30px;">  
+                            <i class="fa fa-download"></i></button>  
+                    </div>
+                  
+                </div>
+            </div>
+            <div #content>
+                <table class="table table-bordered table-striped table-sm" id="tablerecords">
+                    <thead>
+                        <tr>
+                            <th colspan="7"  class="center no-border">Aged Receivables Summary Report</th>
+                        </tr>
+                        <tr>
+                            <td  colspan="7" class="center  no-border">{{organisation.displayName}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7"  class="center no-border">As of  {{filter.fromDate  | date:'d/M/yyyy'}}</td>
+                        </tr>
+                        
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Current</th>
+                            <th>1 to 30 days </th>
+                            <th>31 to 60 days </th>
+                            <th>61 to 90 days </th>
+                            <th>over 90 days </th>
+                            <th>Total </th>
+                        </tr>
+                    </thead>
+                   
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

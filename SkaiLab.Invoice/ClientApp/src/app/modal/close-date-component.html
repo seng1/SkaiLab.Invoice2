@@ -1,0 +1,60 @@
+<div role="document" class="modal-dialog modal-full-height modal-notify modal-info">
+  <div class="modal-content">
+    <div class="modal-header">
+      <p class="heading lead">{{title}}</p>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+        <span aria-hidden="true" class="white-text">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="closeDate">{{ 'textTranslate.closeDate' | translate }}<span class="text-danger"> * </span></label>
+        <angular2-date-picker [(ngModel)]="closeDate" name="closeDate" [settings]="datePickerOption">
+        </angular2-date-picker>
+      </div>
+      <div class="form-group" *ngIf="!hasCloseDoc">
+        <label for="closeDocument">{{ 'textTranslate.closeDocument' | translate }}</label>
+        <loading-component *ngIf="showUploading"></loading-component>
+        <div class="input-group mb-3">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile02" type='file' (change)="fileChange($event)"
+              accept="image/jpeg,image/png,application/pdf">
+            <label class="custom-file-label" for="inputGroupFile02" type='file'><span
+                *ngIf="attachment.fileUrl.length==0">{{ 'textTranslate.chooseFile' | translate }}</span> <span
+                *ngIf="attachment.fileUrl.length>0">{{attachment.fileName}}</span> </label>
+          </div>
+        </div>
+      </div>
+      <div class=" table-responsive" *ngIf="expenses.length>0">
+        <table class="table ">
+          <thead>
+            <tr>
+              <th>{{ 'textTranslate.number' | translate }}</th>
+              <th>{{ 'textTranslate.closeDocument' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let expense of expenses">
+              <td>{{expense.orderNumber}}</td>
+              <td>
+                <span *ngIf="expense.closeAttachment.fileName!=null">{{expense.closeAttachment.fileName}}</span>
+                <div class="input-group mb-3" *ngIf="expense.closeAttachment.fileName==null">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile02" type='file'
+                      (change)="fileExpenseChange($event,expense)" accept="image/jpeg,image/png,application/pdf">
+                    <label class="custom-file-label" for="inputGroupFile02" type='file'>{{ 'textTranslate.chooseFile' | translate }}</label>
+                  </div>
+                </div>
+                <loading-component *ngIf="expense.loading"></loading-component>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="onGo()" class="btn btn-primary">{{ 'textTranslate.go' | translate }}</button>
+      <button type="button" class="btn btn-outline-dark" (click)="close()">{{ 'textTranslate.close' | translate }}</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+export class Page{
+    totalItems:number;
+    currentPage:number;
+    pageSize:number;
+    totalPages:number;
+    startPage:number;
+    endPage:number;
+    endIndex:number;
+    startIndex:number;
+    pages:number[];
+    constructor(){
+        this.totalItems=0;
+        this.currentPage=0;
+        this.pageSize=40;
+        this.totalPages=0;
+        this.startPage=0;
+        this.endPage=0;
+        this.endIndex=0;
+        this.startIndex=0;
+        this.pages=[];
+    }
+}

@@ -1,0 +1,138 @@
+﻿@{
+    ViewData["Title"] = @ShareLocalizer.GetResource("Home");
+}
+@{ 
+    var registerUrl = @Startup.StaticConfig.GetSection("Option:InvoiceUrl").Value + "/Identity/Account/register?culture=" + System.Threading.Thread.CurrentThread.CurrentUICulture.Name+ "&offerType=Trail&planId=1&subscriptionType=monthly";
+}
+<section id="banner">
+    <!-- Slider -->
+    <div id="main-slider" class="flexslider">
+        <ul class="slides">
+            <li>
+                <img src="img/slides/2.jpg" alt="" />
+                <div class="flex-caption">
+                    <p>@ShareLocalizer.GetResource("SkaiInvoice Description")</p>
+                    <div class="hero-content">
+                        <div class="hero-center hero-center-copy">
+                            <a class="hero-btn hero-btn-1 hero-cta btn btn-primary" href="@registerUrl" target="_self">@ShareLocalizer.GetResource("Try for free")</a>
+                            <a class="hero-btn hero-btn-2 hero-cta btn btn" href="~/home/price" target="_self">@ShareLocalizer.GetResource("Buy now")</a>
+
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <img src="img/slides/1.jpg" alt="" />
+                <div class="flex-caption">
+                    <p>@ShareLocalizer.GetResource("SkaiInvoice Description")</p>
+                    <div class="hero-content">
+                        <div class="hero-center hero-center-copy">
+                            <a class="hero-btn hero-btn-1 hero-cta btn btn-primary" href="@registerUrl" target="_self">@ShareLocalizer.GetResource("Try for free")</a>
+                            <a class="hero-btn hero-btn-2 hero-cta btn btn" href="~/home/price" target="_self">@ShareLocalizer.GetResource("Buy now")</a>
+                        </div>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- end slider -->
+</section>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="aligncenter"><h2 class="aligncenter">@ShareLocalizer.GetResource("Get a real-time view of your cashflow")</h2>@ShareLocalizer.GetResource("Log on any time any where")</div>
+                <br />
+            </div>
+        </div>
+        <video poster="ckin.jpg" src="~/video/ckin.mp4" data-ckin="compact" data-overlay="2" data-title="@ShareLocalizer.GetResource("Watch demo...")"></video>
+    </div>
+</section>
+
+<section id="call-to-action-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 aligncenter">
+                <h3>@ShareLocalizer.GetResource("Popular features that will change your life")</h3>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="content">
+    <div class="container content">
+        <!-- Info Blcoks -->
+        <div class="row">
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-file-o"></i>
+                <div class="info-blocks-in">
+                    <h3>@ShareLocalizer.GetResource("Unlimited Invoice & Quote")</h3>
+                    <p>@ShareLocalizer.GetResource("Create and manage unlimited invoice and quote")</p>
+                </div>
+            </div>
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-money"></i>
+                <div class="info-blocks-in">
+                    <h3>
+                        @ShareLocalizer.GetResource("Unlimited Purchase & Bill")
+                    </h3>
+                    <p>@ShareLocalizer.GetResource("Create and manage unlimite purchase order and bill")</p>
+                 </div>
+            </div>
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-percent"></i>
+                <div class="info-blocks-in">
+                    <h3>@ShareLocalizer.GetResource("Tax")</h3>
+                    <p>@ShareLocalizer.GetResource("Track and manage your income and expense tax. Generate monthly tax expense")</p>
+                 </div>
+            </div>
+        </div>
+        <!-- End Info Blcoks -->
+        <!-- Info Blcoks -->
+        <div class="row">
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-money"></i>
+                <div class="info-blocks-in">
+                    <h3>
+                        @ShareLocalizer.GetResource("Transact in multiple currencies")</h3>
+                    <p>@ShareLocalizer.GetResource("Manage multiple currencies")</p>
+</div>
+            </div>
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-building-o"></i>
+                <div class="info-blocks-in">
+                    <h3>
+                        @ShareLocalizer.GetResource("Transact in multiple Companies")</h3>
+                    <p> @ShareLocalizer.GetResource("Manage multiple companies")</p>
+</div>
+            </div>
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-houzz"></i>
+                <div class="info-blocks-in">
+                    <h3>@ShareLocalizer.GetResource("Track inventory")</h3>
+                    <p>@ShareLocalizer.GetResource("Tracking your product inventory in multiple location")</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-users"></i>
+                <div class="info-blocks-in">
+                    <h3>
+                        @ShareLocalizer.GetResource("Payroll")</h3>
+                    <p>@ShareLocalizer.GetResource("Small and easy to generate the payroll for your employee for every month.")</p>
+</div>
+            </div>
+            <div class="col-sm-4 info-blocks">
+                <i class="icon-info-blocks fa fa-bar-chart"></i>
+                <div class="info-blocks-in">
+                    <h3>
+                        @ShareLocalizer.GetResource("Reports")</h3>
+                    <p>@ShareLocalizer.GetResource("Provide many reports to support your business transaction")</p>
+</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@await Html.PartialAsync("_pricePartial")

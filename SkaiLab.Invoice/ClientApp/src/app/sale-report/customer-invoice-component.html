@@ -1,0 +1,128 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>Organisation</label>
+                        <angular2-multiselect [data]="organisations" [(ngModel)]="selectedOrganisations"
+                            [settings]="multipleDropDownSetting"></angular2-multiselect>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>Period</label>
+                        <select class="form-control" (change)="onPeriodChange()" id="perdiod"
+                            [(ngModel)]="filter.periodFilter" name="perdiod">
+                            <option *ngFor="let c of filter.periods" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="fromDate">Start</label>
+                        <angular2-date-picker [(ngModel)]="filter.fromDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="toDate">End</label>
+                        <angular2-date-picker [(ngModel)]="filter.toDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" (click)="onApplyFilter()" class="btn btn-primary"
+                            style="margin-top: 30px;">Apply Filter</button>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" (click)="printData()" style="margin-top: 30px;">
+                            <i class="fa fa-download"></i></button>
+                    </div>
+
+                </div>
+            </div>
+            <div #content>
+                <table class="table table-bordered table-striped table-sm" id="tablerecords">
+                    <thead>
+                        <tr>
+                            <th colspan="8" class="center no-border">Customer Invoice Report</th>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="center  no-border">{{filter.fromDate | date:'d/M/yyyy'}} to
+                                {{filter.toDate | date:'d/M/yyyy'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="center  no-border">Selected
+                                Organisations:{{getSelectedOrganisationNames()}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Ref #</th>
+                            <th>To</th>
+                            <th>Date</th>
+                            <th>Due Date</th>
+                            <th>Paid Date</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let invoice of invoices">
+                            <td><a  
+                                [routerLink]="['/invoice-update/',invoice.id]">{{invoice.number}}</a></td>
+                            <td>{{invoice.refNo}}</td>
+                            <td>{{invoice.customer.displayName}}</td>
+                            <td>{{invoice.date | date:'d/M/yyyy'}}</td>
+                            <td [ngClass]="{ 'text-danger': isOverDue(invoice) }">{{invoice.dueDate | date:'d/M/yyyy'}}
+                            </td>
+                            <td>{{invoice.paidDate | date:'d/M/yyyy'}}</td>
+                            <td>{{currency.symbole}}{{invoice.totalIncludeTax | number:'1.2-2'}}</td>
+                            <td><span
+                                    *ngIf="invoice.paidDate!=null">{{currency.symbole}}{{invoice.totalIncludeTax | number:'1.2-2'}}</span><span
+                                    *ngIf="invoice.paidDate==null">{{currency.symbole}}0.00</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="bold rigth">
+                                Total
+                            </td>
+                            <td class="bold">{{currency.symbole}}{{getTotal() | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="bold rigth">
+                                Total Unpaid
+                            </td>
+                            <td class="bold"> <span [ngClass]="{ 'text-danger': getTotalUnPaid()>0 }">{{currency.symbole}}{{getTotalUnPaid() | number:'1.2-2'}}</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="bold rigth">
+                                Total Paid
+                            </td>
+                            <td class="bold"> {{currency.symbole}}{{getTotalPaid() | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="bold rigth">
+                                Total Overdue
+                            </td>
+                            <td class="bold"> <span [ngClass]="{ 'text-danger': getTotalOverdue()>0 }">{{currency.symbole}}{{getTotalOverdue() | number:'1.2-2'}}</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="center no-border">Print on {{printDate}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>

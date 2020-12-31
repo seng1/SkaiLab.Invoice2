@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/__pdf.cshtml";
+}
+<section class="sheet padding-10mm">
+
+    <h1 class="center">វិក័យប័ត្រ</h1>
+    <h1 class="center">RECEIPT</h1>
+    <table style="border:none;background-color:white">
+        <tbody>
+            <tr>
+                <td class="no-boder">
+                    ឈ្មោះក្រុមហ៊ុន ឬអតិថិជន:
+                    <br />(Company or Customer):
+                </td>
+                <td class="no-boder">
+                    {{vm.invoice.client.contactName}}
+                </td>
+                <td class="no-boder">
+                    លេខ​វិ​ក័​យ​ប័ត្រ:
+                    <br /> Invoice No:
+                </td>
+                <td class="no-boder">
+                    {{vm.invoice.invoiceNumber}}
+                </td>
+            </tr>
+            <tr>
+                <td class="no-boder">
+                    អាសយដ្ឋានក្រុមហ៊ុន:
+                    <br />(Company Address):
+                </td>
+                <td class="no-boder">
+                    {{vm.invoice.client.address}}
+                </td>
+                <td class="no-boder">
+                    កាលបរិច្ឆេទ:
+                    <br />(Date):
+                </td>
+                <td class="no-boder">
+                    {{vm.invoice.displayDate}}
+                </td>
+            </tr>
+            <tr>
+                <td class="no-boder">
+                    ទូរស័ព្ទលេខ:
+                    <br />
+                    (Telephone No):
+                </td>
+                <td class="no-boder">
+                    {{vm.invoice.client.phone}}
+                </td>
+                <td colspan="2" rowspan="2" class="no-boder">
+                    <img src="{{vm.invoice.imageUrl}}" style="height:100px;width:100px" class="alight-right" />
+                </td>
+            </tr>
+            <tr>
+                <td class="no-boder" colspan="2">
+                    {{vm.invoice.note}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table style="margin-top:20px">
+        <tr>
+            <th>
+                ល.រ<br />
+                No.
+            </th>
+            <th>
+                រាយមុខទំនិញ<br />
+                Description
+            </th>
+            <th>
+                បរិមាណ<br />
+                Qty
+            </th>
+            <th>
+                តម្លៃ​រាយ<br />
+                Unit Price
+            </th>
+            <th>
+                តម្លៃសរុប<br />
+                Net Amount
+            </th>
+        </tr>
+        <tr ng-repeat="orderItem in vm.invoice.orderItems">
+            <td>{{$index+1}}</td>
+            <td>{{orderItem.component.name}} <span *ngIf="orderItem.remark" style="font-weight:bold"><br />{{orderItem.remark}}</span></td>
+            <td>{{orderItem.quantity}}</td>
+            <td>
+                {{orderItem.purchasePrice | currency}}
+            </td>
+            <td>
+                {{orderItem.subTotal | currency}}
+            </td>
+        </tr>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="text-align:right;font-weight:bold">
+                    សរុបរង (Total)
+                </td>
+                <td style="font-weight:bold">
+                    {{vm.invoice.total | currency}}
+                </td>
+            </tr>
+            <tr style="background-color:white">
+                <td colspan="5" style="border:none">
+                </td>
+            </tr>
+            <tr style="background-color:white">
+                <td colspan="4" style="border:none">
+                    អ្នកលក់
+                </td>
+                <td colspan="5" style="border:none">
+                    អ្នកទទួល
+                </td>
+            </tr>
+            <tr style="background-color:white;height:60px">
+                <td colspan="5" style="border:none">
+                </td>
+            </tr>
+            <tr style="background-color:white">
+                <td colspan="4" style="border:none">
+                    ឈ្មោះ............................
+                </td>
+                <td colspan="5" style="border:none">
+                    ឈ្មោះ............................
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</section>

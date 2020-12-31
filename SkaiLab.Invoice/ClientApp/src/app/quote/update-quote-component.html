@@ -1,0 +1,234 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <style>
+        .ngx-dropdown-list-container {
+            position: static !important;
+        }
+
+        .ngx-dropdown-container .ngx-dropdown-list-container {
+            position: static !important;
+        }
+    </style>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <div class="btn-group" *ngIf="showSaveDrawButton()">
+                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        class="dropdown-toggle btn btn-primary">{{ 'textTranslate.saveAs' | translate }}</button>
+                    <div tabindex="-1" aria-hidden="true" role="menu" class="dropdown-menu">
+                        <button type="submit" (click)="onSaveAsDraw(false)" class="dropdown-item" *ngIf="showSaveDrawButton()">{{ 'textTranslate.saveAsDrawAndNew' | translate }}</button>
+                        <button type="submit" (click)="onSaveAsDraw(true)" class="dropdown-item"  *ngIf="showSaveDrawButton()"> {{ 'textTranslate.saveAsDrawAndClose' | translate }}</button>
+                        <div tabindex="-1" class="dropdown-divider"  *ngIf="showSaveAcceptButton()"></div>
+                        <button type="submit" (click)="onSaveAndAccept(false)" class="dropdown-item" *ngIf="showSaveAcceptButton()">{{ 'textTranslate.saveAndAcceptAndNew' | translate }}</button>
+                        <button type="submit" (click)="onSaveAndAccept(true)" class="dropdown-item" *ngIf="showSaveAcceptButton()">{{ 'textTranslate.saveAndAcceptAndClose' | translate }}</button>
+                    </div>
+                </div>
+                <a  [routerLink]="['/invoice-newquote/',quote.id]"  class="btn btn-primary" *ngIf="showCreateInvoiceButton()">{{ 'textTranslate.newInvoice' | translate }}</a>
+                <button type="button" class="btn btn-primary" (click)="onSaveAndPrint()" *ngIf="showSaveAndPrint()">{{ 'textTranslate.saveAndPrint' | translate }}</button>
+                <button type="button" class="btn btn-primary" (click)="onPrint()" *ngIf="showPrintButton()">{{ 'textTranslate.print' | translate }}</button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="vendor">{{ 'textTranslate.customer' | translate }}<span class="text-danger"> * </span></label>
+                            <ngx-select-dropdown (change)="onSelectedCustomer($event)" [(ngModel)]="selectCustomer" [disabled]="disableUpdate()"
+                                [config]="dropdownConfig" name="vendor" [options]="customers">
+                            </ngx-select-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="date">{{ 'textTranslate.date' | translate }}<span class="text-danger"> * </span></label>
+                            <angular2-date-picker [(ngModel)]="quote.date" name="orderDate"  [disabled]="disableUpdate()"
+                                [settings]="datePickerOption"></angular2-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="deliveryDate">{{ 'textTranslate.expireDate' | translate }}</label>
+                            <angular2-date-picker [(ngModel)]="quote.expireDate"  [disabled]="disableUpdate()"
+                                (onDateSelect)="onDeliveryDateChange($event)" id="delivery" name="deliveryDate"
+                                [settings]="datePickerOption">
+                            </angular2-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="refNo">{{ 'textTranslate.referenceNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="refNo" [(ngModel)]="quote.refNo"  [disabled]="disableUpdate()"
+                                #refNo="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="orderNumber">{{ 'textTranslate.number' | translate }}</label> 
+                            <input type="text" class="form-control" name="orderNumber"  [disabled]="disableUpdate()"
+                                [(ngModel)]="quote.number" #orderNumber="ngModel" disabled />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="currency">{{ 'textTranslate.currency' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control" id="currency" [(ngModel)]="quote.currency" required  [disabled]="disableUpdate()"
+                                name="currency" (change)="onCurrencySelectedChange()">
+                                <option *ngFor="let c of currencies" [ngValue]="c">{{ c.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12"
+                        *ngFor="let exchangeRate of quote.currency.exchangeRates;let i = index">
+                        <div class="form-group">
+                            <label for="currency{{i}}">1 {{quote.currency.code}} = {{exchangeRate.exchangeRate}}
+                                {{exchangeRate.currency.code}}<span class="text-danger"> * </span></label>
+                            <input type="number" class="form-control" name="currency{{i}}"
+                                (change)="onExchangeRateChange()" [(ngModel)]="exchangeRate.exchangeRate"  [disabled]="disableUpdate()"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-6 col-sm-12" *ngIf="!disableUpdate()">
+                        <div class="input-group">
+                            <ngx-select-dropdown style="min-width: 400px;" [(ngModel)]="selectedProduct" 
+                                [config]="productDropdownConfig" name="product" 
+                                [options]="products" >
+                            </ngx-select-dropdown>
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" (click)="addLine()" *ngIf="!disableUpdate()"> 
+                                    <i class="fa fa-plus"></i> {{ 'textTranslate.addLine' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div  [ngClass]="(disableUpdate())?'col-md-10 col-sm-12':'col-md-4 col-sm-12'">
+                        <h4>{{ 'textTranslate.status' | translate }}: {{quote.status.name}}</h4>
+                    </div>
+                    <div class="col col-md-2 col-sm-3">
+                        <div class="header-menu">
+                            <div class="header-left">
+                                <div class="dropdown for-message">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="files" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-file"></i>
+                                        <span class="count bg-primary">{{quote.attachments.length}}</span>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="files" style="width: 400px;">
+                                        <table class="table table-border">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ 'textTranslate.document' | translate }}</th>
+                                                    <th>{{ 'textTranslate.closeDocument' | translate }}</th>
+                                                    <th *ngIf="!disableUpdate()"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let attachment of quote.attachments;let i = index">
+                                                    <td><a href="{{attachment.fileUrl}}" target="blank">{{attachment.fileName}}</a></td>
+                                                    <td><input type="checkbox" name="isFinalOfficalFile{{i}}" [(ngModel)]="attachment.isFinalOfficalFile" (change)="onOfficalFileChange(attachment)"/></td>
+                                                    <td *ngIf="!disableUpdate()"><span class="pointer" (click)="onRemoveAttachment(attachment)"><i class="fa fa-times"></i></span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                              <input type="file" class="custom-file-input" id="inputGroupFile02" type='file' (change)="fileChange($event)"
+                                              accept="image/jpeg,image/png,application/pdf">
+                                              <label class="custom-file-label" for="inputGroupFile02" type='file'>{{ 'textTranslate.chooseFile' | translate }}</label>
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'textTranslate.productOrService' | translate }}</th>
+                                <th>{{ 'textTranslate.quantity' | translate }}</th>
+                                <th>{{ 'textTranslate.unitPrice' | translate }}</th>
+                                <th>{{ 'textTranslate.discountRate' | translate }}</th>
+                                <th  *ngIf="declareTax">{{ 'textTranslate.tax' | translate }}</th>
+                                <th *ngIf="showLocation()">{{ 'textTranslate.location' | translate }}</th>
+                                <th>{{ 'textTranslate.amount' | translate }}</th>
+                                <th  *ngIf="!disableUpdate()"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let orderItem of quote.quoteItems;let i = index">
+                                <td class="small-font  text-table-padding">
+                                    {{orderItem.product.productSaleInformation.title}}
+                                    <br/>
+                                    {{orderItem.product.productSaleInformation.description}}
+                                </td>
+                                <td class="data-table-padding">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="qty{{i}}"  [disabled]="disableUpdate()"
+                                        [(ngModel)]="orderItem.quantity" (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="price{{i}}"  [disabled]="disableUpdate()"
+                                        [(ngModel)]="orderItem.unitPrice" (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding" *ngIf="declareTax">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="discount{{i}}"  [disabled]="disableUpdate()"
+                                        [(ngModel)]="orderItem.discountRate" min="0" max="100"
+                                        (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding">
+                                    <select class="small-font form-control text-select-line-item" name="tax{{i}}"  [disabled]="disableUpdate()"
+                                        [(ngModel)]="orderItem.taxId" required
+                                        (change)="onTaxSelectChange(orderItem)">
+                                        <option *ngFor="let c of taxes" [ngValue]="c.id">
+                                            {{ c.name }}</option>
+                                    </select>
+                                </td>
+                                <td class="data-table-padding" *ngIf="showLocation()">
+                                    <select class="small-font form-control text-select-line-item" name="location{{i}}" *ngIf="orderItem.product.trackInventory"  [disabled]="disableUpdate()"
+                                        [(ngModel)]="orderItem.locationId">
+                                        <option *ngFor="let c of locations" [ngValue]="c.id">
+                                            {{ c.name }}</option>
+                                    </select>
+                                </td>
+                                <td class="small-font  text-table-padding">{{ orderItem.lineTotal | number:'1.2-2' }}
+                                    {{quote.currency.symbole}}</td>
+                                <td  *ngIf="!disableUpdate()"> <span class="pointer" (click)="onRemvoePurchaseOrderItem(orderItem)"><i
+                                            class="fa fa-times"></i></span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr *ngFor="let subTotal of subTotals">
+                                <td [attr.colspan]="getSubTotalColSpan()"  style="text-align: right;" class="small-font">{{subTotal.label}}
+                                </td>
+                                <td class="small-font">{{ subTotal.amount | number:'1.2-2' }}
+                                    {{subTotal.currency.symbole}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="note">{{ 'textTranslate.termAndCondition' | translate }}</label>
+                            <textarea name="termAndCondition" rows="4" [(ngModel)]="quote.termAndCondition"  [disabled]="disableUpdate()"
+                                class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="note">{{ 'textTranslate.note' | translate }}</label>
+                            <textarea name="note" rows="4" [(ngModel)]="quote.note"  [disabled]="disableUpdate()"
+                                class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

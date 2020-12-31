@@ -1,0 +1,101 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.month' | translate }}</label>
+                        <select class="form-control"  id="perdiod" (change)="getPayroll()"
+                            [(ngModel)]="filter.monthFilter" name="perdiod">
+                            <option *ngFor="let c of filter.monthFilters" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12" >
+                    <div class="btn-group" style="margin-top: 32px;">
+                        <button type="button" class="btn btn-primary" *ngIf="showGeneratePayroll" (click)="onGeneratePayrollClick()">{{ 'textTranslate.generatePayroll' | translate }}</button>
+                        <button type="button" class="btn btn-primary" (click)="printData()">{{ 'textTranslate.exportThisData' | translate }}</button>
+                        <button type="button" class="btn btn-primary" *ngIf="payroll.id!=0" (click)="onGenerateEmployeePaySlips()">{{ 'textTranslate.exportPayslip' | translate }}</button>
+                        <button type="button" class="btn btn-primary" *ngIf="payroll.id!=0 && !showGeneratePayroll" (click)="onRegeneratePayrollClick()">{{ 'textTranslate.reGeneratePayroll' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class=" table-responsive">
+                    <table class="table ">
+                        <thead>
+                            <tr class="small-font">
+                                <th>{{ 'textTranslate.displayName' | translate }}</th>
+                                <th >{{ 'textTranslate.salary' | translate }}</th>
+                                <th >{{ 'textTranslate.otherBenefit' | translate }}</th>
+                                <th >{{ 'textTranslate.total' | translate }}</th>
+                                <th *ngIf="payroll.id!=0"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of payroll.payrolls">
+                                <td>{{p.employee.displayName}}</td>     
+                                <td >
+                                     <input type="number" *ngIf="showGeneratePayroll" class="form-control" style="min-width:100px;" [(ngModel)]="p.salary" />
+                                     <span *ngIf="!showGeneratePayroll">{{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}</span>
+                                 </td>    
+                                 <td>
+                                    <input type="number" *ngIf="showGeneratePayroll" class="form-control" style="min-width:100px;" [(ngModel)]="p.otherBenefit" />
+                                    <span *ngIf="!showGeneratePayroll">{{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}</span>
+                                 </td>
+                                 <td>
+                                    {{payroll.currency.symbole}}{{getPayrollTotal(p) | number:'1.2-2'}}
+                                 </td>
+                                 <td *ngIf="payroll.id!=0">   <button type="button" class="btn btn-primary" (click)="onGenerateEmployeePaySlip(p)" > <i class="fa fa-download"></i></button></td>
+                            </tr>
+                            <tr class="bold">
+                                <td colspan="3" class="rigth">
+                                    {{ 'textTranslate.total' | translate }}: 
+                                </td>
+                                <td>{{payroll.currency.symbole}}{{getTotal() | number:'1.2-2'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display: none;">
+                <div #content>
+                    <div class=" table-responsive">
+                        <table class="table ">
+                            <thead>
+                                <tr class="small-font">
+                                    <th>{{ 'textTranslate.displayName' | translate }}</th>
+                                    <th >{{ 'textTranslate.salary' | translate }}</th>
+                                    <th >{{ 'textTranslate.otherBenefit' | translate }}</th>
+                                    <th >{{ 'textTranslate.total' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of payroll.payrolls">
+                                    <td>{{p.employee.displayName}}</td>     
+                                    <td >
+                                        {{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}
+                                     </td>    
+                                     <td>
+                                        {{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}
+                                     </td>
+                                     <td>
+                                        {{payroll.currency.symbole}}{{getPayrollTotal(p) | number:'1.2-2'}}
+                                     </td>
+                                </tr>
+                                <tr class="bold">
+                                    <td colspan="3" class="rigth">
+                                        {{ 'textTranslate.total' | translate }}:
+                                    </td>
+                                    <td>{{payroll.currency.symbole}}{{getTotal() | number:'1.2-2'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+         
+        </div>
+    </div>
+</div>

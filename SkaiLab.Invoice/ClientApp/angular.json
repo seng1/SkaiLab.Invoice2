@@ -5,10 +5,10 @@
   "projects": {
     "SkaiLab.Invoice": {
       "root": "",
+      "schematics": {},
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -29,6 +29,7 @@
               "./node_modules/popper.js/dist/umd/popper.min.js",
               "./node_modules/bootstrap/dist/js/bootstrap.min.js",
               "./node_modules/jquery-match-height/dist/jquery.matchHeight-min.js",
+              "src/assets/js/kit-fontawesome.js",
               "src/assets/js/main.js"
             ]
           },

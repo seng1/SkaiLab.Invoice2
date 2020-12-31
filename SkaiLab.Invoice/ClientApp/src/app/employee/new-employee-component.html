@@ -1,0 +1,218 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" (click)="onSave(false)">{{ 'textTranslate.saveAndNew' | translate }} </button>
+                <button type="submit" class="btn btn-primary" (click)="onSave(true)">{{ 'textTranslate.saveAndClose' | translate }} </button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="firstName">{{ 'textTranslate.firstName' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="firstName" [(ngModel)]="employee.firstName"  (change)="onNameChange()"
+                                #firstName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && firstName.invalid }" required />
+                            <div *ngIf="firstName.invalid" class="invalid-feedback">
+                                <div *ngIf="firstName.errors.required">{{ 'textTranslate.firstNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="lastName">{{ 'textTranslate.lastName' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="lastName" [(ngModel)]="employee.lastName" (change)="onNameChange()"
+                                #lastName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }" required />
+                            <div *ngIf="lastName.invalid" class="invalid-feedback">
+                                <div *ngIf="lastName.errors.required">{{ 'textTranslate.lastNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="displayName">{{ 'textTranslate.displayName' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="displayName" [(ngModel)]="employee.displayName"
+                                #displayName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && displayName.invalid }" required />
+                            <div *ngIf="displayName.invalid" class="invalid-feedback">
+                                <div *ngIf="displayName.errors.required">{{ 'textTranslate.displayNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="phoneNumber">{{ 'textTranslate.phoneNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="phoneNumber" [(ngModel)]="employee.phoneNumber"
+                                #phoneNumber="ngModel"  />
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="email">{{ 'textTranslate.email' | translate }}</label>
+                            <input type="text" class="form-control" name="email" [(ngModel)]="employee.email"
+                                #email="ngModel"  />
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="iDOrPassportNumber">{{ 'textTranslate.idOrPassport' | translate }}</label>
+                            <input type="text" class="form-control" name="iDOrPassportNumber" [(ngModel)]="employee.iDOrPassportNumber"
+                                #iDOrPassportNumber="ngModel"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="gender">{{ 'textTranslate.gender' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control" id="gender" [(ngModel)]="employee.genderId" required [ngClass]="{ 'is-invalid': errorGender() }"
+                                name="gender">
+                                <option *ngFor="let gender of genders" [ngValue]="gender.id">{{ gender.name }}
+                                </option>
+                            </select>
+                            <div *ngIf="errorGender()" class="text-danger">
+                                <div>{{ 'textTranslate.genderRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="salaryType">{{ 'textTranslate.salaryType' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control"   [ngClass]="{ 'is-invalid': erroSalaryType() }" id="salaryType" [(ngModel)]="employee.salaryTypeId" required
+                                name="salaryType">
+                                <option *ngFor="let salaryType of salaryTypes" [ngValue]="salaryType.id">{{ salaryType.name }}
+                                </option>
+                            </select>
+                            <div *ngIf="erroSalaryType()" class="text-danger">
+                                <div>{{ 'textTranslate.salaryTypeRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="salary">{{ 'textTranslate.salary' | translate }}<span class="text-danger"> * </span></label>
+                            <input type="number" class="form-control" name="salary" [(ngModel)]="employee.salary"
+                                #salary="ngModel" [ngClass]="{ 'is-invalid': f.submitted && salary.invalid }"  required/>
+                                <div *ngIf="salary.invalid" class="invalid-feedback">
+                                    <div *ngIf="salary.errors.required">{{ 'textTranslate.salaryRequire' | translate }}</div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="maritalStatus">{{ 'textTranslate.maritalStatus' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control"  id="maritalStatus" [(ngModel)]="employee.maritalStatusId" required
+                                name="maritalStatus">
+                                <option *ngFor="let maritalStatus of maritalStatuses"  [ngClass]="{ 'is-invalid': errorMaritalStatusGender() }" [ngValue]="maritalStatus.id">{{ maritalStatus.name }}
+                                </option>
+                            </select>
+                            <div *ngIf="errorMaritalStatusGender()" class="text-danger">
+                                <div>{{ 'textTranslate.maritalStatusRequire' | translate }}</div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="numberOfChild">{{ 'textTranslate.numberOfChild' | translate }}<span class="text-danger"> * </span></label>
+                            <input type="number" class="form-control" name="numberOfChild" [ngClass]="{ 'is-invalid': f.submitted && numberOfChild.invalid }"  [(ngModel)]="employee.numberOfChild"
+                                #numberOfChild="ngModel"  required/>
+                                <div *ngIf="numberOfChild.invalid" class="invalid-feedback">
+                                    <div *ngIf="numberOfChild.errors.required">{{ 'textTranslate.numberOfChildRequire' | translate }}</div>
+                                </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="isConfederationThatHosts">{{ 'textTranslate.hasSpouse' | translate }}</label>
+                            <div class="custom-file">
+                                <input type="checkbox" name="isConfederationThatHosts" [(ngModel)]="employee.isConfederationThatHosts"
+                                #isConfederationThatHosts="ngModel" />
+                              </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="isForeginEmployee">{{ 'textTranslate.residentEmployee' | translate }}</label>
+                            <div class="custom-file">
+                                <input type="checkbox" name="isForeginEmployee" [(ngModel)]="employee.isResidentEmployee"
+                                #isForeginEmployee="ngModel" />
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="jobTitle">{{ 'textTranslate.jobTitle' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="jobTitle" [(ngModel)]="employee.jobTitle"  
+                                #jobTitle="ngModel" [ngClass]="{ 'is-invalid': f.submitted && jobTitle.invalid }" required />
+                            <div *ngIf="jobTitle.invalid" class="invalid-feedback">
+                                <div *ngIf="jobTitle.errors.required">{{ 'textTranslate.jobTitleRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="dateOfBirth">{{ 'textTranslate.dateOfBirth' | translate }}</label>
+                            <angular2-date-picker [(ngModel)]="employee.dateOfBirth" 
+                                 id="dateOfBirth" name="dateOfBirth" (onDateSelect)="onDateOfBirthDateChange($event)"
+                                [settings]="datePickerOption">
+                            </angular2-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="nationality">{{ 'textTranslate.nationality' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control"  id="nationality" [(ngModel)]="employee.countryId" required
+                                name="nationality">
+                                <option *ngFor="let country of countries"   [ngValue]="country.id">{{ country.nationality }}
+                                </option>
+                            </select>
+                            
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="address">{{ 'textTranslate.address' | translate }}</label>
+                            <textarea name="address" rows="2" [(ngModel)]="employee.address"
+                                class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="isActive">{{ 'textTranslate.active' | translate }}</label>
+                            <div class="custom-file">
+                                <input type="checkbox" name="isActive" [(ngModel)]="employee.isActive"
+                                #isActive="ngModel" />
+                              </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="document">{{ 'textTranslate.document' | translate }}</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile02" type='file' (change)="fileChange($event)"
+                                accept="image/jpeg,image/png,application/pdf">
+                                <label class="custom-file-label" for="inputGroupFile02" type='file'>{{ 'textTranslate.chooseFile' | translate }}</label>
+                              </div>
+                              <a href="{{employee.documentUrl}}" *ngIf="employee.documentUrl" target="blank">{{ 'textTranslate.employeeDocument' | translate }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

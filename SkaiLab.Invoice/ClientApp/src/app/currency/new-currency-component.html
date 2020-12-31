@@ -1,0 +1,21 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <button type="submit" class="btn btn-primary"  (click)="onSave()">{{ 'textTranslate.save' | translate }}</button>
+            <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="newcurrency">{{ 'textTranslate.currency' | translate }} <span class="text-danger"> * </span></label>
+                        <select class="form-control" id="newcurrency" [(ngModel)]="currency.id" required name="newcurrency" (change)="onCurrencySelected()">
+                            <option *ngFor="let c of newCurrency.currencies" [ngValue]="c.id">{{ c.name }}</option>
+                          </select>
+                    </div>
+                    <div class="form-group" *ngFor="let exchangeRate of currency.exchangeRates;let i = index">
+                        <label for="exchangeRate{{i}}">1 {{currency.code}} = {{exchangeRate.exchangeRate}} {{exchangeRate.currency.code}} <span class="text-danger"> * </span></label>
+                        <input type="number" class="form-control" name="exchangeRate{{i}}"[(ngModel)]="exchangeRate.exchangeRate"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

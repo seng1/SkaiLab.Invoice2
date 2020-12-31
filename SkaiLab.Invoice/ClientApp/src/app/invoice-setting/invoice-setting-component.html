@@ -1,0 +1,35 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" (click)="onSave()">{{ 'textTranslate.save' | translate }}</button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="invoice">{{ 'textTranslate.termAndConditionInvoice' | translate }} <span class="text-danger"> * </span></label>
+                    <textarea name="invoice" rows="4"
+                        [(ngModel)]="organisationSetting.termAndConditionForInvoice" #invoice="ngModel" class="form-control" required></textarea>
+                    <div *ngIf="f.submitted && invoice.status=='INVALID'"
+                        class="text-danger">
+                        <div *ngIf="invoice.errors.required">{{ 'textTranslate.termAndConditionInvoiceRequire' | translate }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="quote">{{ 'textTranslate.termAndConditionQuote' | translate }} </label>
+                    <textarea name="quote" rows="4"
+                        [(ngModel)]="organisationSetting.termAndConditionForQuote" #quote="ngModel" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="po">{{ 'textTranslate.termAndConditionPurchase' | translate }} </label>
+                    <textarea name="po" rows="4"
+                        [(ngModel)]="organisationSetting.termAndConditionForPurchaseOrder" #po="ngModel" class="form-control"></textarea>
+                </div>
+             </div>
+
+             
+        </div>
+    </div>
+</form>

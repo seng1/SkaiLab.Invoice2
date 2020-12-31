@@ -1,0 +1,102 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" (click)="onSave(false)">{{ 'textTranslate.saveAndNew' | translate }} </button>
+                <button type="submit" class="btn btn-primary" (click)="onSave(true)">{{ 'textTranslate.saveAndClose' | translate }} </button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="name">{{ 'textTranslate.displayName' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="name" [(ngModel)]="customer.displayName"
+                                #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+                            <div *ngIf="name.invalid" class="invalid-feedback">
+                                <div *ngIf="name.errors.required">{{ 'textTranslate.displayNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="currency">{{ 'textTranslate.currency' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control" id="currency" [(ngModel)]="customer.currencyId" required
+                                name="newcurrency">
+                                <option *ngFor="let c of currencies" [ngValue]="c.id">{{ c.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="declareTax">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="legalName">{{ 'textTranslate.localLegalName' | translate }}</label>
+                            <input type="text" class="form-control" name="localLegalName" [(ngModel)]="customer.localLegalName"
+                                #localLegalName="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="legalName">{{ 'textTranslate.legalName' | translate }}</label>
+                            <input type="text" class="form-control" name="legalName" [(ngModel)]="customer.legalName"
+                                #legalName="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="bussinessRegistrationNumber">{{ 'textTranslate.businessRegistrationNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="bussinessRegistrationNumber"
+                                [(ngModel)]="customer.businessRegistrationNumber" #legalName="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="taxNumber">{{ 'textTranslate.taxNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="taxNumber" [(ngModel)]="customer.taxNumber"
+                                #taxNumber="ngModel" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="contactName1">{{ 'textTranslate.contactName' | translate }}</label>
+                            <input type="text" class="form-control" name="contactName1" [(ngModel)]="customer.contact.contactName" #contactName1="ngModel"
+                             />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="phoneNumber1">{{ 'textTranslate.phoneNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="phoneNumber1" [(ngModel)]="customer.contact.phoneNumber" #phoneNumber1="ngModel"
+                             />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="email1">{{ 'textTranslate.email' | translate }}</label>
+                            <input type="email" class="form-control" name="email1" [(ngModel)]="customer.contact.email" #email1="ngModel"
+                             />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <label for="website1">{{ 'textTranslate.website' | translate }}</label>
+                            <input type="text" class="form-control" name="website1" [(ngModel)]="customer.contact.website" #website1="ngModel"
+                             />
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label for="address1">{{ 'textTranslate.address' | translate }}</label>
+                            <textarea name="address1" rows="2" [(ngModel)]="customer.contact.address" #address1="ngModel" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

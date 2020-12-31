@@ -12,6 +12,7 @@ namespace SkaiLab.Invoice.Dal.Models
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
             OrganisationUser = new HashSet<OrganisationUser>();
+            OrganisationUserMenuFeature = new HashSet<OrganisationUserMenuFeature>();
         }
 
         public string Id { get; set; }
@@ -30,10 +31,12 @@ namespace SkaiLab.Invoice.Dal.Models
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
 
+        public virtual WorkingOrganisation WorkingOrganisation { get; set; }
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual ICollection<OrganisationUser> OrganisationUser { get; set; }
+        public virtual ICollection<OrganisationUserMenuFeature> OrganisationUserMenuFeature { get; set; }
     }
 }

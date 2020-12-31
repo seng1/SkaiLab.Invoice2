@@ -1,10 +1,10 @@
-{
+﻿{
   "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
+    "windowsAuthentication": false, 
+    "anonymousAuthentication": true, 
     "iisExpress": {
-      "applicationUrl": "http://localhost:23869",
-      "sslPort": 44380
+      "applicationUrl": "http://localhost:54595",
+      "sslPort": 44379
     }
   },
   "profiles": {
@@ -18,7 +18,7 @@
     "SkaiLab.Invoice.Service": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:46429;http://localhost:7611",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

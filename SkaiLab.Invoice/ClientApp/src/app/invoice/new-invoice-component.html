@@ -1,0 +1,218 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" *ngIf="allowSave()" (click)="onSave(false)" class="btn btn-primary">{{ 'textTranslate.save' | translate }}</button>
+                <button type="submit"  *ngIf="allowSave()"  (click)="onSave(true)" class="btn btn-primary">{{ 'textTranslate.saveAndPrint' | translate }}</button>
+                <button type="submit" class="btn btn-primary" (click)="onPrintReceipt()" *ngIf="!allowSave()">{{ 'textTranslate.printReceipt' | translate }}</button>
+                <button type="submit" *ngIf="!allowSave()" (click)="print()" class="btn btn-primary">{{ 'textTranslate.print' | translate }}</button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="vendor">{{ 'textTranslate.customer' | translate }}<span class="text-danger"> * </span></label>
+                            <ngx-select-dropdown (change)="onSelectedCustomer($event)" [(ngModel)]="selectCustomer"
+                                [config]="dropdownConfig" name="vendor" [options]="customers">
+                            </ngx-select-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="date">{{ 'textTranslate.date' | translate }}<span class="text-danger"> * </span></label>
+                            <angular2-date-picker [(ngModel)]="invoice.date" name="orderDate"
+                                [settings]="datePickerOption"></angular2-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="deliveryDate">{{ 'textTranslate.dueDate' | translate }}</label>
+                            <angular2-date-picker [(ngModel)]="invoice.dueDate"
+                                 id="delivery" name="deliveryDate"
+                                [settings]="datePickerOption">
+                            </angular2-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="refNo">{{ 'textTranslate.referenceNumber' | translate }}</label>
+                            <input type="text" class="form-control" name="refNo" [(ngModel)]="invoice.refNo"
+                                #refNo="ngModel" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                            <label for="orderNumber">{{ 'textTranslate.number' | translate }}</label>
+                            <input type="text" class="form-control" name="orderNumber"
+                                [(ngModel)]="invoice.number" #orderNumber="ngModel" disabled />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="currency">{{ 'textTranslate.currency' | translate }} <span class="text-danger"> * </span></label>
+                            <select class="form-control" id="currency" [(ngModel)]="invoice.currency" required
+                                name="currency" (change)="onCurrencySelectedChange()">
+                                <option *ngFor="let c of currencies" [ngValue]="c">{{ c.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12"
+                        *ngFor="let exchangeRate of invoice.currency.exchangeRates;let i = index">
+                        <div class="form-group">
+                            <label for="currency{{i}}">1 {{invoice.currency.code}} = {{exchangeRate.exchangeRate}}
+                                {{exchangeRate.currency.code}}<span class="text-danger"> * </span></label>
+                            <input type="number" class="form-control" name="currency{{i}}"
+                                (change)="onExchangeRateChange()" [(ngModel)]="exchangeRate.exchangeRate" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-8 col-sm-12">
+                        <div class="input-group">
+                            <ngx-select-dropdown style="min-width: 400px;" [(ngModel)]="selectedProduct"
+                                [config]="productDropdownConfig" name="product"
+                                [options]="products" >
+                            </ngx-select-dropdown>
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" (click)="addLine()">
+                                    <i class="fa fa-plus"></i> {{ 'textTranslate.addLine' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-md-4 col-sm-3">
+                        <div class="header-menu">
+                            <div class="header-left">
+                                <div class="dropdown for-message">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="files" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-file"></i>
+                                        <span class="count bg-primary">{{invoice.attachments.length}}</span>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="files" style="width: 400px;">
+                                        <table class="table table-border">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ 'textTranslate.document' | translate }}</th>
+                                                    <th>{{ 'textTranslate.closeDocument' | translate }}</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let attachment of invoice.attachments;let i = index">
+                                                    <td><a href="{{attachment.fileUrl}}" target="blank">{{attachment.fileName}}</a></td>
+                                                    <td><input type="checkbox" name="isFinalOfficalFile{{i}}" [(ngModel)]="attachment.isFinalOfficalFile" (change)="onOfficalFileChange(attachment)"/></td>
+                                                    <td><span class="pointer" (click)="onRemoveAttachment(attachment)"><i class="fa fa-times"></i></span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                              <input type="file" class="custom-file-input" id="inputGroupFile02" type='file' (change)="fileChange($event)"
+                                              accept="image/jpeg,image/png,application/pdf">
+                                              <label class="custom-file-label" for="inputGroupFile02" type='file'>{{ 'textTranslate.chooseFile' | translate }}</label>
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" table-responsive">
+                    <table class="table no-padding-table">
+                        <thead>
+                            <tr>
+                                <th>{{ 'textTranslate.productOrService' | translate }}</th>
+                                <th>{{ 'textTranslate.quantity' | translate }}</th>
+                                <th>{{ 'textTranslate.unitPrice' | translate }}</th>
+                                <th>{{ 'textTranslate.discountRate' | translate }}</th>
+                                <th  *ngIf="declareTax">{{ 'textTranslate.tax' | translate }}</th>
+                                <th *ngIf="showLocation()">{{ 'textTranslate.location' | translate }}</th>
+                                <th>{{ 'textTranslate.amount' | translate }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let orderItem of invoice.customerTransactionItems;let i = index">
+                                <td class="small-font text-table-padding">
+                                    {{orderItem.product.name}}
+                                </td>
+                                <td class="data-table-padding">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="qty{{i}}"
+                                        [(ngModel)]="orderItem.quantity" (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="price{{i}}"
+                                        [(ngModel)]="orderItem.unitPrice" (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding">
+                                    <input type="number" class="small-font form-control text-input-line-item" name="discount{{i}}"
+                                        [(ngModel)]="orderItem.discountRate" min="0" max="100"
+                                        (change)="onOrderItemChange(orderItem)" />
+                                </td>
+                                <td class="data-table-padding" *ngIf="declareTax">
+                                    <select class="small-font form-control text-select-line-item" name="tax{{i}}"
+                                        [(ngModel)]="orderItem.taxId" required
+                                        (change)="onTaxSelectChange(orderItem)">
+                                        <option *ngFor="let c of taxes" [ngValue]="c.id">
+                                            {{ c.name }}</option>
+                                    </select>
+                                </td>
+                                <td class="data-table-padding" *ngIf="showLocation()">
+                                    <div *ngIf="orderItem.product.trackInventory">
+                                        <select class="small-font form-control text-select-line-item" name="location{{i}}" (change)="getInventoryQty(orderItem)"
+                                            [(ngModel)]="orderItem.locationId">
+                                            <option *ngFor="let c of locations" [ngValue]="c.id">
+                                                {{ c.name }}</option>
+                                        </select>
+                                        <div style="margin-top: 5px;text-align: center;" class="small-font">
+                                            <loading-component *ngIf="orderItem.requestingInventory"></loading-component>
+                                        <span *ngIf="!orderItem.requestingInventory && orderItem.inventoryQty!=null">Inventory Qty: <span [ngClass]="(orderItem.inventoryQty==0)?'text-danger':''">{{orderItem.inventoryQty}}</span></span>
+                                        </div>
+                                        
+                                    </div>
+                                </td>
+                                <td class="small-font text-table-padding">{{ orderItem.lineTotal | number:'1.2-2' }}
+                                    {{invoice.currency.symbole}}</td>
+                                <td class="small-font text-table-padding"> <span class="pointer" (click)="onRemvoePurchaseOrderItem(orderItem)"><i
+                                            class="fa fa-times"></i></span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr *ngFor="let subTotal of subTotals">
+                                <td  [attr.colspan]="getSubTotalColSpan()"  style="text-align: right;" class="small-font">{{subTotal.label}}
+                                </td>
+                                <td class="small-font">{{ subTotal.amount | number:'1.2-2' }}
+                                    {{subTotal.currency.symbole}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="note">{{ 'textTranslate.termAndCondition' | translate }}</label>
+                            <textarea name="termAndCondition" rows="4" [(ngModel)]="invoice.termAndCondition"
+                                class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="note">{{ 'textTranslate.note' | translate }}</label>
+                            <textarea name="note" rows="4" [(ngModel)]="invoice.note"
+                                class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

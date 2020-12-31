@@ -1,0 +1,18 @@
+<div role="document" class="modal-dialog modal-full-height modal-notify modal-info">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="heading lead">{{title}} </p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <iframe *ngIf="report" [src]="report" style="width:100%; height:600px;" frameborder="0"></iframe>
+            <loading-component *ngIf="!report"></loading-component>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="close()">Close</button>
+      </div>
+    </div>
+  </div>
+ 

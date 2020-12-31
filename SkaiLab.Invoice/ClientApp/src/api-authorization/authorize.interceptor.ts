@@ -9,12 +9,10 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class AuthorizeInterceptor implements HttpInterceptor {
   constructor(private authorize: AuthorizeService) { }
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authorize.getAccessToken()
       .pipe(mergeMap(token => this.processRequestWithToken(token, req, next)));
   }
-
   // Checks if there is an access_token available in the authorize service
   // and adds it to the request in case it's targeted at the same origin as the
   // single page application.
@@ -22,7 +20,10 @@ export class AuthorizeInterceptor implements HttpInterceptor {
     if (!!token && this.isSameOriginUrl(req)) {
       req = req.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,"OrganisationId":this.getWorkingOrganisationId(),"Language":this.getLanguage()
+        },
+        setParams:{
+          "culture":this.getLanguage()
         }
       });
     }
@@ -50,5 +51,17 @@ export class AuthorizeInterceptor implements HttpInterceptor {
     // It's an absolute or protocol relative url that
     // doesn't have the same origin.
     return false;
+  }
+  getWorkingOrganisationId(){
+    if(localStorage.getItem("OrganisationId")==null){
+      return "";
+    }
+    return localStorage.getItem("OrganisationId");
+  }
+  getLanguage(){
+    if(localStorage.getItem("language")==null || localStorage.getItem("language")=="en"){
+      return "en-US";
+    }
+    return localStorage.getItem("language");
   }
 }

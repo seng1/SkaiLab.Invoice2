@@ -1,0 +1,84 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-9 col-sm-12">
+                    <div class="form-group">
+                        <label>Organisation</label>
+                        <angular2-multiselect [data]="organisations" [(ngModel)]="selectedOrganisations"
+                            [settings]="multipleDropDownSetting"></angular2-multiselect>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" (click)="onApplyFilter()" class="btn btn-primary"
+                            style="margin-top: 30px;">Apply Filter</button>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" (click)="printData()" style="margin-top: 30px;">  
+                            <i class="fa fa-download"></i></button>  
+                    </div>
+                  
+                </div>
+            </div>
+            <div #content>
+                <table class="table table-bordered table-striped table-sm" id="tablerecords">
+                    <thead>
+                        <tr>
+                            <th colspan="5"  class="center no-border">Customer Balance Detail Report</th>
+                        </tr>
+                        <tr>
+                            <td  colspan="5" class="center  no-border">Selected Organisations:{{getSelectedOrganisationNames()}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Transaction Type</th>
+                            <th style="width: 100px;">Number</th>
+                            <th>Due Date</th>
+                            <th>Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let headerRow of customerBalanceDetail.customerBalanceDetailHeaders" >
+                        <tr class="bold">
+                            <td colspan="4" (click)="expandClick(headerRow)">
+                                {{headerRow.customer.displayName}} <span style="color: blue;cursor: pointer;"><i *ngIf="headerRow.isExpand" class="fa fa-caret-square-o-down"></i><i *ngIf="!headerRow.isExpand" class="fa fa-caret-square-o-up"></i></span>
+                            </td>
+                            <td>{{currency.symbole}}{{headerRow.total | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr  *ngFor="let row of headerRow.customerBalanceDetailItems" [ngClass]="{ 'hide': !headerRow.isExpand }">
+                            <td ><span style="padding-left: 10px;">
+                                <a class="btn-link" (click)="itemClick(row)"
+                                   > {{row.date | date:'d/M/yyyy'}}</a>
+                               
+                            </span></td>
+                           <td>{{row.transactionType}}</td>
+                           <td style="word-break: break-all;">
+                            <a class="btn-link" (click)="itemClick(row)"
+                            >{{row.number}}</a>
+                            </td>
+                           <td [ngClass]="{ 'text-danger': row.isOverDue }">{{row.dueDate | date:'d/M/yyyy'}}</td>
+                           <td>{{currency.symbole}}{{row.amount | number:'1.2-2'}}</td>
+                        </tr>
+                    </tbody>
+                   <tbody>
+                       <tr  class="bold">
+                           <td colspan="4" class="rigth">Total</td>
+                           <td [ngClass]="{ 'text-danger': customerBalanceDetail.total<0 }">{{currency.symbole}}{{customerBalanceDetail.total | number:'1.2-2'}}</td>
+                       </tr>
+                       <tr>
+                        <td class="center no-border" colspan="5">
+                            Print on {{printDate}}
+                        </td>
+                    </tr>
+                   </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

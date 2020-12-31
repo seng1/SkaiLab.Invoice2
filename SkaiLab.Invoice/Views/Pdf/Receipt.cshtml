@@ -1,0 +1,100 @@
+﻿@model SkaiLab.Invoice.Models.Receipt
+@{
+    ViewData["Title"] = "Receipt";
+    Layout = "~/Pages/Shared/__pdf.cshtml";
+}
+<div id="invoice">
+    <div class="invoice">
+        <div style="min-width: 600px">
+            <header>
+                <div style="display:inline">
+                    <div>
+                        @if (!string.IsNullOrEmpty(Model.Orgainsation.LogoUrl))
+                        {
+                            <img src="@Model.Orgainsation.LogoUrl" data-holder-rendered="true" style="width:100px;height:100px;" />
+                        }
+                    </div>
+                    <div style="margin-left:150px;margin-top:-100px">
+                        <h2 class="name center khmer-moul">OFFICIAL RECEIPT</h2>
+                        <table class="no-color-table">
+                            <tbody>
+                                <tr>
+                                    <td class="no-padding" style="width:170px"> Date</td>
+                                    <td class="no-padding"> @Model.Date.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                                @if (!string.IsNullOrEmpty(Model.Orgainsation.Contact.PhoneNumber))
+                                {
+                                    <tr>
+                                        <td class="no-padding" style="width:170px">Telephone:</td>
+                                        <td class="no-padding"> @Model.Orgainsation.Contact.PhoneNumber</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Orgainsation.Contact.Email))
+                                {
+                                    <tr>
+                                        <td class="no-padding">Email:</td>
+                                        <td class="no-padding"> @Model.Orgainsation.Contact.Email</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Orgainsation.Contact.Website))
+                                {
+                                    <tr>
+                                        <td class="no-padding"> Website:</td>
+                                        <td class="no-padding"> @Model.Orgainsation.Contact.Website</td>
+                                    </tr>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Orgainsation.Contact.Address))
+                                {
+                                    <tr>
+                                        <td class="no-padding"> Address:</td>
+                                        <td class="no-padding"> @Model.Orgainsation.Contact.Address</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+              
+            </header>
+            <main>
+                <table class="no-color-table">
+                    <tbody>
+                        <tr>
+                            <td class="no-padding" style="width:170px"> Payee: </td>
+                            <td class="no-padding" style="border-bottom: 1px dotted"> @Model.Customer.DisplayName</td>
+                        </tr>
+                        <tr>
+                            <td class="no-padding" style="width:170px"> Purpose: </td>
+                            <td class="no-padding" style="border-bottom: 1px dotted"> @Model.Purpose</td>
+                        </tr>
+                        <tr>
+                            <td class="no-padding" style="width:170px"> Amount: </td>
+                            <td class="no-padding" style="border-bottom: 1px dotted"> @Model.Total.ToString("#,##0.00") @Model.CurrencyCode</td>
+                        </tr>
+                        <tr>
+                            <td class="no-padding" style="width:170px"> Amount in word: </td>
+                            <td class="no-padding" style="border-bottom: 1px dotted"> @Model.AmountInWord</td>
+                        </tr>
+                        <tr style="height:40px">
+                            <td class="no-padding" style="width:170px"> Paid by </td>
+                            <td class="no-padding" style="border-bottom: 1px dotted"> </td>
+                        </tr>
+                        <tr>
+                            <td class="no-padding" style="width:170px">  </td>
+                            <td class="no-padding" colspan="2" style="text-align:center"> (Name, Signature) </td>
+                        </tr>
+                        <tr style="height:40px">
+                            <td class="no-padding" style="width:170px"> Received by </td>
+                            <td class="no-padding" style="border-bottom: 1px dotted"> </td>
+                        </tr>
+                        <tr>
+                            <td class="no-padding" style="width:170px">  </td>
+                            <td class="no-padding" colspan="2" style="text-align:center"> (Name, Signature) </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+</div>
+

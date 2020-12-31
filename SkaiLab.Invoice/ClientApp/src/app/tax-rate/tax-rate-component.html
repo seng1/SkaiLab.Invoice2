@@ -1,0 +1,29 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="button-panel">
+                <a [routerLink]='["/taxrate-new"]' class="btn btn-primary">{{ 'textTranslate.new' | translate }}</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.name' | translate }}</th>
+                            <th>{{ 'textTranslate.rate' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let tax of taxes;let i = index">
+                            <td> <a type="button"
+                                [routerLink]="['/taxrate-update/',tax.id]">{{tax.name}}</a></td>
+                            <td>
+                               {{tax.totalRate}} %
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

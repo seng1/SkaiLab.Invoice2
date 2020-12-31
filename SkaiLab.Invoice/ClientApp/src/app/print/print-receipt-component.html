@@ -1,0 +1,21 @@
+<div role="document" class="modal-dialog modal-full-height modal-notify modal-dialog-small modal-info">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="heading lead">{{ 'textTranslate.receiptFor' | translate }} {{invoice.number}} </p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="note">{{ 'textTranslate.purpose' | translate }} </label>
+            <textarea name="note" rows="2" [(ngModel)]="purpose" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="print()">{{ 'textTranslate.print' | translate }}</button>
+        <button type="button" class="btn btn-outline-dark" (click)="close()">{{ 'textTranslate.close' | translate }}</button>
+      </div>
+    </div>
+  </div>
+ 

@@ -1,0 +1,167 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.period' | translate }}</label>
+                        <select class="form-control" id="perdiod"
+                            [(ngModel)]="filter.periodFilter" name="perdiod">
+                            <option *ngFor="let c of filter.periods" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="fromDate">{{ 'textTranslate.start' | translate }}</label>
+                        <angular2-date-picker [(ngModel)]="filter.fromDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="toDate">{{ 'textTranslate.end' | translate }}</label>
+                        <angular2-date-picker [(ngModel)]="filter.toDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <button type="button"  class="btn btn-primary"
+                            style="margin-top: 30px;">{{ 'textTranslate.applyFilter' | translate }}</button>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" (click)="printData()" style="margin-top: 30px;">
+                            <i class="fa fa-download"></i></button>
+                    </div>
+
+                </div>
+            </div>
+            <div #content>
+                <table class="table table-bordered table-striped table-sm" id="tablerecords">
+                    <thead>
+                        <tr>
+                            <th  colspan="8" class="center no-border">{{ 'textTranslate.productAndServiceSaleDetailReport' | translate }}</th>
+                        </tr>
+                        <tr>
+                            <td  colspan="8" class="center  no-border">{{filter.fromDate | date:'d/M/yyyy'}} to
+                                {{filter.toDate | date:'d/M/yyyy'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="center  no-border">{{organisation.displayName}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="center  no-border">{{productName}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="no-border"><h4>{{ 'textTranslate.purchseOrder' | translate }}</h4></td>
+                        </tr>
+                        <tr>
+                            <th class="center">{{ 'textTranslate.date' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.referenceNumber' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.to' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.quantity' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.unitPrice' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.discountRate' | translate }}</th>
+                            <th class="center" *ngIf="organisation.declareTax">{{ 'textTranslate.tax' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.total' | translate }}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let productSale of productSaleDetail.purchaseItems">
+                            <td>
+                                {{productSale.date | date:'d/M/yyyy'}}
+                            </td>
+                            <td>
+                                {{productSale.refNo}}
+                            </td>
+                            <td>
+                                {{productSale.to}}
+                            </td>
+                            <td>
+                                {{productSale.qty}}
+                            </td>
+                            <td >{{currency.symbole}}{{productSale.unitPrice | number:'1.2-2'}}</td>
+                            <td>
+                                <span *ngIf="productSale.discountRate!=null">{{productSale.discountRate}} %</span>
+                            </td>
+                            <td *ngIf="organisation.declareTax">
+                                <span *ngIf="productSale.taxRate!=null">{{productSale.taxRate}} %</span>
+                            </td>
+                            <td >{{currency.symbole}}{{productSale.total | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr class="bold">
+                            <td colspan="3" class="rigth">{{ 'textTranslate.purchaseTotal' | translate }} :</td>
+                            <td>{{getTotalPurchaseQty()}}</td>
+                            <td></td>
+                            <td></td>
+                            <td *ngIf="organisation.declareTax"></td>
+                            <td >{{currency.symbole}}{{getPurchaseTotal() | number:'1.2-2'}}</td>
+                        </tr>
+                    </tbody>
+                    <thead>
+                        <tr>
+                            <td colspan="8" class="no-border"><h4>{{ 'textTranslate.sale' | translate }}</h4></td>
+                        </tr>
+                        <tr>
+                            <th class="center">{{ 'textTranslate.date' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.referenceNumber' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.to' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.quantity' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.unitPrice' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.discountRate' | translate }}</th>
+                            <th class="center" *ngIf="organisation.declareTax">{{ 'textTranslate.tax' | translate }}</th>
+                            <th class="center">{{ 'textTranslate.total' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let productSale of productSaleDetail.saleItems">
+                            <td>
+                                {{productSale.date | date:'d/M/yyyy'}}
+                            </td>
+                            <td>
+                                {{productSale.refNo}}
+                            </td>
+                            <td>
+                                {{productSale.to}}
+                            </td>
+                            <td>
+                                {{productSale.qty}}
+                            </td>
+                            <td >{{currency.symbole}}{{productSale.unitPrice | number:'1.2-2'}}</td>
+                            <td>
+                                <span *ngIf="productSale.discountRate!=null">{{productSale.discountRate}} %</span>
+                            </td>
+                            <td *ngIf="organisation.declareTax">
+                                <span *ngIf="productSale.taxRate!=null">{{productSale.taxRate}} %</span>
+                            </td>
+                            <td >{{currency.symbole}}{{productSale.total | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr class="bold">
+                            <td colspan="3" class="rigth">{{ 'textTranslate.saleTotal' | translate }}:</td>
+                            <td>{{getTotalSaleQty()}}</td>
+                            <td></td>
+                            <td></td>
+                            <td *ngIf="organisation.declareTax"></td>
+                            <td >{{currency.symbole}}{{getSaleTotal() | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr class="bold">
+                            <td colspan="3" class="rigth">{{ 'textTranslate.netTotal' | translate }}:</td>
+                            <td [ngClass]="{ 'text-danger': getTotalPurchaseQty()<getTotalSaleQty() }">{{getTotalPurchaseQty()-getTotalSaleQty()}}</td>
+                            <td></td>
+                            <td></td>
+                            <td *ngIf="organisation.declareTax"></td>
+                            <td [ngClass]="{ 'text-danger': getSaleTotal()<getPurchaseTotal() }">{{currency.symbole}}{{getSaleTotal() - getPurchaseTotal() | number:'1.2-2'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>

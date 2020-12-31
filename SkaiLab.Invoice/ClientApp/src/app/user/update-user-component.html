@@ -1,0 +1,101 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" *ngIf="!organisationUser.isOwner" (click)="onSave()">{{ 'textTranslate.update' | translate }} </button>
+                <button type="submit" class="btn btn-primary" *ngIf="!organisationUser.isOwner" (click)="onRemove()">{{ 'textTranslate.removeThisUser' | translate }} </button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <span for="email">{{ 'textTranslate.email' | translate }} <span class="text-danger"> * </span></span>
+                            <input type="email" class="form-control" name="email" disabled
+                                [(ngModel)]="organisationUser.user.email"
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"
+                                [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" required />
+                            <div *ngIf="email.invalid" class="invalid-feedback">
+                                <div *ngIf="email.errors.required">{{ 'textTranslate.emailRequire' | translate }}</div>
+                                <div *ngIf="email.errors.pattern">{{ 'textTranslate.emailNotValid' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <span for="firstName">{{ 'textTranslate.firstName' | translate }} <span class="text-danger"> * </span></span>
+                            <input type="text" class="form-control" name="firstName" disabled
+                                [(ngModel)]="organisationUser.user.firstName" 
+                                #firstName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && firstName.invalid }"
+                                required />
+                            <div *ngIf="firstName.invalid" class="invalid-feedback">
+                                <div *ngIf="firstName.errors.required">{{ 'textTranslate.firstNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <span for="lastName">{{ 'textTranslate.lastName' | translate }} <span class="text-danger"> * </span></span>
+                            <input type="text" class="form-control" name="lastName" disabled
+                                [(ngModel)]="organisationUser.user.lastName" 
+                                #lastName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }"
+                                required />
+                            <div *ngIf="lastName.invalid" class="invalid-feedback">
+                                <div *ngIf="lastName.errors.required">{{ 'textTranslate.lastNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <span for="name">{{ 'textTranslate.displayName' | translate }} <span class="text-danger"> * </span></span>
+                            <input type="text" class="form-control" name="name" [(ngModel)]="organisationUser.user.name" disabled
+                                #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+                            <div *ngIf="name.invalid" class="invalid-feedback">
+                                <div *ngIf="name.errors.required">{{ 'textTranslate.displayNameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2 class="h4 mb-1">{{ 'textTranslate.pleaseChooseUserRole' | translate }}</h2>
+                    <p class="small text-muted font-italic mb-4">{{ 'textTranslate.allowUserToAccessAppFeatures' | translate }}</p>
+                    <ul class="list-group">
+                        <li class="list-group-item rounded-0 d-flex align-items-center justify-content-between">
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" id="customRadio1" (change)="onRoleChange(true)" type="radio" name="customRadio" [checked]="organisationUser.isAdministrator === true">
+                                <label class="custom-control-label" for="customRadio1">
+                                    <p class="mb-0">{{ 'textTranslate.administrator' | translate }}</p><span class="small font-italic text-muted">{{ 'textTranslate.userCancelAccessAllAppFeatures' | translate }}</span>
+                                </label>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex align-items-center justify-content-between" *ngIf="!organisationUser.isOwner">
+                            <div class="custom-control custom-radio">
+                                <input class="custom-control-input" id="customRadio2" (change)="onRoleChange(false)" type="radio" name="customRadio" [checked]="organisationUser.isAdministrator === false">
+                                <label class="custom-control-label" for="customRadio2">
+                                    <p class="mb-0">{{ 'textTranslate.custom' | translate }}</p><span class="small font-italic text-muted">{{ 'textTranslate.allowYouToSelectAppFeatures' | translate }}</span>
+                                </label>
+                            </div>
+                        </li>
+                
+                    </ul>
+                </div>
+                <div class="card-body" *ngIf="!organisationUser.isAdministrator && !organisationUser.isOwner">
+                    <h2 class="h4 mb-1">{{ 'textTranslate.pleaseChooseTheFeatures' | translate }}</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let menuFeature of organisationUser.menuFeatures;let i = index">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input" id="menuFeature{{i}}" name="menuFeature{{i}}"  type="checkbox"  [(ngModel)]="menuFeature.isCheck">
+                                <label  for="menuFeature{{i}}" class="cursor-pointer d-block custom-control-label">{{menuFeature.name}}</label>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</form>

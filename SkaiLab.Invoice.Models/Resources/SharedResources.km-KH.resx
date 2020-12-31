@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="All" xml:space="preserve">
+    <value>ទាំងអស់</value>
+  </data>
+  <data name="All Simple basic features +" xml:space="preserve">
+    <value>លក្ខណៈមូលដ្ឋានសាមញ្ញទាំងអស់ +</value>
+  </data>
+  <data name="Basic" xml:space="preserve">
+    <value>មូលដ្ឋាន</value>
+  </data>
+  <data name="Bills" xml:space="preserve">
+    <value>ប៊ីល</value>
+  </data>
+  <data name="Buy now" xml:space="preserve">
+    <value>ទិញ​ឥឡូវនេះ</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>ក្រុមហ៊ុន</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>ទំនាក់ទំនង</value>
+  </data>
+  <data name="Create and manage unlimite purchase order and bill" xml:space="preserve">
+    <value>បង្កើតនិងគ្រប់គ្រងការបញ្ជាទិញនិងប៊ីលគ្មានកំណត់</value>
+  </data>
+  <data name="Create and manage unlimited invoice and quote" xml:space="preserve">
+    <value>បង្កើតនិងគ្រប់គ្រងវិក្កយបត្រគ្មានកំណត់និងQuote</value>
+  </data>
+  <data name="Currencies" xml:space="preserve">
+    <value>រូបិយប័ណ្ណ</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>អតិថិជន</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>ផ្ទាំងគ្រប់គ្រង</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>អ៊ីមែល</value>
+  </data>
+  <data name="Employee Salary" xml:space="preserve">
+    <value>ប្រាក់ខែបុគ្គលិក</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>បុគ្គលិក</value>
+  </data>
+  <data name="Expense" xml:space="preserve">
+    <value>ចំណាយ</value>
+  </data>
+  <data name="Expire" xml:space="preserve">
+    <value>ផុតកំណត់</value>
+  </data>
+  <data name="Forgot Password?" xml:space="preserve">
+    <value>ភ្លេចពាក្យសម្ងាត់?</value>
+  </data>
+  <data name="Get a real-time view of your cashflow" xml:space="preserve">
+    <value>មើលពេលវេលាជាក់ស្តែងនៃលំហូរសាច់ប្រាក់របស់អ្នក</value>
+  </data>
+  <data name="Hi" xml:space="preserve">
+    <value>សួស្តី</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ទំព័រដើម</value>
+  </data>
+  <data name="Income" xml:space="preserve">
+    <value>ចំណូល</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>វិក័យប័ត្រ</value>
+  </data>
+  <data name="Invoice Setting" xml:space="preserve">
+    <value>ការកំណត់វិក្កយបត្រ</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>វិក័យប័ត្រ</value>
+  </data>
+  <data name="Locations" xml:space="preserve">
+    <value>ទីតាំង</value>
+  </data>
+  <data name="Log in" xml:space="preserve">
+    <value>ចូលកម្មវិធី</value>
+  </data>
+  <data name="Log on any time any where" xml:space="preserve">
+    <value>ចូលតាមអ៊ិនធរណេតគ្រប់ពេលគ្រប់ទីកន្លែងនៅលើកុំព្យូទ័រ Mac កុំព្យូទ័រថេប្លេតឬទូរស័ព្ទរបស់អ្នកហើយមើលហិរញ្ញវត្ថុទាន់សម័យ។ វាជាកម្មវិធីអាជីវកម្មខ្នាតតូចដែលសាមញ្ញឆ្លាតនិងមន្តអាគមម្តងម្កាល។</value>
+  </data>
+  <data name="Manage multiple companies" xml:space="preserve">
+    <value>គ្រប់គ្រងក្រុមហ៊ុនច្រើន</value>
+  </data>
+  <data name="Manage multiple currencies" xml:space="preserve">
+    <value>គ្រប់គ្រងរូបិយប័ណ្ណច្រើន</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>ខែ</value>
+  </data>
+  <data name="Multiple currencies support" xml:space="preserve">
+    <value>រូបិយប័ណ្ណច្រើន</value>
+  </data>
+  <data name="Other Expense" xml:space="preserve">
+    <value>ចំណាយផ្សេងទៀត</value>
+  </data>
+  <data name="Our Best Pricng" xml:space="preserve">
+    <value>តម្លៃល្អបំផុតរបស់យើង</value>
+  </data>
+  <data name="Our Social" xml:space="preserve">
+    <value>ប្រព័ន្ធផ្សព្វផ្សាយសង្គមរបស់យើង</value>
+  </data>
+  <data name="OurAddressValue" xml:space="preserve">
+    <value>សាកលវិទ្យាល័យភ្នំពេញអន្តរជាតិលេខ ៣៦ ផ្លូវ ១៦៩ សង្កាត់ វាលវង់​ ខណ្ឌ​ ៧មករា​ រាជធានីភ្នំពេញ​ ប្រទេសកម្ពុជា</value>
+  </data>
+  <data name="Overdue" xml:space="preserve">
+    <value>ហួសកាលកំណត់</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>ទិដ្ឋភាពទូទៅ</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>ពាក្យសម្ងាត់</value>
+  </data>
+  <data name="Pay monthly" xml:space="preserve">
+    <value>បង់ប្រចាំខែ</value>
+  </data>
+  <data name="Pay run" xml:space="preserve">
+    <value>ប្រាក់ខែ</value>
+  </data>
+  <data name="Pay yearly" xml:space="preserve">
+    <value>បង់ប្រចាំឆ្នាំ</value>
+  </data>
+  <data name="Payroll" xml:space="preserve">
+    <value>បើកប្រាក់ខែ</value>
+  </data>
+  <data name="Pending Bill" xml:space="preserve">
+    <value>ព្រាងប៊ីល</value>
+  </data>
+  <data name="Pending PO" xml:space="preserve">
+    <value>ព្រាងបញ្ជាទិញ</value>
+  </data>
+  <data name="Pending Quote" xml:space="preserve">
+    <value>ព្រាង​ Quote</value>
+  </data>
+  <data name="Phone Number" xml:space="preserve">
+    <value>លេខទូរសព្ទ</value>
+  </data>
+  <data name="Popular features that will change your life" xml:space="preserve">
+    <value>លក្ខណៈពិសេសពេញនិយមដែលនឹងផ្លាស់ប្តូរជីវិតរបស់អ្នក</value>
+  </data>
+  <data name="Premium" xml:space="preserve">
+    <value>សហគ្រាស</value>
+  </data>
+  <data name="Pricing/Plan" xml:space="preserve">
+    <value>តម្លៃ / ផែនការ</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>ទំនិញ</value>
+  </data>
+  <data name="Profit &amp; Lost" xml:space="preserve">
+    <value>ចំណេញនិងខាត</value>
+  </data>
+  <data name="Provide many reports to support your business transaction" xml:space="preserve">
+    <value>ផ្តល់របាយការណ៍ជាច្រើនដើម្បីគាំទ្រប្រតិបត្តិការអាជីវកម្មរបស់អ្នក</value>
+  </data>
+  <data name="Purchase" xml:space="preserve">
+    <value>ទិញ</value>
+  </data>
+  <data name="Purchase Orders" xml:space="preserve">
+    <value>បញ្ជា​ទិញ</value>
+  </data>
+  <data name="Quick Contact" xml:space="preserve">
+    <value>ទំនាក់ទំនងរហ័ស</value>
+  </data>
+  <data name="Quotes" xml:space="preserve">
+    <value>Quote</value>
+  </data>
+  <data name="Remember me" xml:space="preserve">
+    <value>ចងចាំខ្ញុំ</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>របាយការណ៍</value>
+  </data>
+  <data name="Sale" xml:space="preserve">
+    <value>លក់</value>
+  </data>
+  <data name="Save percent {%} extra" xml:space="preserve">
+    <value>ចំនេញ {%}</value>
+  </data>
+  <data name="Save supscript mean" xml:space="preserve">
+    <value>ចំនេញ</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>ការកំណត់</value>
+  </data>
+  <data name="Sign in" xml:space="preserve">
+    <value>ចូលកម្មវិធី</value>
+  </data>
+  <data name="Sign in with Facebook" xml:space="preserve">
+    <value>ចូលជាមួយហ្វេសប៊ុក</value>
+  </data>
+  <data name="Sign in with Microsoft" xml:space="preserve">
+    <value>ចូលជាមួយ Microsoft</value>
+  </data>
+  <data name="SkaiInvoice Description" xml:space="preserve">
+    <value>Skai invoice គឺជាកម្មវិធីលើអ៊ីនធឺណិតដើម្បីគ្រប់គ្រងប្រតិបត្តិការអាជីវកម្មរបស់អ្នក</value>
+  </data>
+  <data name="Small and easy to generate the payroll for your employee for every month." xml:space="preserve">
+    <value>តូចនិងងាយស្រួលក្នុងការបង្កើតប្រាក់ខែសម្រាប់និយោជិករបស់អ្នករៀងរាល់ខែ។</value>
+  </data>
+  <data name="Standard" xml:space="preserve">
+    <value>ស្តង់ដារ</value>
+  </data>
+  <data name="Tax" xml:space="preserve">
+    <value>ពន្ធ</value>
+  </data>
+  <data name="Tax Support" xml:space="preserve">
+    <value>ពន្ធ</value>
+  </data>
+  <data name="Taxes" xml:space="preserve">
+    <value>ពន្ធ</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>សរុប</value>
+  </data>
+  <data name="Total Expense" xml:space="preserve">
+    <value>ចំណាយសរុប</value>
+  </data>
+  <data name="Total Invoice" xml:space="preserve">
+    <value>វិក្កយបត្រសរុប</value>
+  </data>
+  <data name="Track and manage your income and expense tax. Generate monthly tax expense" xml:space="preserve">
+    <value>តាមដាននិងគ្រប់គ្រងពន្ធលើប្រាក់ចំណូលនិងចំណាយរបស់អ្នក។ បង្កើតការចំណាយពន្ធប្រចាំខែ</value>
+  </data>
+  <data name="Track inventory" xml:space="preserve">
+    <value>តាមដានស្តុក</value>
+  </data>
+  <data name="Tracking your product inventory in multiple location" xml:space="preserve">
+    <value>តាមដានស្តុកទំនិញរបស់អ្នកនៅទីតាំងច្រើន</value>
+  </data>
+  <data name="Transact in multiple Companies" xml:space="preserve">
+    <value>ប្រតិបត្តិការក្រុមហ៊ុនជាច្រើនក្នុងពេលតែមួយ</value>
+  </data>
+  <data name="Transact in multiple currencies" xml:space="preserve">
+    <value>ធ្វើប្រតិបត្តិការជាមួយរូបិយប័ណ្ណច្រើន</value>
+  </data>
+  <data name="Try for free" xml:space="preserve">
+    <value>សាកល្បងដោយឥតគិតថ្លៃ</value>
+  </data>
+  <data name="Un-Paid" xml:space="preserve">
+    <value>មិនទាន់បង់ប្រាក់</value>
+  </data>
+  <data name="Un-Paid Invoice" xml:space="preserve">
+    <value>វិក្កយបត្រមិនទាន់បង់ប្រាក់</value>
+  </data>
+  <data name="Unlimited companies" xml:space="preserve">
+    <value>ក្រុមហ៊ុនគ្មានដែនកំណត់</value>
+  </data>
+  <data name="Unlimited Invoice &amp; Quote" xml:space="preserve">
+    <value>វិក្កយបត្រគ្មានកំណត់និងQuote</value>
+  </data>
+  <data name="Unlimited Purchase &amp; Bill" xml:space="preserve">
+    <value>ការទិញនិងប៊ីលគ្មានកំណត់</value>
+  </data>
+  <data name="Unlimited users" xml:space="preserve">
+    <value>អ្នកប្រើប្រាស់គ្មានដែនកំណត់</value>
+  </data>
+  <data name="Up to 2 companies" xml:space="preserve">
+    <value>រហូតដល់ ២ ក្រុមហ៊ុន</value>
+  </data>
+  <data name="Up to 4 companies" xml:space="preserve">
+    <value>រហូតដល់ ៤ ក្រុមហ៊ុន</value>
+  </data>
+  <data name="Up to 4 users" xml:space="preserve">
+    <value>អ្នកប្រើប្រាស់រហូតដល់ ៤ នាក់</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>អ្នកប្រើប្រាស់</value>
+  </data>
+  <data name="Vendors" xml:space="preserve">
+    <value>អ្នកលក់</value>
+  </data>
+  <data name="Watch demo..." xml:space="preserve">
+    <value>ទស្សនាការបង្ហាញ</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>ឆ្នាំ</value>
+  </data>
+</root>

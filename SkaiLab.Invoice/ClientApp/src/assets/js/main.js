@@ -69,6 +69,8 @@ jQuery(document).ready(function($) {
 		} 
 		
 	});
-  
- 
+	$('a.btn-ok, #dialog-overlay, #dialog-box').click(function () {		
+		$('#dialog-overlay, #dialog-box').hide();		
+		return false;
+	});
 });

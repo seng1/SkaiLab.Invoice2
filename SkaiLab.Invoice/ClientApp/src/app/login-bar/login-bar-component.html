@@ -1,0 +1,42 @@
+<div class="header-left" *ngIf="permission.readWritePurchaseSale">
+    <div class="dropdown for-notification">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-plus"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="notification" x-placement="bottom-start"
+            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 56px, 0px);">
+            <p class="red">{{ 'textTranslate.createNew' | translate }}</p>
+            <a class="dropdown-item media" [routerLink]='["/quote-new"]'>
+                <i class="fas fa-file-invoice-dollar"></i>
+                <p>{{ 'textTranslate.quote' | translate }}</p>
+            </a>
+            <a class="dropdown-item media" [routerLink]='["/order-new"]'>
+                <i class="fa fa-shopping-cart"></i>
+                <p>{{ 'textTranslate.purchseOrder' | translate }}</p>
+            </a>
+            <a class="dropdown-item media" [routerLink]='["/vendor-bill-new"]'>
+                <i class="fa fa-money"></i>
+                <p>{{ 'textTranslate.bill' | translate }}</p>
+            </a>
+            <a class="dropdown-item media" [routerLink]='["/invoice-new"]'>
+                <i class="fas fa-file-invoice-dollar"></i>
+                <p>{{ 'textTranslate.invoice' | translate }}</p>
+            </a>
+           
+           
+        </div>
+    </div>
+    <button class="search-trigger" (click)="khClick()" *ngIf="user.language=='en'"><img src="/assets/images/kh.png"/></button>
+    <button class="search-trigger" (click)="enClick()" *ngIf="user.language=='km-KH'"><img src="/assets/images/en.png"/></button>
+</div>
+<div class="user-area dropdown float-right" *ngIf="loaded">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <p [attr.data-letters]="getDisplayName()"></p>
+    </a>
+    <div class="user-menu dropdown-menu">
+        <a class="nav-link" [routerLink]='["/myprofile"]'><i class="fa fa- user"></i>{{ 'textTranslate.myProfile' | translate }}</a>
+        <a class="nav-link" [routerLink]='["/authentication/logout"]' [state]='{ local: true }' title="Logout"><i
+                class="fa fa -cog"></i>{{ 'textTranslate.logout' | translate }}</a>
+    </div>
+</div>

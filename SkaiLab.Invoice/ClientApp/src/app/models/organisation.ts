@@ -11,12 +11,12 @@ export class Organisation{
     bussinessRegistrationNumber:string;
     description:string;
     taxNumber:string;
-    taxDisplayName:string;
-    contactId1?:string;
-    contactId2?:string;
-    contact1?:Contact;
-    contact2?:Contact;
+    legalLocalName:string;
+    contactId?:string;
+    contact?:Contact;
     organisationType?:OrganisationType;
+    declareTax:boolean;
+    organisationBaseCurrency:OrganisationBaseCurrency;
     constructor(){
         this.id="";
         this.displayName="";
@@ -27,11 +27,21 @@ export class Organisation{
         this.bussinessRegistrationNumber="";
         this.description="";
         this.taxNumber="";
-        this.taxDisplayName="";
-        this.contactId1=null;
-        this.contactId1=null;
-        this.contact1=new Contact();
-        this.contact2=new Contact();
+        this.legalLocalName="";
+        this.contactId=null;
+        this.contact=new Contact();
         this.organisationType=new OrganisationType();
+        this.declareTax=true;
+        this.organisationBaseCurrency=new OrganisationBaseCurrency();
+    }
+}
+export class OrganisationBaseCurrency{
+    baseCurrencyId:number;
+    taxCurrencyId:number;
+    taxExchangeRate:number;
+    constructor(){
+        this.baseCurrencyId=null;
+        this.taxCurrencyId=null;
+        this.taxExchangeRate=4000;
     }
 }

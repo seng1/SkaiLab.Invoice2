@@ -1,0 +1,143 @@
+<form class="forms-sample" #f="ngForm" novalidate>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary" *ngIf="permission.readWritePurchaseSale" (click)="onSave(false)">{{ 'textTranslate.saveAndNew' | translate }} </button>
+                <button type="submit" class="btn btn-primary" *ngIf="permission.readWritePurchaseSale" (click)="onSave(true)">{{ 'textTranslate.saveAndClose' | translate }} </button>
+                <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="code">{{ 'textTranslate.code' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="code" [(ngModel)]="product.code"
+                                #code="ngModel" [ngClass]="{ 'is-invalid': f.submitted && code.invalid }" required disabled />
+                            <div *ngIf="code.invalid" class="invalid-feedback">
+                                <div *ngIf="code.errors.required">{{ 'textTranslate.codeRequire' | translate }}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">{{ 'textTranslate.name' | translate }} <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control" name="name" [(ngModel)]="product.name" (change)="onNameChange()"
+                                #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+                            <div *ngIf="name.invalid" class="invalid-feedback">
+                                <div *ngIf="name.errors.required">{{ 'textTranslate.nameRequire' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12" style="display: none;">
+                        <div class="file-upload">
+                            <div class="image-upload-wrap">
+                                <input class="file-upload-input" type='file' (change)="fileChange($event)" accept="image/jpeg,image/png" />
+                                <div class="drag-text">
+                                    <h5 *ngIf="!product.imageUrl">Upload image</h5>
+                                    <img src="{{product.imageUrl}}" *ngIf="product.imageUrl" class="logo"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                {{ 'textTranslate.purchaseInformation' | translate }}
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="purchasePrice">{{ 'textTranslate.purchasePrice' | translate }} <span class="text-danger"> * </span></label>
+                                    <input type="number" class="form-control" name="purchasePrice" [(ngModel)]="product.productPurchaseInformation.price"
+                                        #purchasePrice="ngModel" [ngClass]="{ 'is-invalid': f.submitted && purchasePrice.invalid }" required />
+                                    <div *ngIf="purchasePrice.invalid" class="invalid-feedback">
+                                        <div *ngIf="purchasePrice.errors.required">{{ 'textTranslate.purchasePriceRequire' | translate }}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="purchaseTax">{{ 'textTranslate.tax' | translate }}</label>
+                                    <select class="form-control" id="purchaseTax" [(ngModel)]="product.productPurchaseInformation.taxId" name="purchaseTax">
+                                        <option *ngFor="let tax of taxes" [ngValue]="tax.id">{{ tax.name }}</option>
+                                      </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">{{ 'textTranslate.nameForVendor' | translate }} <span class="text-danger"> * </span></label>
+                                    <input type="text" class="form-control" name="purchaseName" [(ngModel)]="product.productPurchaseInformation.title"
+                                        #purchaseName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && purchaseName.invalid }" required />
+                                    <div *ngIf="purchaseName.invalid" class="invalid-feedback">
+                                        <div *ngIf="purchaseName.errors.required">{{ 'textTranslate.nameForVendorRequire' | translate }}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="purchaseDescription">{{ 'textTranslate.purchaseDescriptionForVendor' | translate }} </label>
+                                    <textarea name="purchaseDescription" rows="3" [(ngModel)]="product.productPurchaseInformation.description" #purchaseDescription="ngModel" class="form-control"></textarea>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                {{ 'textTranslate.saleInformation' | translate }}
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="salePrice">{{ 'textTranslate.salePrice' | translate }} <span class="text-danger"> * </span></label>
+                                    <input type="number" class="form-control" name="salePrice" [(ngModel)]="product.productSaleInformation.price"
+                                        #salePrice="ngModel" [ngClass]="{ 'is-invalid': f.submitted && salePrice.invalid }" required />
+                                    <div *ngIf="salePrice.invalid" class="invalid-feedback">
+                                        <div *ngIf="salePrice.errors.required">{{ 'textTranslate.salePriceRequire' | translate }}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="saleTax">{{ 'textTranslate.tax' | translate }}</label>
+                                    <select class="form-control" id="saleTax" [(ngModel)]="product.productSaleInformation.taxId" name="saleTax">
+                                        <option *ngFor="let tax of taxes" [ngValue]="tax.id">{{ tax.name }}</option>
+                                      </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">{{ 'textTranslate.nameForMyCustomer' | translate }} <span class="text-danger"> * </span></label>
+                                    <input type="text" class="form-control" name="saleName" [(ngModel)]="product.productSaleInformation.title"
+                                        #saleName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && saleName.invalid }" required />
+                                    <div *ngIf="saleName.invalid" class="invalid-feedback">
+                                        <div *ngIf="saleName.errors.required">{{ 'textTranslate.nameForMyCustomerRequire' | translate }}</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="saleDescription">{{ 'textTranslate.saleDesriptionForMyCustomer' | translate }} </label>
+                                    <textarea name="saleDescription" rows="3" [(ngModel)]="product.productSaleInformation.description" #saleDescription="ngModel" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="trackInventory"
+                                    disabled [(ngModel)]="product.trackInventory">
+                                <label>{{ 'textTranslate.trackInventory' | translate }} ({{ 'textTranslate.thisCannotChange' | translate }})</label>
+                            </div>
+                        </div>
+                        <div *ngIf="product.trackInventory">
+                            <div class="form-group">
+                                <label for="defaultLocation">{{ 'textTranslate.defaultLocation' | translate }}</label>
+                                <select class="form-control" name="defaultLocation"
+                                    [(ngModel)]="product.locationId" required>
+                                    <option *ngFor="let c of locations" [ngValue]="c.id">
+                                        {{ c.name }}</option>
+                                </select>
+                                <div *ngIf="f.submitted && product.locationId==null" class="text-danger">
+                                    <div>{{ 'textTranslate.locationRequire' | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,310 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.month' | translate }}</label>
+                        <select class="form-control" id="perdiod" (change)="getReport()" [(ngModel)]="filter.monthFilter" name="perdiod">
+                            <option *ngFor="let c of filter.monthFilters" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="btn-group" style="margin-top: 32px;">
+                        <button type="button" class="btn btn-primary" (click)="onPrint()">{{ 'textTranslate.print' | translate }}</button>
+                        <button type="button" class="btn btn-primary" (click)="onDownload()">{{ 'textTranslate.download' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">{{ 'textTranslate.summary' | translate }} </div>
+            <div class="p-4">
+                <ul class="list-unstyled mb-4">
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">{{ 'textTranslate.totalInvoice' | translate }}
+                             </strong><strong>{{taxMonthly.currency.symbole}}{{taxMonthly.totalInvoice | number:'1.2-2'}}</strong></li>
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">{{ 'textTranslate.totalExpense' | translate }}
+                            </strong><strong>{{taxMonthly.currency.symbole}}{{taxMonthly.totalEmployeeSalary | number:'1.2-2'}}</strong></li>
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">{{ 'textTranslate.totalExpense' | translate }}
+                            </strong><strong *ngIf="taxMonthly.isPayrollRun">{{taxMonthly.currency.symbole}}{{taxMonthly.totalEmployeeSalary | number:'1.2-2'}}</strong>
+                            <a [routerLink]='["/payroll"]' *ngIf="!taxMonthly.isPayrollRun">{{ 'textTranslate.goToPayRun' | translate }}</a>
+                        </li>
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">{{ 'textTranslate.totalTax' | translate }}
+                            </strong>
+                        <h5 class="font-weight-bold">{{taxMonthly.currency.symbole}}{{taxMonthly.totalPayToTax | number:'1.2-2'}}</h5>
+                    </li>
+                    <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">
+                        {{ 'textTranslate.totalTaxInKHR' | translate }} </strong>
+                        <h5 class="font-weight-bold">{{taxMonthly.totalPayToTaxInKHR | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</h5>
+                    </li>
+                </ul>
+            </div>
+            <h3 style="cursor: pointer;" (click)="onInvoiceExpandClick()">{{ 'textTranslate.invoice' | translate }}<span style="color: blue;"><i [ngClass]="(taxMonthly.showInvoicePanel)?'fa fa-caret-square-o-down':'fa fa-caret-square-o-up'" ></i></span></h3>
+            <div class=" table-responsive" *ngIf="taxMonthly.showInvoicePanel">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.date' | translate }}</th>
+                            <th>{{ 'textTranslate.number' | translate }}</th>
+                            <th>{{ 'textTranslate.total' | translate }}</th>
+                            <th>{{ 'textTranslate.payToTax' | translate }}</th>
+                            <th>{{ 'textTranslate.exchangeRate' | translate }}</th>
+                            <th>{{ 'textTranslate.payToTaxInKHR' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let invoice of taxMonthly.invoices">
+                            <td>{{invoice.date | date:'d/M/yyyy'}}</td>
+                            <td>{{invoice.number}}</td>
+                            <td>{{invoice.currency.symbole}}{{invoice.totalIncludeTax | number:'1.2-2'}} </td>
+                            <td>{{invoice.currency.symbole}}{{invoice.totalIncludeTax-invoice.total | number:'1.2-2'}} </td>
+                            <td>
+                                <span *ngIf="invoice.taxCurrencyExchangeRate>1"> {{invoice.taxCurrencyExchangeRate}}</span>
+                                <span *ngIf="invoice.taxCurrencyExchangeRate==1">-</span>
+                            </td>
+                            <td>{{(invoice.totalIncludeTax-invoice.total)*invoice.taxCurrencyExchangeRate | number:'1.2-2'}} {{taxMonthly.taxCurrency.symbole}}</td>
+                        </tr>
+                        <tr class="bold">
+                            <td colspan="2" class="rigth">
+                                {{ 'textTranslate.total' | translate }}:
+                            </td>
+                            <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalInvoice | number:'1.2-2'}}</td>
+                            <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalInvoiceTaxInBaseCurrency | number:'1.2-2'}}</td>
+                            <td>-</td>
+                            <td>{{taxMonthly.totalInvoiceTaxInTaxCurrency | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 style="cursor: pointer;" (click)="onExpenseExpandClick()">{{ 'textTranslate.expense' | translate }}<span style="color: blue;"><i [ngClass]="(taxMonthly.showExpensePanel)?'fa fa-caret-square-o-down':'fa fa-caret-square-o-up'" ></i></span></h3>
+            <div class=" table-responsive" *ngIf="taxMonthly.showExpensePanel">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.date' | translate }}</th>
+                            <th>{{ 'textTranslate.referenceNumber' | translate }}</th>
+                            <th>{{ 'textTranslate.total' | translate }}</th>
+                            <th>{{ 'textTranslate.payToTax' | translate }}</th>
+                            <th>{{ 'textTranslate.exchangeRate' | translate }}</th>
+                            <th>{{ 'textTranslate.payToTaxInKHR' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let expense of taxMonthly.expenses">
+                            <td>{{expense.date | date:'d/M/yyyy'}}</td>
+                            <td>{{expense.orderNumber}}</td>
+                            <td>{{expense.currency.symbole}}{{expense.totalIncludeTax | number:'1.2-2'}} </td>
+                            <td>{{expense.currency.symbole}}{{expense.totalIncludeTax-expense.total | number:'1.2-2'}} </td>
+                            <td>
+                                <span *ngIf="expense.taxCurrencyExchangeRate>1"> {{expense.taxCurrencyExchangeRate}}</span>
+                                <span *ngIf="expense.taxCurrencyExchangeRate==1">-</span>
+                            </td>
+                            <td>{{(expense.totalIncludeTax-expense.total)*expense.taxCurrencyExchangeRate | number:'1.2-2'}} {{taxMonthly.taxCurrency.symbole}}</td>
+                        </tr>
+                        <tr class="bold">
+                            <td colspan="2" class="rigth">
+                                {{ 'textTranslate.total' | translate }}:
+                            </td>
+                            <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalExpense | number:'1.2-2'}}</td>
+                            <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalExpenseTaxInBaseCurrency | number:'1.2-2'}}</td>
+                            <td>-</td>
+                            <td>{{taxMonthly.totalExpenseTaxInTaxCurrency | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 style="cursor: pointer;" (click)="onEmployeeExpandClick()">{{ 'textTranslate.employeeSalary' | translate }}<span style="color: blue;"><i [ngClass]="(taxMonthly.showEmployeePanel)?'fa fa-caret-square-o-down':'fa fa-caret-square-o-up'" ></i></span></h3>
+            <div class=" table-responsive" *ngIf="taxMonthly.showEmployeePanel">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.displayName' | translate }}</th>
+                            <th>{{ 'textTranslate.salary' | translate }}</th>
+                            <th>{{ 'textTranslate.otherBenefit' | translate }}</th>
+                            <th>{{ 'textTranslate.payToTax' | translate }}</th>
+                            <th>{{ 'textTranslate.exchangeRate' | translate }}</th>
+                            <th>{{ 'textTranslate.payToTaxInKHR' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of taxMonthly.payroll.payrolls">
+                            <td>{{p.employee.displayName}}</td>     
+                            <td>{{taxMonthly.currency.symbole}}{{p.salary | number:'1.2-2'}}</td>
+                            <td>
+                                <span *ngIf="p.employee.isResidentEmployee">
+                                    {{taxMonthly.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}
+                                </span>
+                                <span *ngIf="!p.employee.isResidentEmployee">
+                                   -
+                                </span>
+                            </td>
+                            <td>{{taxMonthly.currency.symbole}}{{getPayrollTotalDeduct(p) | number:'1.2-2'}}</td>
+                            <td>
+                                <span *ngIf="taxMonthly.payroll.exchangeRate>1">{{taxMonthly.payroll.exchangeRate}}</span>
+                                <span *ngIf="taxMonthly.payroll.exchangeRate==1">-</span>
+                            </td>
+                            <td>{{getPayrollTotalDeduct(p)*taxMonthly.payroll.exchangeRate | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                        </tr>
+                        <tr class="bold">
+                            <td class="rigth">
+                                {{ 'textTranslate.total' | translate }}:
+                            </td>
+                            <td>{{taxMonthly.currency.symbole}}{{getTotalSalary() | number:'1.2-2'}}</td>
+                            <td>{{taxMonthly.currency.symbole}}{{getTotalOtherBenefit() | number:'1.2-2'}}</td>
+                            <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalEmployeeTaxInBaseCurrency | number:'1.2-2'}}</td>
+                            <td>-</td>
+                            <td>{{taxMonthly.totalEmployeeTaxInTaxCurrency | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div style="display: none;">
+        <div #content>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="center"> Tax Monthly {{filter.monthFilter.name}}</h3>
+                    <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Summary </div>
+                    <div class="p-4">
+                        <ul class="list-unstyled mb-4">
+                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total
+                                    Invoice </strong><strong>{{taxMonthly.currency.symbole}}{{taxMonthly.totalInvoice | number:'1.2-2'}}</strong></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total
+                                    Expense</strong><strong>{{taxMonthly.currency.symbole}}{{taxMonthly.totalExpense | number:'1.2-2'}}</strong></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total
+                                    Employee Salary</strong><strong>{{taxMonthly.currency.symbole}}{{taxMonthly.totalEmployeeSalary | number:'1.2-2'}}</strong></li>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total
+                                    Tax</strong>
+                                <h5 class="font-weight-bold">{{taxMonthly.currency.symbole}}{{taxMonthly.totalPayToTax | number:'1.2-2'}}</h5>
+                            </li>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Tax
+                                    In KHR</strong>
+                                <h5 class="font-weight-bold">{{taxMonthly.totalPayToTaxInKHR | number:'1.2-2'}}{{taxMonthly.currency.symbole}}</h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <h3>Invoice</h3>
+                    <div class=" table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Invoice #</th>
+                                    <th>Total</th>
+                                    <th>Pay to Tax</th>
+                                    <th>Exchange Rate</th>
+                                    <th>Pay to Tax In KHR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let invoice of taxMonthly.invoices">
+                                    <td>{{invoice.date | date:'d/M/yyyy'}}</td>
+                                    <td>{{invoice.number}}</td>
+                                    <td>{{invoice.currency.symbole}}{{invoice.totalIncludeTax | number:'1.2-2'}} </td>
+                                    <td>{{invoice.currency.symbole}}{{invoice.totalIncludeTax-invoice.total | number:'1.2-2'}} </td>
+                                    <td>
+                                        <span *ngIf="invoice.taxCurrencyExchangeRate>1"> {{invoice.taxCurrencyExchangeRate}}</span>
+                                        <span *ngIf="invoice.taxCurrencyExchangeRate==1">-</span>
+                                    </td>
+                                    <td>{{(invoice.totalIncludeTax-invoice.total)*invoice.taxCurrencyExchangeRate | number:'1.2-2'}} {{taxMonthly.taxCurrency.symbole}}</td>
+                                </tr>
+                                <tr class="bold">
+                                    <td colspan="2" class="rigth">
+                                        Total:
+                                    </td>
+                                    <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalInvoice | number:'1.2-2'}}</td>
+                                    <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalInvoiceTaxInBaseCurrency | number:'1.2-2'}}</td>
+                                    <td>-</td>
+                                    <td>{{taxMonthly.totalInvoiceTaxInTaxCurrency | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3>Expense</h3>
+                    <div class=" table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Ref #</th>
+                                    <th>Total</th>
+                                    <th>Pay to Tax</th>
+                                    <th>Exchange Rate</th>
+                                    <th>Pay to Tax In KHR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let expense of taxMonthly.expenses">
+                                    <td>{{expense.date | date:'d/M/yyyy'}}</td>
+                                    <td>{{expense.orderNumber}}</td>
+                                    <td>{{expense.currency.symbole}}{{expense.totalIncludeTax | number:'1.2-2'}} </td>
+                                    <td>{{expense.currency.symbole}}{{expense.totalIncludeTax-expense.total | number:'1.2-2'}} </td>
+                                    <td>
+                                        <span *ngIf="expense.taxCurrencyExchangeRate>1"> {{expense.taxCurrencyExchangeRate}}</span>
+                                        <span *ngIf="expense.taxCurrencyExchangeRate==1">-</span>
+                                    </td>
+                                    <td>{{(expense.totalIncludeTax-expense.total)*expense.taxCurrencyExchangeRate | number:'1.2-2'}} {{taxMonthly.taxCurrency.symbole}}</td>
+                                </tr>
+                                <tr class="bold">
+                                    <td colspan="2" class="rigth">
+                                        Total:
+                                    </td>
+                                    <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalExpense | number:'1.2-2'}}</td>
+                                    <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalExpenseTaxInBaseCurrency | number:'1.2-2'}}</td>
+                                    <td>-</td>
+                                    <td>{{taxMonthly.totalExpenseTaxInTaxCurrency | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3>Employee Salary</h3>
+                    <div class=" table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Employee name</th>
+                                    <th>Salary</th>
+                                    <th>Other Benefit</th>
+                                    <th>Pay to Tax</th>
+                                    <th>Exchange Rate</th>
+                                    <th>Pay to Tax In KHR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of taxMonthly.payroll.payrolls">
+                                    <td>{{p.employee.displayName}}</td>     
+                                    <td>{{taxMonthly.currency.symbole}}{{p.salary | number:'1.2-2'}}</td>
+                                    <td>
+                                        <span *ngIf="p.employee.isResidentEmployee">
+                                            {{taxMonthly.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}
+                                        </span>
+                                        <span *ngIf="!p.employee.isResidentEmployee">
+                                           -
+                                        </span>
+                                    </td>
+                                    <td>{{taxMonthly.currency.symbole}}{{getPayrollTotalDeduct(p) | number:'1.2-2'}}</td>
+                                    <td>
+                                        <span *ngIf="taxMonthly.payroll.exchangeRate>1">{{taxMonthly.payroll.exchangeRate}}</span>
+                                        <span *ngIf="taxMonthly.payroll.exchangeRate==1">-</span>
+                                    </td>
+                                    <td>{{getPayrollTotalDeduct(p)*taxMonthly.payroll.exchangeRate | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                                </tr>
+                                <tr class="bold">
+                                    <td class="rigth">
+                                        Total:
+                                    </td>
+                                    <td>{{taxMonthly.currency.symbole}}{{getTotalSalary() | number:'1.2-2'}}</td>
+                                    <td>{{taxMonthly.currency.symbole}}{{getTotalOtherBenefit() | number:'1.2-2'}}</td>
+                                    <td>{{taxMonthly.currency.symbole}}{{taxMonthly.totalEmployeeTaxInBaseCurrency | number:'1.2-2'}}</td>
+                                    <td>-</td>
+                                    <td>{{taxMonthly.totalEmployeeTaxInTaxCurrency | number:'1.2-2'}}{{taxMonthly.taxCurrency.symbole}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

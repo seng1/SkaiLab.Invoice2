@@ -7,5 +7,6 @@ namespace SkaiLab.Invoice.Service
     public interface IOrganisationTypeService:IService
     {
         List<OrganisationType> Gets();
+       
     }
 }

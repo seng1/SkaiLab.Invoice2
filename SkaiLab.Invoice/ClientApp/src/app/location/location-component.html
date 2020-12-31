@@ -1,0 +1,31 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="button-panel">
+                <a [routerLink]='["/location-new"]' class="btn btn-primary">{{ 'textTranslate.new' | translate }}</a>
+            </div>
+            <div class=" table-responsive">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.name' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let location of locations;let i = index">
+                            <td > 
+                                <a type="button" [routerLink]="['/location-update/',location.id]">{{location.name}}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="1" style="text-align: left;" *ngIf="locations.length==0" class="text-danger">{{ 'textTranslate.noRecordFound' | translate }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

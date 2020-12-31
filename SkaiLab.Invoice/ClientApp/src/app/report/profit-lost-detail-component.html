@@ -1,0 +1,116 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.organisation' | translate }}</label>
+                        <angular2-multiselect [data]="organisations" [(ngModel)]="selectedOrganisations"
+                            [settings]="multipleDropDownSetting"></angular2-multiselect>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>{{ 'textTranslate.period' | translate }}</label>
+                        <select class="form-control" (change)="onPeriodChange()" id="perdiod" [(ngModel)]="filter.periodFilter" name="perdiod">
+                            <option *ngFor="let c of filter.periods" [ngValue]="c">{{ c.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="fromDate">{{ 'textTranslate.start' | translate }}</label>
+                        <angular2-date-picker  [(ngModel)]="filter.fromDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label for="toDate">{{ 'textTranslate.end' | translate }}</label>
+                        <angular2-date-picker  [(ngModel)]="filter.toDate" [settings]="datePickerOption">
+                        </angular2-date-picker>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" (click)="onApplyFilter()" class="btn btn-primary"
+                            style="margin-top: 30px;">{{ 'textTranslate.applyFilter' | translate }}</button>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" (click)="printData()" style="margin-top: 30px;">  
+                            <i class="fa fa-download"></i></button>  
+                    </div>
+                  
+                </div>
+            </div>
+            <div #content>
+                <table class="table table-bordered table-striped table-sm" id="tablerecords">
+                    <thead>
+                        <tr>
+                            <th colspan="6"  class="center no-border">{{ 'textTranslate.profitAndLostDetailReport' | translate }}</th>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="center  no-border">{{filter.fromDate | date:'d/M/yyyy'}} to {{filter.toDate | date:'d/M/yyyy'}}</td>
+                        </tr>
+                        <tr>
+                            <td  colspan="6" class="center  no-border">{{ 'textTranslate.selectedOrganisation' | translate }}: {{getSelectedOrganisationNames()}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.date' | translate }}</th>
+                            <th>{{ 'textTranslate.transactionType' | translate }}</th>
+                            <th style="width: 100px;">{{ 'textTranslate.number' | translate }}</th>
+                            <th>{{ 'textTranslate.name' | translate }}</th>
+                            <th>{{ 'textTranslate.description' | translate }}</th>
+                            <th>{{ 'textTranslate.amount' | translate }}</th>
+
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let headerRow of profitAndLostDetail.profitAndLostDetailParents" >
+                        <tr class="bold">
+                            <td colspan="5" (click)="expandClick(headerRow)">
+                                {{headerRow.name}} <span style="color: blue;cursor: pointer;"><i *ngIf="headerRow.isExpand" class="fa fa-caret-square-o-down"></i><i *ngIf="!headerRow.isExpand" class="fa fa-caret-square-o-up"></i></span>
+                            </td>
+                            <td>{{currency.symbole}}{{headerRow.total | number:'1.2-2'}}</td>
+                        </tr>
+                        <tr  *ngFor="let row of headerRow.profitAndLostDetailItems" [ngClass]="{ 'hide': !headerRow.isExpand }">
+                            <td ><span style="padding-left: 10px;">
+                                <a class="btn-link" (click)="itemClick(row)"
+                                   > {{row.date | date:'d/M/yyyy'}}</a>
+                               
+                            </span></td>
+                           <td>{{row.transactionType}}</td>
+                           <td style="word-break: break-all;">
+                            <a class="btn-link" (click)="itemClick(row)"
+                            >{{row.number}}</a>
+                            </td>
+                           <td>{{row.clientOrVendorName}}</td>
+                           <td style="word-break: keep-all;">{{row.description}}</td>
+                           <td>{{currency.symbole}}{{row.amount | number:'1.2-2'}}</td>
+                        </tr>
+                    </tbody>
+                   <tbody>
+                       <tr  class="bold">
+                           <td colspan="5" class="rigth">{{profitAndLostDetail.profitAndLostDetailTotal.name}}</td>
+                           <td [ngClass]="{ 'text-danger': profitAndLostDetail.profitAndLostDetailTotal.total<0 }">{{currency.symbole}}{{profitAndLostDetail.profitAndLostDetailTotal.total | number:'1.2-2'}}</td>
+                       </tr>
+                       <tr>
+                        <td class="center no-border" colspan="6">
+                            {{ 'textTranslate.printOn' | translate }} {{printDate}}
+                        </td>
+                    </tr>
+                   </tbody>
+                </table>
+              
+            </div>
+        </div>
+    </div>
+  
+
+</div>

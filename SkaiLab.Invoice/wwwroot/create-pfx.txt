@@ -1,0 +1,12 @@
+﻿New-SelfSignedCertificate `
+   –Dns inv-linux.azurewebsites.net`
+   -CertStoreLocation "cert:\LocalMachine\My" `
+
+#create a password for our cert
+$pwd = ConvertTo-SecureString -String "mast12345" -Force -AsPlainText
+
+#finds the certificate in our local store
+$cert = Get-ChildItem -Path cert:\LocalMachine\my | where Subject -eq "CN=inv-linux.azurewebsites.net"
+
+#exports the certificate to temp directory
+Export-PfxCertificate -FilePath d:\invoice1.pfx -Password $pwd -Cert $cert

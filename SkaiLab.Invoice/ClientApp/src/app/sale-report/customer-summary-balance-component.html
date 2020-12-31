@@ -1,0 +1,66 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-9 col-sm-12">
+                    <div class="form-group">
+                        <label>Organisation</label>
+                        <angular2-multiselect [data]="organisations" [(ngModel)]="selectedOrganisations"
+                            [settings]="multipleDropDownSetting"></angular2-multiselect>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" (click)="onApplyFilter()" class="btn btn-primary"
+                            style="margin-top: 30px;">Apply Filter</button>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" (click)="printData()" style="margin-top: 30px;">  
+                            <i class="fa fa-download"></i></button>  
+                    </div>
+                  
+                </div>
+            </div>
+            <div #content>
+                <table class="table table-bordered table-striped table-sm" id="tablerecords">
+                    <thead>
+                        <tr>
+                            <th colspan="5"  class="center no-border">Customer Summary Balance Report</th>
+                        </tr>
+                        <tr>
+                            <td  colspan="5" class="center  no-border">Selected Organisations:{{getSelectedOrganisationNames()}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Total</th>
+
+                        </tr>
+                    </thead>
+                    <tbody >
+                       
+                        <tr  *ngFor="let row of customerBalanceSummaries">
+                           <td>{{row.customer.displayName}}</td>
+                           <td>{{currency.symbole}}{{row.total | number:'1.2-2'}}</td>
+                        </tr>
+                    </tbody>
+                   <tbody>
+                       <tr  class="bold">
+                           <td  class="rigth">Total</td>
+                           <td >{{currency.symbole}}{{getTotal() | number:'1.2-2'}}</td>
+                       </tr>
+                       <tr>
+                        <td class="center no-border" colspan="2">
+                            Print on {{printDate}}
+                        </td>
+                    </tr>
+                   </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

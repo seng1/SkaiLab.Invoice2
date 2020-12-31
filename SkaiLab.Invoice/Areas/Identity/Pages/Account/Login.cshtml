@@ -1,0 +1,75 @@
+﻿@page
+@model LoginModel
+@inject SkaiLab.Invoice.Models.IAppResource ShareLocalizer
+@{
+    ViewData["Title"] =ShareLocalizer.GetResource("Sign in");
+    Layout = "~/Pages/Shared/_AccounntLayout.cshtml";
+}
+<div class="container  unified_container ">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <img alt="Company Logo" class="companyLogo" src="~/logo.jpeg">
+                    <div id="api" data-name="Unified">
+                        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <div class="localAccount" role="form">
+                                <div class="intro">
+                                    <h2>
+                                        @ViewData["Title"]
+                                    </h2>
+                                </div>
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="entry">
+                                    <div class="entry-item">
+                                        <label for="name">
+                                            <span class="text-danger"> * </span>
+                                            @ShareLocalizer.GetResource("Email")
+                                        </label>
+                                        <input asp-for="Input.Email" type="text" class="input-text" placeholder="​@ShareLocalizer.GetResource("Email")" />
+                                    </div>
+                                    <div class="entry-item">
+                                        <div class="password-label">
+                                            <label for="password">@ShareLocalizer.GetResource("Password")</label>
+                                            <a id="forgotPassword" tabindex="2" asp-page="./ForgotPassword">@ShareLocalizer.GetResource("Forgot Password?")</a>
+                                        </div>
+                           
+                                        <input type="password" class="input-text" asp-for="Input.Password" placeholder="@ShareLocalizer.GetResource("Password")" tabindex="1">
+                                    </div>
+                                    <div class="working"></div>
+                                    <div class="rememberMe">
+                                        <input asp-for="Input.RememberMe" type="checkbox" tabindex="1">
+                                        <label for="rememberMe">@ShareLocalizer.GetResource("Remember me")</label>
+                                    </div>
+                                    <div class="buttons">
+                                        <button id="next" type="submit" tabindex="1">@ShareLocalizer.GetResource("Sign in")</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+                        @if (Model.ExternalLogins != null && Model.ExternalLogins.Any())
+                        {
+
+
+                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                @foreach (var pr in Model.ExternalLogins)
+                                {
+                                    @if (pr.Name == "Facebook")
+                                    {
+                                        <button class="accountButton firstButton" name="provider" id="FacebookExchange" type="submit" value="@pr.Name" tabindex="1">@ShareLocalizer.GetResource("Sign in with Facebook")</button>
+                                    }
+                                    @if (pr.Name == "Microsoft")
+                                    {
+                                        <button class="accountButton firstButton" name="provider" id="MicrosoftAccountExchange" type="submit" value="@pr.Name" tabindex="1">@ShareLocalizer.GetResource("Sign in with Microsoft")</button>
+                                    }
+                                }
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

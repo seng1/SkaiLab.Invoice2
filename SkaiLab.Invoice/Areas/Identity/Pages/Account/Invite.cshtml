@@ -1,0 +1,29 @@
+﻿@page
+@model SkaiLab.Invoice.Areas.Identity.Pages.Account.InviteModel
+@{
+}
+@{
+    ViewData["Title"] = "Confirm Invitation";
+    Layout = "~/Pages/Shared/_AccounntLayout.cshtml";
+}
+<div class="login">
+    <h1>@ViewData["Title"]</h1>
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label for="name">Email <span class="text-danger"> * </span></label>
+            <input asp-for="OrganisationUser.User.Email" disabled class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="name">Password <span class="text-danger"> * </span></label>
+            <input asp-for="Input.Password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="name">Confirm password <span class="text-danger"> * </span></label>
+            <input asp-for="Input.ConfirmPassword" class="form-control" />
+        </div>
+        <label class="hvr-sweep-to-bottom">
+            <input type="submit" value="Confirm" />
+        </label>
+    </form>
+</div>

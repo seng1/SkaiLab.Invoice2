@@ -13,10 +13,11 @@ namespace SkaiLab.Invoice.Service
         public List<OrganisationType> Gets()
         {
             using var context = Context();
+            var khmer = IsKhmer;
             return context.OrganisationType.Select(u => new OrganisationType
             {
                 Id=u.Id,
-                Name=u.Name
+                Name = IsKhmer ? u.NameKh : u.Name
             }).ToList();
         }
     }

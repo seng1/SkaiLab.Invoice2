@@ -1,0 +1,54 @@
+<div class="animated fadeIn">
+    <div class="card">
+        <div class="card-body">
+            <div class="button-panel">
+                <a [routerLink]='["/employee-new"]' class="btn btn-primary">{{ 'textTranslate.new' | translate }}</a>
+            </div>
+            <div class="row form-group">
+                <div class="col col-md-12">
+                    <div class="input-group">
+                        <input type="text" [(ngModel)]="searchText" placeholder="{{ 'textTranslate.search' | translate }}"
+                            (keyup.enter)="ngOnInit()" class="form-control">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" (click)="ngOnInit()">
+                                <i class="fa fa-search"></i> {{ 'textTranslate.search' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" table-responsive">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>{{ 'textTranslate.displayName' | translate }}</th>
+                            <th>{{ 'textTranslate.phoneNumber' | translate }}</th>
+                            <th>{{ 'textTranslate.email' | translate }}</th>
+                            <th>{{ 'textTranslate.gender' | translate }}</th>
+                            <th>{{ 'textTranslate.salary' | translate }}</th>
+                            <th>{{ 'textTranslate.active' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let employee of employees">
+                            <td> <a 
+                                [routerLink]="['/employee-update/',employee.id]">{{employee.displayName}}</a>
+                           </td>
+                            <td>{{employee.phoneNumber}}</td>
+                            <td>{{employee.email}}</td>   
+                            <td>{{employee.gender.name}}</td>   
+                            <td>{{employee.salary | number:'1.2-2'}} {{employee.currency.symbole}}</td>  
+                            <td><input type="checkbox" [(ngModel)]="employee.isActive" disabled/></td>                  
+                         </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr *ngIf="employees.length==0">
+                            <td colspan="4" class="text-danger">{{ 'textTranslate.noRecordFound' | translate }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,6 @@
+.ngx-dropdown-list-container{
+    position: static !important;
+}
+.ngx-dropdown-container .ngx-dropdown-list-container{
+    position: static !important;
+}
