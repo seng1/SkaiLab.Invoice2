@@ -364,7 +364,7 @@ namespace SkaiLab.Invoice.Service
                             Qty = u.Sum(t => t.Quantity),
                             total = u.Sum(t => t.LineTotalIncludeTax)
                         }).ToList();
-            var products = context.Product.Select(u => new Product
+            var products = context.Product.Where(u=>organisationIds.Any(t=>t==u.OrganisationId)).Select(u => new Product
             {
                 Id=u.Id,
                 Code=u.Code,

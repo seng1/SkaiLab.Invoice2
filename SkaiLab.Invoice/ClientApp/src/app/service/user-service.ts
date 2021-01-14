@@ -6,6 +6,7 @@ import { Token } from '../models/token';
 import { Organisation } from '../models/organisation';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
+import { UserLicenseInformation } from '../models/user-license-information';
 
 @Injectable()
 export class UserService {
@@ -45,5 +46,9 @@ export class UserService {
   updateUserLanguage(user:User):Observable<User>{
     let url = this.baseService.apiUrl + '/OrganisationUser/UpdateUserLanguage';
     return this.http.post<User>(url,user);
+  }
+  getUserLicenseInformation():Observable<UserLicenseInformation>{
+    let url = this.baseService.apiUrl + '/Account/GetUserLicenseInformation';
+    return this.http.get<UserLicenseInformation>(url);
   }
 }

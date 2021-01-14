@@ -43,6 +43,7 @@ namespace SkaiLab.Invoice.Service
             var workingOrganisation = context.WorkingOrganisation.FirstOrDefault(u => u.UserId == aspUser.Id);
             if (workingOrganisation == null)
             {
+                workingOrganisation = new Dal.Models.WorkingOrganisation();
                 workingOrganisation.UserId = aspUser.Id;
                 context.WorkingOrganisation.Add(workingOrganisation);
             }
@@ -52,7 +53,7 @@ namespace SkaiLab.Invoice.Service
             context.SaveChanges();
         }
 
-        public async Task ConfirmationInvitationAsync(string organisationId, string email, string password, UserManager<ApplicationUser> userManager)
+        public async Task ConfirmationInvitationAsync(string organisationId, string email, string password, UserManager<ApplicationUser> userManager,string phoneNumber)
         {
             using var context = Context();
             var organisationUser = context.OrganisationInvitingUser.FirstOrDefault(u => u.OrganisationId == organisationId && u.Email.ToLower() == email.ToLower());
@@ -62,11 +63,9 @@ namespace SkaiLab.Invoice.Service
             await userManager.ConfirmEmailAsync(user, code);
             await userManager.AddClaimsAsync(user, new List<Claim>
             {
-                new Claim(ClaimTypes.Surname,organisationUser.FirstName),
-                new Claim(ClaimTypes.GivenName,organisationUser.LastName),
                 new Claim(ClaimTypes.Email,email),
                 new Claim(ClaimTypes.Name,organisationUser.DisplayName),
-                new Claim(ClaimTypes.MobilePhone,"")
+                new Claim(ClaimTypes.MobilePhone,phoneNumber)
             });
             context.OrganisationUser.Add(new Dal.Models.OrganisationUser
             {
@@ -134,9 +133,7 @@ namespace SkaiLab.Invoice.Service
                      User=new User
                      {
                          Email=organisationUser.User.Email,
-                         FirstName=claims.FirstOrDefault(u=>u.ClaimType==ClaimTypes.Surname).ClaimValue,
-                         LastName = claims.FirstOrDefault(u => u.ClaimType == ClaimTypes.GivenName).ClaimValue,
-                         //Name = claims.FirstOrDefault(u => u.ClaimType == ClaimTypes.Name).ClaimValue,
+                         Name = claims.FirstOrDefault(u => u.ClaimType == ClaimTypes.Name).ClaimValue,
                          Id=organisationUser.UserId,
                          
                      },
@@ -164,8 +161,6 @@ namespace SkaiLab.Invoice.Service
                     User=new User
                     {
                         Email=invitingUser.Email,
-                        FirstName=invitingUser.FirstName,
-                        LastName=invitingUser.LastName,
                         Name=invitingUser.DisplayName
                     },
                     MenuFeatures= menuFeauture
@@ -198,8 +193,6 @@ namespace SkaiLab.Invoice.Service
                 User = new User
                 {
                     Email = invitingUser.Email,
-                    FirstName = invitingUser.FirstName,
-                    LastName = invitingUser.LastName,
                     Name = invitingUser.DisplayName,
 
                 },
@@ -239,8 +232,6 @@ namespace SkaiLab.Invoice.Service
                 User = new User
                 {
                     Email = u.Email,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
                     Name = u.DisplayName
                 }
             }).ToList();
@@ -265,8 +256,6 @@ namespace SkaiLab.Invoice.Service
                 Id=user.Id,
                 Email=user.Email,
                 Language=language==null?"en":language.ClaimValue,
-                FirstName=claims.FirstOrDefault(u=>u.ClaimType==ClaimTypes.Surname)==null?"": claims.First(u => u.ClaimType == ClaimTypes.Surname).ClaimValue,
-                LastName = claims.FirstOrDefault(u => u.ClaimType == ClaimTypes.GivenName) == null ? "" : claims.First(u => u.ClaimType == ClaimTypes.GivenName).ClaimValue,
                 Name = claims.FirstOrDefault(u => u.ClaimType == ClaimTypes.Name) == null ? "" : claims.First(u => u.ClaimType == ClaimTypes.Name).ClaimValue,
                 PhoneNumber = claims.FirstOrDefault(u => u.ClaimType == ClaimTypes.MobilePhone) == null ? "" : claims.First(u => u.ClaimType == ClaimTypes.MobilePhone).ClaimValue,
             };
@@ -278,14 +267,6 @@ namespace SkaiLab.Invoice.Service
             if (string.IsNullOrEmpty(organisationUser.User.Email))
             {
                 throw new Exception("Email is require");
-            }
-            if (string.IsNullOrEmpty(organisationUser.User.FirstName))
-            {
-                throw new Exception("First name is require");
-            }
-            if (string.IsNullOrEmpty(organisationUser.User.LastName))
-            {
-                throw new Exception("Last name is require");
             }
             if (string.IsNullOrEmpty(organisationUser.User.Name))
             {
@@ -303,11 +284,16 @@ namespace SkaiLab.Invoice.Service
             {
                 throw new Exception("User already invited");
             }
+            var ownerUser = context.OrganisationUser.FirstOrDefault(u => u.OrganisationId == organisationId && u.IsOwner);
+            var totalInvitedUser = context.OrganisationUser.Where(u => u.OrganisationId == organisationId).Count();
+            var totalUserCanAdd = GetTotalUsersCanAssign(organisationId, context);
+            if (totalInvitedUser >= totalUserCanAdd)
+            {
+                throw new Exception("Your license is reach out to add user.");
+            }
             var newInviteUser =new Dal.Models.OrganisationInvitingUser{
                 DisplayName=organisationUser.User.Name,
                 Email=organisationUser.User.Email.ToLower(),
-                FirstName=organisationUser.User.FirstName,
-                LastName=organisationUser.User.LastName,
                 OrganisationId=organisationId,
                 RoleName=organisationUser.RoleName,
                 ExpireToken=CurrentCambodiaTime.AddDays(2),
@@ -344,11 +330,22 @@ namespace SkaiLab.Invoice.Service
             var organisation = context.Organisation.FirstOrDefault(u => u.Id == organisationId);
             context.OrganisationInvitingUser.Add(newInviteUser);
             context.SaveChanges();
-            webUrl += "/Identity/Account/Invite?token=" + newInviteUser.Token;
-            await emailService.SendEmailAsync(organisationUser.User.Email, "Invitation to Invoice Account", $"You've been invited to join: {organisation.DisplayName} <a href='{webUrl}'>clicking here</a>.", true);
+            await ResentInviatationAsync(organisationId, userId, organisationUser.User.Email, webUrl);
+        }
+        private int GetTotalUsersCanAssign(string organisationId, Dal.Models.InvoiceContext context)
+        {
+            var ownerUser = context.OrganisationUser.FirstOrDefault(u => u.OrganisationId == organisationId && u.IsOwner).User.UserPlan;
+            if (ownerUser.PlanId == 1)
+            {
+                return 1;
+            }
+            if (ownerUser.PlanId == 2)
+            {
+                return 4;
+            }
+            return 100000000;
 
         }
-
         public void RemoveOrganisationUser(string organisationId, string removeByUserId, string email)
         {
             using var context = Context();
@@ -398,42 +395,19 @@ namespace SkaiLab.Invoice.Service
             inviteUser.ExpireToken = CurrentCambodiaTime.AddDays(2);
             inviteUser.Token = Guid.NewGuid().ToString();
             context.SaveChanges();
-            webUrl += "/Identity/Account/Invite?token=" + inviteUser.Token;
-            await emailService.SendEmailAsync(inviteUser.Email, "Invitation to Invoice Account", $"You've been invited to join: {inviteUser.Organisation.DisplayName} <a href='{webUrl}'>clicking here</a>.", true);
-
+            var userName = context.AspNetUserClaims.FirstOrDefault(u => u.UserId == userId && u.ClaimType == ClaimTypes.Name).ClaimValue;
+            var organisation = context.Organisation.FirstOrDefault(u => u.Id == organisationId).DisplayName;
+            webUrl += "/Identity/Account/Invite?token=" + inviteUser.Token+"&name="+userName;
+            string subject = $"{userName} អញ្ជើញអ្នកចូលរួមប្រើ Skai Account របស់ក្រុមហ៊ុន {organisation}({userName} invite to join  Skai Account for company {organisation})";
+            string body = $"You have invite to join Skai Account for company {organisation}. Please click <a href='{webUrl}'>here</a>​ to join.";
+            string bodyKh = $"អ្នកបានអញ្ជើញឱ្យចូលរួម Skai Account សម្រាប់ក្រុមហ៊ុន {organisation}។ សូមចុច <a href='{webUrl}'>ត្រង់នេះ</a>​ ដើម្បីចូលរួម។";
+            await emailService.SendEmailAsync(new List<string> { inviteUser.Email }, inviteUser.DisplayName, subject, body, bodyKh);
         }
 
         public void UpdateUser(User user)
         {
             using var context = Context();
-            var claimSureName = context.AspNetUserClaims.FirstOrDefault(u => u.UserId == user.Id && u.ClaimType == ClaimTypes.Surname);
-            if (claimSureName != null)
-            {
-                claimSureName.ClaimValue = user.FirstName;
-            }
-            else
-            {
-                context.AspNetUserClaims.Add(new Dal.Models.AspNetUserClaims
-                {
-                    ClaimType=ClaimTypes.Surname,
-                    ClaimValue=user.FirstName,
-                    UserId=user.Id
-                });
-            }
-            var claimGiventName = context.AspNetUserClaims.FirstOrDefault(u => u.UserId == user.Id && u.ClaimType == ClaimTypes.GivenName);
-            if (claimGiventName != null)
-            {
-                claimGiventName.ClaimValue = user.LastName;
-            }
-            else
-            {
-                context.AspNetUserClaims.Add(new Dal.Models.AspNetUserClaims
-                {
-                    ClaimType = ClaimTypes.GivenName,
-                    ClaimValue = user.LastName,
-                    UserId = user.Id
-                });
-            }
+        
             var claimName = context.AspNetUserClaims.FirstOrDefault(u => u.UserId == user.Id && u.ClaimType == ClaimTypes.Name);
             if (claimName != null)
             {

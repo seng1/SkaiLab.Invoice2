@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using SkaiLab.Invoice.Dal;
+using SkaiLab.Invoice.Models;
 
 namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
 {
@@ -19,14 +20,16 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-
+        private readonly IAppResource appResource;
         public LoginModel(SignInManager<ApplicationUser> signInManager, 
             ILogger<LoginModel> logger,
+            IAppResource appResource,
             UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            this.appResource = appResource;
         }
 
         [BindProperty]
@@ -35,6 +38,8 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
+        public List<string> Errors { get; set; }
+        public string Culture { get; set; }
 
         [TempData]
         public string ErrorMessage { get; set; }
@@ -53,12 +58,15 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null, string culture = null)
         {
+            culture = culture ?? "en-US";
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
+            Culture = culture;
+            Errors = new List<string>();
 
             returnUrl = returnUrl ?? Url.Content("~/");
 
@@ -70,19 +78,17 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null, string culture = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+            Culture = culture;
+            Errors = new List<string>();
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-               
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -91,17 +97,25 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    Errors.Add(appResource.GetResource("Email or password not correct"));
                     return Page();
                 }
             }
-
-            // If we got this far, something failed, redisplay form
+            if (!ModelState.IsValid)
+            {
+                foreach (var r in ModelState.Values)
+                {
+                    foreach (var t in r.Errors)
+                    {
+                        Errors.Add(appResource.GetResource(t.ErrorMessage));
+                    }
+                }
+            }
             return Page();
         }
     }

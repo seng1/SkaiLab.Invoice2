@@ -13,6 +13,7 @@ namespace SkaiLab.Invoice.Dal.Models
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
             OrganisationUser = new HashSet<OrganisationUser>();
             OrganisationUserMenuFeature = new HashSet<OrganisationUserMenuFeature>();
+            UserPayment = new HashSet<UserPayment>();
         }
 
         public string Id { get; set; }
@@ -31,6 +32,8 @@ namespace SkaiLab.Invoice.Dal.Models
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
 
+        public virtual AspNetUserTokensCode AspNetUserTokensCode { get; set; }
+        public virtual UserPlan UserPlan { get; set; }
         public virtual WorkingOrganisation WorkingOrganisation { get; set; }
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
@@ -38,5 +41,6 @@ namespace SkaiLab.Invoice.Dal.Models
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual ICollection<OrganisationUser> OrganisationUser { get; set; }
         public virtual ICollection<OrganisationUserMenuFeature> OrganisationUserMenuFeature { get; set; }
+        public virtual ICollection<UserPayment> UserPayment { get; set; }
     }
 }

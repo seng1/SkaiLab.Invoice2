@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import { BaseService } from './base-service';
 import { Organisation } from '../models/organisation';
 import { Currency } from '../models/currency';
+import { ApiResult } from '../models/api-result';
 
 @Injectable()
 export class OrganisationService {
@@ -25,9 +26,9 @@ export class OrganisationService {
     let url = this.baseService.apiUrl + '/Organisation/GetTaxCurrency';
     return this.http.get<Currency>(url,{headers:this.baseService.getRequestHeader(true)});
   }
-  add(organisation:Organisation):Observable<Organisation>{
+  add(organisation:Organisation):Observable<ApiResult>{
     let url = this.baseService.apiUrl + '/Organisation/Add';
-    return this.http.post<Organisation>(url,organisation,{headers:this.baseService.getRequestHeader(true)});
+    return this.http.post<ApiResult>(url,organisation,{headers:this.baseService.getRequestHeader(true)});
   }
   changeWorkingOrganisation(id:any):Observable<Organisation>{
     let url = this.baseService.apiUrl + '/Organisation/changeWorkingOrganisation/'+id;

@@ -1,29 +1,59 @@
 ﻿@page
 @model SkaiLab.Invoice.Areas.Identity.Pages.Account.InviteModel
+@inject SkaiLab.Invoice.Models.IAppResource ShareLocalizer
 @{
-}
-@{
-    ViewData["Title"] = "Confirm Invitation";
+    ViewData["Title"] = ShareLocalizer.GetResource("Confirm Invitation");
     Layout = "~/Pages/Shared/_AccounntLayout.cshtml";
 }
-<div class="login">
-    <h1>@ViewData["Title"]</h1>
-    <form method="post">
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="form-group">
-            <label for="name">Email <span class="text-danger"> * </span></label>
-            <input asp-for="OrganisationUser.User.Email" disabled class="form-control" />
+<div class="container  unified_container ">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <img alt="Company Logo" class="companyLogo" src="~/logo.jpeg">
+                    <div id="api" data-name="Unified">
+                        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" asp-action="./Login?culture=@Model.Culture&token=@Model.Token&name=@Model.Name">
+                            <div class="localAccount" role="form">
+                                <div class="intro">
+                                    <h2>
+                                        @ViewData["Title"]
+                                    </h2>
+                                </div>
+                                @if (Model.Errors.Any())
+                                {
+                                    <div class="text-danger validation-summary-errors">
+                                        <ul>
+                                            @foreach (var error in Model.Errors)
+                                            {
+                                                <li>@error</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                                <div class="entry">
+                                    <div class="entry-item">
+                                        <input type="text" value="@Model.OrganisationUser.User.Email" disabled class="input-text" placeholder="​@ShareLocalizer.GetResource("Email")" />
+                                    </div>
+                                    <div class="entry-item">
+                                        <input asp-for="Input.PhoneNumber" type="text" autocomplete="off" class="input-text" placeholder="​@ShareLocalizer.GetResource("Phone Number")" />
+                                    </div>
+                                    <div class="entry-item">
+                                        <input type="password" class="input-text" autocomplete="off" asp-for="Input.Password" placeholder="​@ShareLocalizer.GetResource("Password")">
+                                    </div>
+                                    <div class="entry-item">
+
+                                        <input type="password" class="input-text" autocomplete="off" asp-for="Input.ConfirmPassword" placeholder="​@ShareLocalizer.GetResource("Confirm Password")">
+                                    </div>
+                                    <div class="buttons">
+                                        <button id="next" type="submit" tabindex="1">@ShareLocalizer.GetResource("Confirm")</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="name">Password <span class="text-danger"> * </span></label>
-            <input asp-for="Input.Password" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="name">Confirm password <span class="text-danger"> * </span></label>
-            <input asp-for="Input.ConfirmPassword" class="form-control" />
-        </div>
-        <label class="hvr-sweep-to-bottom">
-            <input type="submit" value="Confirm" />
-        </label>
-    </form>
+    </div>
 </div>

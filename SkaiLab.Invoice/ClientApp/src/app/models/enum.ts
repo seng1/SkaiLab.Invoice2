@@ -66,3 +66,10 @@ export enum DisplayColumnEnum{
     TotalOnly=2,
     Organisation=3
 }
+export enum CreateCompanyResultEnum
+{
+    Success=0,
+    UserNoLicense=1,
+    LicenseExpireOrIncomple=2,
+    LimitCreateNumberOfOrganisation=3
+}

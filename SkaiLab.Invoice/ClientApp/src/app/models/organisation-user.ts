@@ -22,15 +22,12 @@ export class OrganisationUser{
 }
 export class User{
 
-    firstName:string;
-    lastName:string;
     id:string;
     email:string;
     name:string;
     phoneNumber:string;
     constructor(){
-        this.firstName="";
-        this.lastName="";
+
         this.id="";
         this.email="";
         this.name="";

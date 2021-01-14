@@ -11,9 +11,11 @@ namespace SkaiLab.Invoice.Controllers
     public class OrganisationController : ParentController
     {
         private readonly IOrganisationService organisationService;
-        public OrganisationController(IOrganisationService organisationService):base(organisationService)
+        private readonly IAppResource appResource;
+        public OrganisationController(IOrganisationService organisationService,IAppResource appResource):base(organisationService)
         {
             this.organisationService = organisationService;
+            this.appResource = appResource;
         }
         [HttpGet("[action]")]
         public IActionResult Get()
@@ -34,11 +36,13 @@ namespace SkaiLab.Invoice.Controllers
         [HttpGet("[action]")]
         public IActionResult GetBaseCurrency()
         {
+            EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
             return Ok(organisationService.GetBaseCurrency(organisationService.OrganisationId));
         }
         [HttpGet("[action]")]
         public IActionResult GetTaxCurrency()
         {
+            EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
             return Ok(organisationService.GetTaxCurrency(organisationService.OrganisationId));
         }
         [HttpPost("[action]")]
@@ -46,8 +50,18 @@ namespace SkaiLab.Invoice.Controllers
         {
             try
             {
-                organisationService.Create(organisation, organisationService.UserId);
-                return Ok(organisation);
+               var result= organisationService.Create(organisation, organisationService.UserId);
+                var r = new ApiResult
+                {
+                    IsSccuess = result == (int)CreateCompanyResultEnum.Success,
+                    Code = result,
+                    UserId=organisationService.UserId
+                };
+                if (result == (int)CreateCompanyResultEnum.LimitCreateNumberOfOrganisation)
+                {
+                    r.ErrorText =appResource.GetResource("You reach to number of companies that you can create");
+                }
+                return Ok(r);
             }
             catch(Exception ex)
             {

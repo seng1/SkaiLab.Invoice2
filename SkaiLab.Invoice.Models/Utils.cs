@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TimeZoneConverter;
 
@@ -103,6 +106,27 @@ namespace SkaiLab.Invoice.Models
             var callbackUrl = url.Content("~/Error/Index");
             context.Session.SetString("ErrorText", errorText);
             return callbackUrl;
+        }
+        public static bool IsKhmer = Thread.CurrentThread.CurrentUICulture.Name=="km-Kh";
+        public static string SerializeObject(object data)
+        {
+            var serializerSettings = new Newtonsoft.Json.JsonSerializerSettings();
+            serializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            return Newtonsoft.Json.JsonConvert.SerializeObject(data, serializerSettings);
+        }
+        public static string SHA512_ComputeHash(string text, string secretKey)
+        {
+            byte[] secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+            byte[] inputBytes = Encoding.UTF8.GetBytes(text);
+            using (var hmac = new HMACSHA512(secretKeyBytes))
+            {
+                byte[] hashValue = hmac.ComputeHash(inputBytes);
+                return Convert.ToBase64String(hashValue);
+            }
+        }
+        public static string FormatCurrency(double price)
+        {
+            return String.Format("{0:USD #,##0.00}", price);
         }
     }
 }

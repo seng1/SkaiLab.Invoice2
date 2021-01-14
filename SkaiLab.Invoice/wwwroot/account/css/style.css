@@ -4,3 +4,102 @@ a, span, p, div, td, input, select, label, h1, h2, h3, h4, h5, h6, li {
 .intro > h2{
     text-align:center;
 }
+.entry-item{
+    text-align:left;
+}
+.entry-item > label{
+    display:block !important;
+    font-weight:normal !important;
+}
+#email_ver_but_resend{
+    margin-top:0px !important;
+    color:black !important;
+    background-color:aliceblue !important;
+}
+#preloader {
+    position: fixed;
+    z-index: 999999;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: transparent;
+}
+
+#preloader-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    /*You can use animated gif for preloader*/
+    /*background: url('../img/preloader.png') no-repeat 50% 20px;*/
+}
+
+#preloader-title {
+    font-size: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.spinner {
+    margin: 0 auto;
+    width: 120px;
+    height: 30px;
+    text-align: center;
+    font-size: 10px;
+}
+
+    .spinner > div {
+        background-color: #16347B;
+        height: 100%;
+        width: 20px;
+        display: inline-block;
+        -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+        animation: stretchdelay 1.2s infinite ease-in-out;
+    }
+
+    .spinner .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s;
+    }
+
+    .spinner .rect3 {
+        -webkit-animation-delay: -1s;
+        animation-delay: -1s;
+    }
+
+    .spinner .rect4 {
+        -webkit-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+    }
+
+    .spinner .rect5 {
+        -webkit-animation-delay: -0.8s;
+        animation-delay: -0.8s;
+    }
+
+@-webkit-keyframes stretchdelay {
+
+    0%, 40%, 100% {
+        -webkit-transform: scaleY(0.4);
+    }
+
+    20% {
+        -webkit-transform: scaleY(1);
+    }
+}
+
+@keyframes stretchdelay {
+
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }
+
+    20% {
+        transform: scaleY(1);
+        -webkit-transform: scaleY(1);
+    }
+}

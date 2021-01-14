@@ -15,6 +15,19 @@
 </head>
 <body style="background:#05a4b5">
     @RenderBody()
-
+    <div id="preloader" style="display:none">
+        <div id="preloader-status">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <div id="preloader-title">Loading</div>
+        </div>
+    </div>
+    <script src="~/js/jquery-2.1.4.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

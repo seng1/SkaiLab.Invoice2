@@ -1,0 +1,164 @@
+﻿@model SkaiLab.Invoice.Models.UserLicenseInformationDetail
+@inject SkaiLab.Invoice.Models.IAppResource ShareLocalizer
+@{
+    ViewData["Title"] = @ShareLocalizer.GetResource("Checkout");
+    Layout = "~/Pages/Shared/_checkout.cshtml";
+}
+<style type="text/css">
+    .panel-wrapper .panel-body {
+        min-height: 310px !important;
+    }
+</style>
+@{
+    <input type="hidden" id="hdData" value="@SkaiLab.Invoice.Models.Utils.SerializeObject(Model)" />
+    <input type="hidden" id="hdculture" value="@ViewBag.culture"/>
+}
+<script src="~/controller/payment-summary.js"></script>
+<div class="container-fluid background" ng-controller="PaymentControler as vm" ng-init="vm.init()">
+    <div class="row padding-top-20">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-8 offset-md-1 offset-lg-1 offset-xl-2 padding-horizontal-40">
+            <div class="row">
+                <div class="col-12 main-wrapper">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="row panel-wrapper">
+                                <div class="col-12 panel-header creditcard-header">
+                                    <div class="row">
+                                        <div class="col-12 creditcard-title">
+                                            <span class="description">@ShareLocalizer.GetResource("Purchase Detail")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 panel-body creditcard-body">
+                                    <form action="#" method="post" target="_self">
+                                        <fieldset>
+                                            <label for="card-name">@ShareLocalizer.GetResource("Plan") <span class="text-danger"> *</span></label><br>
+                                            <select class="form-control" name="plan" ng-change="vm.onPlanChange()"
+                                                    ng-model="vm.data.planId"
+                                                    ng-options="v.id as v.name for v in vm.data.plans">
+                                            </select>
+                                            <a class="btn btn-link btn-sm text-default" href="@ViewBag.priceUrl" target="_blank" style="font-size:10px">@ShareLocalizer.GetResource("Click here for more detail")</a>
+                                        </fieldset>
+                                        <fieldset>
+                                            <label for="card-name">
+                                                @ShareLocalizer.GetResource("Subscription Type") <span class="text - danger"> *</span>
+                                            </label><br>
+                                            <select class="form-control" name="subscriptionTypeId" ng-change="vm.onSubscriptionChange()"
+                                                    ng-model="vm.data.subscriptionId"
+                                                    ng-options="v.id as v.name for v in vm.data.subscriptionTypes">
+                                            </select>
+                                        </fieldset>
+                                        <fieldset style="text-align:center">
+                                            <button class="btn btn-link btn-sm text-default" ng-hide="vm.data.totalDiscount!=null" ng-click="vm.onShowCouplCodeModal()" type="button">
+                                                @ShareLocalizer.GetResource("Have a promo code?")
+                                            </button>
+                                            <span ng-hide="vm.data.totalDiscount==null">@ShareLocalizer.GetResource("Prmotion code"): {{vm.data.couponCode}}({{vm.data.discountRate}}%) <button class="btn btn - link btn - sm text - default" type="button" ng-click="vm.onRemoveCouponCode()"><i class="fa fa - times" aria-hidden="true"></i></button></span>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <div class="col-12 panel-footer creditcard-footer">
+                                    <div class="row">
+                                        <div class="col-12 align-right"><button class="confirm" ng-click="vm.onNextClick()">@ShareLocalizer.GetResource("Next")</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div id="template" class="row panel-wrapper">
+                                <div class="col-12 panel-header basket-header">
+                                    <div class="row">
+                                        <div class="col-6 basket-title">
+                                            <span class="description">@ShareLocalizer.GetResource("review your")</span><br><span class="emphasized">@ShareLocalizer.GetResource("Cart Summary")</span>
+                                        </div>
+                                    </div>
+                                    <div class="row column-titles padding-top-10">
+                                        <div class="col-5 align-center">
+                                            <span>
+                                                @ShareLocalizer.GetResource("Name")
+                                            </span>
+                                        </div>
+                                        <div class="col-2 align-center">
+                                            <span>
+                                                @ShareLocalizer.GetResource("Quantity")
+                                            </span>
+                                        </div>
+                                        <div class="col-3 align-right"><span> @ShareLocalizer.GetResource("Price")</span></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 panel-body basket-body">
+                                    <div class="row product">
+                                        <div class="col-5">{{vm.data.paymentDescription}}</div>
+                                        <div class="col-2 align-right">1</div>
+                                        <div class="col-3 align-right"><span class="sub">USD</span> {{vm.data.totalIncludeTax | number:2}}</div>
+                                    </div>
+
+                                </div>
+                                <div class="col-12 panel-footer basket-footer">
+                                    <hr>
+                                    <div class="row">
+
+                                        <div class="col-8 align-right description"><div class="dive">@ShareLocalizer.GetResource("Sub Total")</div></div>
+                                        <div class="col-4 align-right"><span class="emphasized">USD {{vm.data.total | number:2}}</span></div>
+                                        <div class="col-8 align-right description" ng-hide="vm.data.totalDiscount==null"><div class="dive">@ShareLocalizer.GetResource("Discount") ({{vm.data.discountRate}}%)</div></div>
+                                        <div class="col-4 align-right" ng-hide="vm.data.totalDiscount==null"><span class="emphasized">USD {{ vm.data.totalDiscount | number:2}}</span></div>
+                                        <div class="col-8 align-right description" ng-hide="vm.data.totalDiscount==null">
+                                            <div class="dive">
+                                                @ShareLocalizer.GetResource("Total After Discount")
+                                            </div>
+                                        </div>
+                                        <div class="col-4 align-right" ng-hide="vm.data.totalDiscount==null"><span class="emphasized">USD {{vm.data.totalAfterDiscount | number:2}}</span></div>
+                                        <div class="col-8 align-right description" ng-show="vm.data.isTax">
+                                            <div class="dive">
+                                                @ShareLocalizer.GetResource("Tax (10%)")
+                                            </div>
+                                        </div>
+                                        <div class="col-4 align-right" ng-show="vm.data.isTax"><span class="emphasized">USD {{vm.data.taxAmount | number:2}}</span></div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-8 align-right description">
+                                            <div class="dive">
+                                                @ShareLocalizer.GetResource("Total")
+                                            </div>
+                                        </div>
+                                        <div class="col-4 align-right"><span class="emphasized">USD {{vm.data.totalIncludeTax | number:2}}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="CouponCodeModal" class="modal fade" role="dialog">
+        <div class="modal-content">
+            <div class="modal-dialog modal-full-height modal-notify modal-info" role="document">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <p class="heading lead">@ShareLocalizer.GetResource("Have a promo code?")</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="couple">
+                                @ShareLocalizer.GetResource("Prmotion code")<span class="text - danger"> * </span>
+                            </label>
+                                                        <input type="text" name="couple" ng-model="vm.couponCode" class="form-control" />
+</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-click="vm.onApplyCouponCode()" class="btn btn-default">@ShareLocalizer.GetResource("Apply")</button>
+</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

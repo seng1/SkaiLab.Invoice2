@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+
+<html ng-app="app">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Raleway:300,400,600&amp;subset=latin-ext">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Battambang|Roboto" rel="stylesheet" type="text/css" />
+    <link href="~/checkout/style.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-animate/1.8.0/angular-animate.min.js"></script>
+    <script src="~/controller/app.js"></script>
+</head>
+<body>
+    @RenderBody()
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
+    
+    <script src="~/js/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+        });
+        (function ($) {
+            $.fn.hasScrollBar = function () {
+                return this.get(0).scrollHeight > this.height();
+            }
+        })(jQuery);
+    </script>
+    @RenderSection("Scripts", required: false)
+    <div id="errorModal" class="modal fade" role="dialog">
+        <div class="modal-content">
+            <div class="modal-dialog modal-full-height modal-notify modal-info" role="document">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header modal-header-error">
+                        <p class="heading lead">Error</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <label class="text-danger" id="lblError" style="font-size:14px"></label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div id="preloader" style="display:none">
+        <div id="preloader-status">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+            <div id="preloader-title">Loading</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -19,7 +19,7 @@ namespace SkaiLab.Invoice.Service
         Task UpdateUserRoleAsync(string organisationId, string updateByUserId, OrganisationUser organisationUser);
         OrganisationUser GetOrganisationUser(string token);
         void ConfirmationInvitation(string organisationId, string email);
-        Task ConfirmationInvitationAsync(string organisationId, string email,string password,UserManager<ApplicationUser> userManager);
+        Task ConfirmationInvitationAsync(string organisationId, string email,string password,UserManager<ApplicationUser> userManager,string phone);
         User GetUser(string userId);
         void UpdateUser(User user);
         void UpdateUserLanguage(User user);

@@ -103,4 +103,11 @@
         Payroll=6,
         Report=7
     }
+    public enum CreateCompanyResultEnum
+    {
+        Success=0,
+        UserNoLicense=1,
+        LicenseExpireOrIncomple=2,
+        LimitCreateNumberOfOrganisation=3
+    }
 }

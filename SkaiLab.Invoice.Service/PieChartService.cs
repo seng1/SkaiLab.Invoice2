@@ -24,7 +24,7 @@ namespace SkaiLab.Invoice.Service
                                                    )
                .Select(u => new { u.TotalIncludeTax, u.BaseCurrencyExchangeRate })
                .Sum(u => u.TotalIncludeTax * u.BaseCurrencyExchangeRate);
-            var totalEmployeeSalary = context.PayrollEmployee.Where(u => u.Date >= filter.FromDate && u.Date <= filter.ToDate)
+            var totalEmployeeSalary = context.PayrollEmployee.Where(u => u.Date >= filter.FromDate && u.Date <= filter.ToDate && organisationIds.Any(t=>t==u.PayrollMonth.OrganisationId))
                 .Sum(u => u.Total);
             totalExpense += totalEmployeeSalary;
 
@@ -127,7 +127,7 @@ namespace SkaiLab.Invoice.Service
                                                     )
                 .Select(u => new { u.TotalIncludeTax, u.BaseCurrencyExchangeRate })
                 .Sum(u => u.TotalIncludeTax * u.BaseCurrencyExchangeRate);
-            var totalEmployeeSalary = context.PayrollEmployee.Where(u => u.Date >= filter.FromDate && u.Date <= filter.ToDate)
+            var totalEmployeeSalary = context.PayrollEmployee.Where(u => u.Date >= filter.FromDate && u.Date <= filter.ToDate && organisationIds.Any(t=>t==u.PayrollMonth.OrganisationId))
                 .Sum(u => u.Total);
             totalExpense += totalEmployeeSalary;
             return new PieChart

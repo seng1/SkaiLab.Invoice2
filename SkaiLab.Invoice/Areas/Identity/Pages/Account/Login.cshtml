@@ -12,28 +12,34 @@
                 <div class="panel-body">
                     <img alt="Company Logo" class="companyLogo" src="~/logo.jpeg">
                     <div id="api" data-name="Unified">
-                        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" asp-action="./Login?culture=@Model.Culture">
                             <div class="localAccount" role="form">
                                 <div class="intro">
                                     <h2>
                                         @ViewData["Title"]
                                     </h2>
                                 </div>
-                                <div asp-validation-summary="All" class="text-danger"></div>
+                                @if (Model.Errors.Any())
+                                {
+                                    <div class="text-danger validation-summary-errors">
+                                        <ul>
+                                            @foreach (var error in Model.Errors)
+                                            {
+                                                <li>@error</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
                                 <div class="entry">
                                     <div class="entry-item">
-                                        <label for="name">
-                                            <span class="text-danger"> * </span>
-                                            @ShareLocalizer.GetResource("Email")
-                                        </label>
                                         <input asp-for="Input.Email" type="text" class="input-text" placeholder="​@ShareLocalizer.GetResource("Email")" />
                                     </div>
                                     <div class="entry-item">
                                         <div class="password-label">
                                             <label for="password">@ShareLocalizer.GetResource("Password")</label>
-                                            <a id="forgotPassword" tabindex="2" asp-page="./ForgotPassword">@ShareLocalizer.GetResource("Forgot Password?")</a>
+                                            <a id="forgotPassword" tabindex="2" href="./ForgotPassword?culture=@Model.Culture">@ShareLocalizer.GetResource("Forgot Password?")</a>
                                         </div>
-                           
+
                                         <input type="password" class="input-text" asp-for="Input.Password" placeholder="@ShareLocalizer.GetResource("Password")" tabindex="1">
                                     </div>
                                     <div class="working"></div>
@@ -49,7 +55,7 @@
                             </div>
                         </form>
 
-                        @if (Model.ExternalLogins != null && Model.ExternalLogins.Any())
+                        @*@if (Model.ExternalLogins != null && Model.ExternalLogins.Any())
                         {
 
 
@@ -66,7 +72,7 @@
                                     }
                                 }
                             </form>
-                        }
+                        }*@
                     </div>
                 </div>
             </div>

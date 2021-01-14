@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using SkaiLab.Invoice.Dal;
 using SkaiLab.Invoice.Service;
+using SkaiLab.Invoice.Models;
 
 namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
 {
@@ -20,15 +20,24 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailService _emailSender;
+        private readonly IAppResource appResource;
+        private readonly IUserService userService;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailService emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, 
+            IEmailService emailSender,
+            IAppResource appResource,
+            IUserService userService)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            this.appResource = appResource;
+            this.userService = userService;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
+        public List<string> Errors { get; set; }
+        public string Culture { get; set; }
 
         public class InputModel
         {
@@ -36,52 +45,49 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
         }
-
-        public async Task<IActionResult> OnPostAsync()
+        public async Task OnGetAsync(string culture = null)
         {
+            culture = culture ?? "en-US";
+            Culture = culture;
+            Errors = new List<string>();
+        }
+
+        public async Task<IActionResult> OnPostAsync(string culture = null)
+        {
+            culture = culture ?? "en-US";
+            Culture = culture;
+            Errors = new List<string>();
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                var code = "";
-                var callbackUrl = "";
                 if (user == null)
                 {
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    ModelState.AddModelError(string.Empty, appResource.GetResource("User with thi email doesn't exist"));
+                    Errors.Add(appResource.GetResource("User with thi email doesn't exist"));
+                    return Page();
                 }
+
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                 {
-                    code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = Url.Content("~/") },
-                        protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", true);
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userService.SendNewCodeAsync(user.Id);
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, id = user.Id, returnUrl = Url.Content("~/") });
+                }
+                await _userManager.GeneratePasswordResetTokenAsync(user);
+                await userService.SendNewCodeAsync(user.Id);
+                return RedirectToPage("./ForgotPasswordConfirmation", new { email = Input.Email, culture = culture, id = user.Id });
+            }
+            if (!ModelState.IsValid)
+            {
+                foreach (var r in ModelState.Values)
+                {
+                    foreach (var t in r.Errors)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = Url.Content("~/") });
+                        Errors.Add(appResource.GetResource(t.ErrorMessage));
                     }
                 }
-                code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                callbackUrl = Url.Page(
-                    "/Account/ResetPassword",
-                    pageHandler: null,
-                    values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
-
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.",true);
-
-                return RedirectToPage("./ForgotPasswordConfirmation");
             }
-
             return Page();
         }
     }

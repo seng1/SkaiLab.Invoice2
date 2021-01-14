@@ -123,6 +123,9 @@
   <data name="All Simple basic features +" xml:space="preserve">
     <value>លក្ខណៈមូលដ្ឋានសាមញ្ញទាំងអស់ +</value>
   </data>
+  <data name="Apply" xml:space="preserve">
+    <value>អនុវត្ត</value>
+  </data>
   <data name="Basic" xml:space="preserve">
     <value>មូលដ្ឋាន</value>
   </data>
@@ -132,8 +135,32 @@
   <data name="Buy now" xml:space="preserve">
     <value>ទិញ​ឥឡូវនេះ</value>
   </data>
+  <data name="Cart Summary" xml:space="preserve">
+    <value>សង្ខេបរទេះ</value>
+  </data>
+  <data name="Checkout" xml:space="preserve">
+    <value>បញ្ជរបង់ប្រាក់</value>
+  </data>
+  <data name="Choose the payment method below." xml:space="preserve">
+    <value>ជ្រើសរើសវិធីទូទាត់ខាងក្រោម</value>
+  </data>
+  <data name="Click here for more detail" xml:space="preserve">
+    <value>ចុចទីនេះសម្រាប់ព័ត៌មានលម្អិត</value>
+  </data>
   <data name="Company" xml:space="preserve">
     <value>ក្រុមហ៊ុន</value>
+  </data>
+  <data name="Company Name" xml:space="preserve">
+    <value>ឈ្មោះ​ក្រុម​ហ៊ុន</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>បញ្ជាក់</value>
+  </data>
+  <data name="Confirm Invitation" xml:space="preserve">
+    <value>បញ្ជាក់ការអញ្ជើញ</value>
+  </data>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>បញ្ជាក់ពាក្យសម្ងាត់</value>
   </data>
   <data name="Contact" xml:space="preserve">
     <value>ទំនាក់ទំនង</value>
@@ -153,8 +180,17 @@
   <data name="Dashboard" xml:space="preserve">
     <value>ផ្ទាំងគ្រប់គ្រង</value>
   </data>
+  <data name="Discount" xml:space="preserve">
+    <value>បញ្ចុះតម្លៃ</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>អ៊ីមែល</value>
+  </data>
+  <data name="Email is require." xml:space="preserve">
+    <value>អ៊ីមែលត្រូវតែមាន។</value>
+  </data>
+  <data name="Email or password not correct" xml:space="preserve">
+    <value>អ៊ីមែលឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ</value>
   </data>
   <data name="Employee Salary" xml:space="preserve">
     <value>ប្រាក់ខែបុគ្គលិក</value>
@@ -168,11 +204,20 @@
   <data name="Expire" xml:space="preserve">
     <value>ផុតកំណត់</value>
   </data>
+  <data name="Forgot password confirmation" xml:space="preserve">
+    <value>ការបញ្ជាក់ភ្លេចពាក្សសម្ងាត់</value>
+  </data>
   <data name="Forgot Password?" xml:space="preserve">
     <value>ភ្លេចពាក្យសម្ងាត់?</value>
   </data>
+  <data name="Forgot your password?" xml:space="preserve">
+    <value>ភ្លេចពាក្សសំងាត់?</value>
+  </data>
   <data name="Get a real-time view of your cashflow" xml:space="preserve">
     <value>មើលពេលវេលាជាក់ស្តែងនៃលំហូរសាច់ប្រាក់របស់អ្នក</value>
+  </data>
+  <data name="Have a promo code?" xml:space="preserve">
+    <value>មានលេខ​កូដ​ប្រូ​ម៉ូ​សិន?</value>
   </data>
   <data name="Hi" xml:space="preserve">
     <value>សួស្តី</value>
@@ -213,6 +258,15 @@
   <data name="Multiple currencies support" xml:space="preserve">
     <value>រូបិយប័ណ្ណច្រើន</value>
   </data>
+  <data name="Name" xml:space="preserve">
+    <value>ឈ្មោះ</value>
+  </data>
+  <data name="Name is require." xml:space="preserve">
+    <value>ឈ្មោះត្រូវតែមាន។</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>បន្ទាប់</value>
+  </data>
   <data name="Other Expense" xml:space="preserve">
     <value>ចំណាយផ្សេងទៀត</value>
   </data>
@@ -234,11 +288,29 @@
   <data name="Password" xml:space="preserve">
     <value>ពាក្យសម្ងាត់</value>
   </data>
+  <data name="Password is require." xml:space="preserve">
+    <value>ពាក្យសម្ងាត់ត្រូវតែមាន។</value>
+  </data>
+  <data name="Passwords must be at least 6 characters." xml:space="preserve">
+    <value>ពាក្សសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់ ៦ តួអក្សរ។</value>
+  </data>
+  <data name="Passwords must have at least one digit ('0'-'9')." xml:space="preserve">
+    <value>ពាក្សសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់មួយខ្ទង់ ('0' - '9') ។</value>
+  </data>
+  <data name="Passwords must have at least one lowercase ('a'-'z')." xml:space="preserve">
+    <value>ពាក្យសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់អក្សរតូចមួយ ('a' - 'z') ។</value>
+  </data>
+  <data name="Passwords must have at least one uppercase ('A'-'Z')." xml:space="preserve">
+    <value>ពាក្យសម្ងាត់ត្រូវតែមានអក្សរធំយ៉ាងហោចណាស់មួយ ('A' - 'Z') ។</value>
+  </data>
   <data name="Pay monthly" xml:space="preserve">
     <value>បង់ប្រចាំខែ</value>
   </data>
   <data name="Pay run" xml:space="preserve">
     <value>ប្រាក់ខែ</value>
+  </data>
+  <data name="Pay with QR Code via ABA Mobile App on your phone. or Pay with Visa, MasterCard and many other credit and debit cards." xml:space="preserve">
+    <value>បង់ប្រាក់ជាមួយ QR Code តាមរយៈកម្មវិធីទូរស័ព្ទដៃABAនៅលើទូរស័ព្ទរបស់អ្នក។ ឬបង់ប្រាក់ជាមួយវីសាម៉ាស្ទឺរកាតនិងកាតឥណពន្ធនិងឥណពន្ធជាច្រើនទៀត។</value>
   </data>
   <data name="Pay yearly" xml:space="preserve">
     <value>បង់ប្រចាំឆ្នាំ</value>
@@ -258,14 +330,29 @@
   <data name="Phone Number" xml:space="preserve">
     <value>លេខទូរសព្ទ</value>
   </data>
+  <data name="Phone number is require." xml:space="preserve">
+    <value>លេខទូរស័ព្ទត្រូវតែមាន។</value>
+  </data>
+  <data name="Plan" xml:space="preserve">
+    <value>គម្រោង</value>
+  </data>
   <data name="Popular features that will change your life" xml:space="preserve">
     <value>លក្ខណៈពិសេសពេញនិយមដែលនឹងផ្លាស់ប្តូរជីវិតរបស់អ្នក</value>
+  </data>
+  <data name="Popular Payments" xml:space="preserve">
+    <value>ការទូទាត់ពេញនិយម</value>
   </data>
   <data name="Premium" xml:space="preserve">
     <value>សហគ្រាស</value>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>តម្លៃ</value>
+  </data>
   <data name="Pricing/Plan" xml:space="preserve">
     <value>តម្លៃ / ផែនការ</value>
+  </data>
+  <data name="Prmotion code" xml:space="preserve">
+    <value>លេខ​កូដ​ប្រូ​ម៉ូ​សិន</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>ទំនិញ</value>
@@ -279,8 +366,14 @@
   <data name="Purchase" xml:space="preserve">
     <value>ទិញ</value>
   </data>
+  <data name="Purchase Detail" xml:space="preserve">
+    <value>ព័ត៌មានលំអិតការបញ្ជាទិញ</value>
+  </data>
   <data name="Purchase Orders" xml:space="preserve">
     <value>បញ្ជា​ទិញ</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>ចំនួន</value>
   </data>
   <data name="Quick Contact" xml:space="preserve">
     <value>ទំនាក់ទំនងរហ័ស</value>
@@ -288,11 +381,20 @@
   <data name="Quotes" xml:space="preserve">
     <value>Quote</value>
   </data>
+  <data name="Register" xml:space="preserve">
+    <value>ចុះឈ្មោះ</value>
+  </data>
+  <data name="Register Confirmation" xml:space="preserve">
+    <value>បញ្ជាក់ការចុះឈ្មោះ</value>
+  </data>
   <data name="Remember me" xml:space="preserve">
     <value>ចងចាំខ្ញុំ</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>របាយការណ៍</value>
+  </data>
+  <data name="review your" xml:space="preserve">
+    <value>ពិនិត្យឡើងវិញ</value>
   </data>
   <data name="Sale" xml:space="preserve">
     <value>លក់</value>
@@ -302,6 +404,9 @@
   </data>
   <data name="Save supscript mean" xml:space="preserve">
     <value>ចំនេញ</value>
+  </data>
+  <data name="Send new code" xml:space="preserve">
+    <value>ផ្ញើលេខកូដថ្មី</value>
   </data>
   <data name="Setting" xml:space="preserve">
     <value>ការកំណត់</value>
@@ -324,8 +429,20 @@
   <data name="Standard" xml:space="preserve">
     <value>ស្តង់ដារ</value>
   </data>
+  <data name="Sub Total" xml:space="preserve">
+    <value>សរុបរង</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>ដាក់ស្នើ</value>
+  </data>
+  <data name="Subscription Type" xml:space="preserve">
+    <value>ប្រភេទការជាវ</value>
+  </data>
   <data name="Tax" xml:space="preserve">
     <value>ពន្ធ</value>
+  </data>
+  <data name="Tax (10%)" xml:space="preserve">
+    <value>អាករលើតម្លៃបន្ថែម(១០%)</value>
   </data>
   <data name="Tax Support" xml:space="preserve">
     <value>ពន្ធ</value>
@@ -333,8 +450,26 @@
   <data name="Taxes" xml:space="preserve">
     <value>ពន្ធ</value>
   </data>
+  <data name="The Email field is required." xml:space="preserve">
+    <value>អ៊ីមែលត្រូវតែមាន។</value>
+  </data>
+  <data name="The password and confirmation password do not match." xml:space="preserve">
+    <value>ពាក្យសម្ងាត់និងបញ្ជាក់ពាក្យសម្ងាត់មិនត្រូវគ្នាទេ។</value>
+  </data>
+  <data name="The Password field is required." xml:space="preserve">
+    <value>ពាក្សសំងាត់ត្រូវតែមាន។</value>
+  </data>
+  <data name="The Password must be at least 6 and at max 100 characters long." xml:space="preserve">
+    <value>ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងតិច ៦ និងយ៉ាងច្រើន ១០០ តួអក្សរ។</value>
+  </data>
+  <data name="This organisation declare tax?(it cannot change)?" xml:space="preserve">
+    <value>ក្រុមហ៊ុននេះប្រកាសពន្ធ (វាមិនអាចប្តូរបានទេ)?</value>
+  </data>
   <data name="Total" xml:space="preserve">
     <value>សរុប</value>
+  </data>
+  <data name="Total After Discount" xml:space="preserve">
+    <value>សរុបបន្ទាប់ពីបញ្ចុះតម្លៃ</value>
   </data>
   <data name="Total Expense" xml:space="preserve">
     <value>ចំណាយសរុប</value>
@@ -387,16 +522,22 @@
   <data name="Up to 4 users" xml:space="preserve">
     <value>អ្នកប្រើប្រាស់រហូតដល់ ៤ នាក់</value>
   </data>
-  <data name="Users" xml:space="preserve">
-    <value>អ្នកប្រើប្រាស់</value>
+  <data name="User with thi email doesn't exist" xml:space="preserve">
+    <value>អ្នកប្រើប្រាស់ជាមួយអ៊ីមែលនេះមិនមានទេ</value>
   </data>
   <data name="Vendors" xml:space="preserve">
     <value>អ្នកលក់</value>
+  </data>
+  <data name="Verification Code" xml:space="preserve">
+    <value>លេខកូដ​ផ្ទៀង​ផ្ទាត់</value>
   </data>
   <data name="Watch demo..." xml:space="preserve">
     <value>ទស្សនាការបង្ហាញ</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>ឆ្នាំ</value>
+  </data>
+  <data name="You reach to number of companies that you can create" xml:space="preserve">
+    <value>អ្នកឈានដល់ចំនួនក្រុមហ៊ុនដែលអ្នកអាចបង្កើតបាន</value>
   </data>
 </root>

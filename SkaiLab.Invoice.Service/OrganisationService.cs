@@ -38,7 +38,7 @@ namespace SkaiLab.Invoice.Service
                 Id=Guid.NewGuid().ToString(),
                 DisplayName=companyName,
                 OrganisationTypeId=1,
-               DeclareTax=true
+                DeclareTax=true
             };
             organisation.OrganisationUser.Add(new Dal.Models.OrganisationUser
             {
@@ -49,9 +49,24 @@ namespace SkaiLab.Invoice.Service
             context.SaveChanges();
         }
 
-        public void Create(Organsation organsation, string userId)
+        public int Create(Organsation organsation, string userId)
         {
             using var context = Context();
+            var userPlan = context.UserPlan.FirstOrDefault(u => u.UserId == userId);
+            if (userPlan == null)
+            {
+                return (int)CreateCompanyResultEnum.UserNoLicense;
+            }
+            if (userPlan.Expire == null || userPlan.Expire< CurrentCambodiaTime)
+            {
+                return (int)CreateCompanyResultEnum.LicenseExpireOrIncomple;
+            }
+            var totalOrganisation = context.OrganisationUser.Where(u => u.UserId == userId && u.IsOwner).Count();
+            int maxOrganisation =userPlan.PlanId==1?2:(userPlan.PlanId==2?4:100000000);
+            if (totalOrganisation >= maxOrganisation)
+            {
+                return (int)CreateCompanyResultEnum.LimitCreateNumberOfOrganisation;
+            }
             if (!organsation.DeclareTax)
             {
                 organsation.OrganisationBaseCurrency.TaxCurrencyId = organsation.OrganisationBaseCurrency.BaseCurrencyId;
@@ -104,7 +119,9 @@ namespace SkaiLab.Invoice.Service
             }
             newOrganisation.OrganisationUser.Add(new Dal.Models.OrganisationUser
             {
-                UserId=userId
+                UserId=userId,
+                IsOwner=true,
+                RoleName = "Owner",
             });
            
             if (organsation.OrganisationBaseCurrency.BaseCurrencyId != organsation.OrganisationBaseCurrency.TaxCurrencyId)
@@ -142,9 +159,19 @@ namespace SkaiLab.Invoice.Service
                 });
             }
             context.Organisation.Add(newOrganisation);
+            var features = context.MenuFeature.Select(u => u.Id).ToList();
+            foreach (var feature in features)
+            {
+                context.OrganisationUserMenuFeature.Add(new Dal.Models.OrganisationUserMenuFeature
+                {
+                    MenuFeatureId = feature,
+                   Organisation=newOrganisation,
+                    UserId = userId
+                });
+            }
             context.SaveChanges();
             organsation.Id = newOrganisation.Id;
-
+            return (int) CreateCompanyResultEnum.Success;
         }
 
         public Organsation Get(string id)
@@ -193,6 +220,25 @@ namespace SkaiLab.Invoice.Service
                 Symbole=currency.Symbole,
                 Id=currency.Id
             };
+        }
+
+        public int GetMaximumCreateOrganisationByUser(string userId)
+        {
+            using var context = Context();
+            var userPlan = context.UserPlan.FirstOrDefault(u => u.UserId == userId);
+            if (userPlan == null)
+            {
+                return 0;
+            }
+            if (userPlan.PlanId == 1)
+            {
+                return 2;
+            }
+            if (userPlan.PlanId == 2)
+            {
+                return 4;
+            }
+            return 100000000;
         }
 
         public string GetOrganisationIdByUserId(string userId)

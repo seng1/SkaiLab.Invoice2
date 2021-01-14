@@ -79,7 +79,7 @@ export class Utility {
             result.push(new DashboardPeriodFilter(DashboardPeriodEnum.LastYear, "ឆ្នាំមុន"));
         }
         else{
-            result.push(new DashboardPeriodFilter(DashboardPeriodEnum.Last30Day, "Last 30 days"));
+        result.push(new DashboardPeriodFilter(DashboardPeriodEnum.Last30Day, "Last 30 days"));
         result.push(new DashboardPeriodFilter(DashboardPeriodEnum.ThisMonth, "This month"));
         result.push(new DashboardPeriodFilter(DashboardPeriodEnum.ThisQuarter, "This quarter"));
         result.push(new DashboardPeriodFilter(DashboardPeriodEnum.ThisYear, "This year"));

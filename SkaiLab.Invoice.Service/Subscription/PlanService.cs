@@ -10,6 +10,30 @@ namespace SkaiLab.Invoice.Service.Subscription
     {
         public PlanService(IDataContext context) : base(context) { }
 
+        public void CreateUserPlan(string userId, int planId, bool isPayYearLy)
+        {
+            using var context = Context();
+            var userPlan = context.UserPlan.FirstOrDefault(u => u.UserId == userId);
+            if (userPlan != null)
+            {
+                throw new Exception("User is already have plan");
+            }
+            var plan = context.Plan.FirstOrDefault(u => u.Id == planId);
+            userPlan = new Dal.Models.UserPlan
+            {
+                UserId=UserId,
+                PlanId=planId,
+                Price=isPayYearLy?plan.YearlyPrice:plan.MonthlyPrice,
+                IsTrail=false,
+                Expire=null,
+                RenewPrice=isPayYearLy?plan.YearlyRenewPrice:plan.MonthlyRenewPrice,
+                ProjectId=1,
+                SubcriptionId=isPayYearLy?2:1
+            };
+            context.UserPlan.Add(userPlan);
+            context.SaveChanges();
+        }
+
         public List<Plan> GetPlans(int projectPlanId)
         {
             using var context = Context();
@@ -21,8 +45,11 @@ namespace SkaiLab.Invoice.Service.Subscription
                     Id=u.Id,
                     ProjectPlanId=u.ProjectPlanId,
                     Name=khmer?u.NameKh: u.Name,
-                    Price=u.Price,
-                    YearDiscountRate=u.YearDiscount,
+                    MontlyPrice=u.MonthlyPrice,
+                    MontlyRenewPrice=u.MonthlyRenewPrice,
+                    YearlyPrice=u.YearlyPrice,
+                    YearlyRenewPrice=u.YearlyPrice,
+                    YearlySavePercent=u.YearlySavePercent
                     
                 }).ToList();
         }

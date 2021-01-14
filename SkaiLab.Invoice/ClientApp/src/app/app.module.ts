@@ -119,6 +119,9 @@ import { CloseDateComponent } from './modal/close-date-component';
 import { LoginBarComponent } from './login-bar/login-bar-component';
 import { MyProfileComponent } from './my-profile/my-profile-component';
 import { GlobaltranslateService } from './service/global-translate-service';
+import { LicenseExpireModalComponent } from './modal/license-expire-component';
+import { BuyLicenseModalComponent } from './modal/buy-license-component';
+import { PlanService } from './service/planservice';
 
 @NgModule({
   declarations: [
@@ -191,7 +194,9 @@ import { GlobaltranslateService } from './service/global-translate-service';
     UpdateUserComponent,
     CloseDateComponent,
     LoginBarComponent,
-    MyProfileComponent
+    MyProfileComponent,
+    LicenseExpireModalComponent,
+    BuyLicenseModalComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -309,6 +314,7 @@ import { GlobaltranslateService } from './service/global-translate-service';
     MenuService,
     OrganisationUserService,
     GlobaltranslateService ,
+    PlanService,
     {
     provide:HTTP_INTERCEPTORS,
     useClass:AuthorizeInterceptor,
@@ -320,7 +326,9 @@ import { GlobaltranslateService } from './service/global-translate-service';
     PrintComponent,
     PrintReceiptComponent,
     NewCompanyComponent,
-    CloseDateComponent
+    CloseDateComponent,
+    LicenseExpireModalComponent,
+    BuyLicenseModalComponent
   ]
 })
 export class AppModule { }

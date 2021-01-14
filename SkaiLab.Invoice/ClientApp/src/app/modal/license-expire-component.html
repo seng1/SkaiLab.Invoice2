@@ -1,0 +1,19 @@
+<div role="document" class="modal-dialog modal-full-height modal-notify modal-info">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="heading lead">{{ 'textTranslate.yourLicenseIsExpireOrYouAreNotCompletePurchaseYet' | translate }}</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label >{{ 'textTranslate.yourLicenseIsExpireOrYouAreNotCompletePurchaseYet' | translate }}</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a type="button" href="{{purchaseUrl}}" class="btn btn-primary">{{ 'textTranslate.purchaseNow' | translate }}</a>
+        <button type="button" class="btn btn-outline-dark" (click)="close()">{{ 'textTranslate.close' | translate }}</button>
+      </div>
+    </div>
+  </div>

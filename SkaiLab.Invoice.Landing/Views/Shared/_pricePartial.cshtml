@@ -90,12 +90,12 @@
 
         </div>
         <div class="tt-toggle-switch">
-            <span class="text">@ShareLocalizer.GetResource("Pay monthly") </span>
+            <span class="text"> @ShareLocalizer.GetResource("Pay yearly")</span>
             <label class="switch">
                 <input type="checkbox" id="choose_plan" data-di-id="#choose_plan" ng-click="vm.toggleClick()">
                 <span class="slider round"></span>
             </label>
-            <span class="text"> @ShareLocalizer.GetResource("Pay yearly")</span> <span class="discount">{{vm.saveExtraText}}</span>
+            <span class="text">@ShareLocalizer.GetResource("Pay monthly") </span>
         </div>
         <!-- end divider -->
         <div class="row">
@@ -107,10 +107,10 @@
                         <h3><strong>@ShareLocalizer.GetResource("Basic")</strong></h3>
                     </div>
                     <div class="pricing-terms" ​ ng-show="vm.monthlySelected">
-                        <h6>&#36;{{vm.items[0].price}} / @ShareLocalizer.GetResource("Month")</h6>
+                        <h6>&#36;{{vm.items[0].montlyPrice}} / @ShareLocalizer.GetResource("Month")</h6>
                     </div>
                     <div class="pricing-terms" ​ ng-show="!vm.monthlySelected">
-                        <h6>&#36;{{vm.items[0].yearPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[0].yearDiscountRate}}%)</h6>
+                        <h6>&#36;{{vm.items[0].yearlyPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[0].yearlySavePercent}}%)</h6>
                     </div>
                     <div class="pricing-action" ng-show="vm.monthlySelected">
                         <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[0].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
@@ -141,10 +141,10 @@
                         <h3><strong>@ShareLocalizer.GetResource("Standard")</strong></h3>
                     </div>
                     <div class="pricing-terms" ng-show="vm.monthlySelected">
-                        <h6>&#36;{{vm.items[1].price}} / @ShareLocalizer.GetResource("Month")</h6>
+                        <h6>&#36;{{vm.items[1].montlyPrice}} / @ShareLocalizer.GetResource("Month")</h6>
                     </div>
                     <div class="pricing-terms" ​ ng-show="!vm.monthlySelected">
-                        <h6>&#36;{{vm.items[1].yearPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[1].yearDiscountRate}}%)</h6>
+                        <h6>&#36;{{vm.items[1].yearlyPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[1].yearlySavePercent}}%)</h6>
                     </div>
                     <div class="pricing-action" ng-show="vm.monthlySelected">
                         <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[1].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>
@@ -169,10 +169,10 @@
                         <h3><strong>@ShareLocalizer.GetResource("Premium")</strong></h3>
                     </div>
                     <div class="pricing-terms" ng-show="vm.monthlySelected">
-                        <h6>&#36;{{vm.items[2].price}} / @ShareLocalizer.GetResource("Month")</h6>
+                        <h6>&#36;{{vm.items[2].montlyPrice}} / @ShareLocalizer.GetResource("Month")</h6>
                     </div>
                     <div class="pricing-terms" ​ ng-show="!vm.monthlySelected">
-                        <h6>&#36;{{vm.items[2].yearPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[2].yearDiscountRate}}%)</h6>
+                        <h6>&#36;{{vm.items[2].yearlyPrice}} / @ShareLocalizer.GetResource("Year") (@ShareLocalizer.GetResource("Save supscript mean"){{vm.items[2].yearlySavePercent}}%)</h6>
                     </div>
                     <div class="pricing-action" ng-show="vm.monthlySelected">
                         <a href="@clientWebUrl&offerType=Purchase&planId={{vm.items[2].id}}&&subscriptionType=monthly" class="btn btn-medium"><i class="icon-bolt"></i> @ShareLocalizer.GetResource("Buy now")</a>

@@ -11,6 +11,7 @@
     <PackageReference Include="MailKit" Version="2.9.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.9" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NReco.PdfGenerator.LT" Version="1.1.17" />
     <PackageReference Include="TimeZoneConverter" Version="3.3.0" />
   </ItemGroup>

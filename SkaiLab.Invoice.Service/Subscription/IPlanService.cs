@@ -9,5 +9,6 @@ namespace SkaiLab.Invoice.Service.Subscription
     public interface IPlanService:IService
     {
         List<Plan> GetPlans(int projectPlanId);
+        void CreateUserPlan(string userId, int planId, bool isPayYearLy);
     }
 }

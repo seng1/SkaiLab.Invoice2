@@ -21,10 +21,12 @@ namespace SkaiLab.Invoice.Dal.Models
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<AspNetUserTokensCode> AspNetUserTokensCode { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Bill> Bill { get; set; }
         public virtual DbSet<Contact> Contact { get; set; }
         public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<Coupon> Coupon { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerTransaction> CustomerTransaction { get; set; }
@@ -61,6 +63,7 @@ namespace SkaiLab.Invoice.Dal.Models
         public virtual DbSet<PayrollMonth> PayrollMonth { get; set; }
         public virtual DbSet<PayrollMonthTaxSalary> PayrollMonthTaxSalary { get; set; }
         public virtual DbSet<PayrollMonthTaxSalaryRange> PayrollMonthTaxSalaryRange { get; set; }
+        public virtual DbSet<PaywayTransactionLog> PaywayTransactionLog { get; set; }
         public virtual DbSet<PersistedGrants> PersistedGrants { get; set; }
         public virtual DbSet<Plan> Plan { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -78,10 +81,16 @@ namespace SkaiLab.Invoice.Dal.Models
         public virtual DbSet<QuoteItem> QuoteItem { get; set; }
         public virtual DbSet<QuoteStatus> QuoteStatus { get; set; }
         public virtual DbSet<SalaryType> SalaryType { get; set; }
+        public virtual DbSet<SubscriptionType> SubscriptionType { get; set; }
         public virtual DbSet<Tax> Tax { get; set; }
         public virtual DbSet<TaxComponent> TaxComponent { get; set; }
         public virtual DbSet<TaxSalary> TaxSalary { get; set; }
         public virtual DbSet<TaxSalaryRange> TaxSalaryRange { get; set; }
+        public virtual DbSet<UserPayment> UserPayment { get; set; }
+        public virtual DbSet<UserPaymentInvoice> UserPaymentInvoice { get; set; }
+        public virtual DbSet<UserPaymentPayWayDetail> UserPaymentPayWayDetail { get; set; }
+        public virtual DbSet<UserPaymentPayway> UserPaymentPayway { get; set; }
+        public virtual DbSet<UserPlan> UserPlan { get; set; }
         public virtual DbSet<Vendor> Vendor { get; set; }
         public virtual DbSet<VendorExpense> VendorExpense { get; set; }
         public virtual DbSet<WorkingOrganisation> WorkingOrganisation { get; set; }
@@ -169,6 +178,25 @@ namespace SkaiLab.Invoice.Dal.Models
                     .HasForeignKey(d => d.UserId);
             });
 
+            modelBuilder.Entity<AspNetUserTokensCode>(entity =>
+            {
+                entity.HasKey(e => e.UserId)
+                    .HasName("PK__AspNetUs__1788CC4C2F449891");
+
+                entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Expire).HasColumnType("datetime");
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.AspNetUserTokensCode)
+                    .HasForeignKey<AspNetUserTokensCode>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AspNetUse__UserI__41B8C09B");
+            });
+
             modelBuilder.Entity<AspNetUsers>(entity =>
             {
                 entity.Property(e => e.Email).HasMaxLength(256);
@@ -235,6 +263,22 @@ namespace SkaiLab.Invoice.Dal.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.NationalityKh).HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<Coupon>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("PK__Coupon__A25C5AA6F9DBC14A");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ExpireDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Currency>(entity =>
@@ -859,10 +903,6 @@ namespace SkaiLab.Invoice.Dal.Models
 
                 entity.Property(e => e.ExpireToken).HasColumnType("datetime");
 
-                entity.Property(e => e.FirstName).HasMaxLength(100);
-
-                entity.Property(e => e.LastName).HasMaxLength(100);
-
                 entity.Property(e => e.RoleName).HasMaxLength(100);
 
                 entity.Property(e => e.Token)
@@ -1093,6 +1133,26 @@ namespace SkaiLab.Invoice.Dal.Models
                     .HasConstraintName("FK__PayrollMo__Payro__6FB49575");
             });
 
+            modelBuilder.Entity<PaywayTransactionLog>(entity =>
+            {
+                entity.HasKey(e => new { e.TransactionId, e.UserPaymentId })
+                    .HasName("PK__PaywayTr__CDAC3561BE616B13");
+
+                entity.Property(e => e.TransactionId)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.UserPayment)
+                    .WithMany(p => p.PaywayTransactionLog)
+                    .HasForeignKey(d => d.UserPaymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__PaywayTra__UserP__7EC1CEDB");
+            });
+
             modelBuilder.Entity<PersistedGrants>(entity =>
             {
                 entity.HasKey(e => e.Key);
@@ -1119,6 +1179,8 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.Property(e => e.Name).HasMaxLength(100);
 
                 entity.Property(e => e.NameKh).HasMaxLength(100);
+
+                entity.Property(e => e.YearlySavePercent).HasDefaultValueSql("((10))");
 
                 entity.HasOne(d => d.ProjectPlan)
                     .WithMany(p => p.Plan)
@@ -1453,6 +1515,16 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.Property(e => e.NameKh).HasMaxLength(100);
             });
 
+            modelBuilder.Entity<SubscriptionType>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Tax>(entity =>
             {
                 entity.Property(e => e.Name).HasMaxLength(100);
@@ -1500,6 +1572,141 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.Property(e => e.FromAmount).HasColumnType("money");
 
                 entity.Property(e => e.ToAmount).HasColumnType("money");
+            });
+
+            modelBuilder.Entity<UserPayment>(entity =>
+            {
+                entity.Property(e => e.CouponCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Created)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.CouponCodeNavigation)
+                    .WithMany(p => p.UserPayment)
+                    .HasForeignKey(d => d.CouponCode)
+                    .HasConstraintName("FK__UserPayme__Coupo__6E8B6712");
+
+                entity.HasOne(d => d.Plan)
+                    .WithMany(p => p.UserPayment)
+                    .HasForeignKey(d => d.PlanId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPayme__PlanI__6D9742D9");
+
+                entity.HasOne(d => d.SubscriptionType)
+                    .WithMany(p => p.UserPayment)
+                    .HasForeignKey(d => d.SubscriptionTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPayme__Subsc__6CA31EA0");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserPayment)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPayme__UserI__6BAEFA67");
+            });
+
+            modelBuilder.Entity<UserPaymentInvoice>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Number)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.UserPaymentInvoice)
+                    .HasForeignKey<UserPaymentInvoice>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPaymentI__Id__02925FBF");
+            });
+
+            modelBuilder.Entity<UserPaymentPayWayDetail>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Apv).HasMaxLength(100);
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.PaidBy).HasMaxLength(200);
+
+                entity.Property(e => e.PaymentType).HasMaxLength(100);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SourceOfFund)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.UserPaymentPayWayDetail)
+                    .HasForeignKey<UserPaymentPayWayDetail>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPaymentP__Id__0662F0A3");
+            });
+
+            modelBuilder.Entity<UserPaymentPayway>(entity =>
+            {
+                entity.HasIndex(e => e.TransactionId)
+                    .HasName("UQ__UserPaym__55433A6A4A4B5286")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.TransactionId)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.UserPaymentPayway)
+                    .HasForeignKey<UserPaymentPayway>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPaymentP__Id__7BE56230");
+            });
+
+            modelBuilder.Entity<UserPlan>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.Property(e => e.Expire).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Plan)
+                    .WithMany(p => p.UserPlan)
+                    .HasForeignKey(d => d.PlanId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPlan__PlanId__4589517F");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.UserPlan)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPlan__Projec__44952D46");
+
+                entity.HasOne(d => d.Subcription)
+                    .WithMany(p => p.UserPlan)
+                    .HasForeignKey(d => d.SubcriptionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPlan__Subcri__4A4E069C");
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.UserPlan)
+                    .HasForeignKey<UserPlan>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserPlan__UserId__43A1090D");
             });
 
             modelBuilder.Entity<Vendor>(entity =>

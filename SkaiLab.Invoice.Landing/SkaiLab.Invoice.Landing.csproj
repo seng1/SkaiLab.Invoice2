@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>7336b99b-855d-488d-a8f9-c36c3e109364</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,18 +13,20 @@ namespace SkaiLab.Invoice.Controllers
     public class OrganisationUserController : ParentController
     {
         private readonly IOrganisationUserService organisationUserService;
-        public OrganisationUserController(IOrganisationUserService organisationUserService) : base(organisationUserService,(int)MenuFeatureEnum.ManageOrganisactionSetting)
+        public OrganisationUserController(IOrganisationUserService organisationUserService) : base(organisationUserService)
         {
             this.organisationUserService = organisationUserService;
         }
         [HttpGet("[action]")]
         public IActionResult GetOrganisationUsers()
         {
+            EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
             return Ok(organisationUserService.GetOrganisationUsers(organisationUserService.OrganisationId,organisationUserService.UserId));
         }
         [HttpGet("[action]")]
         public IActionResult GetMenuFeatures()
         {
+            EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
             return Ok(organisationUserService.GetMenuFeatures());
         }
         [HttpPost("[action]")]
@@ -32,6 +34,7 @@ namespace SkaiLab.Invoice.Controllers
         {
             try
             {
+                EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
                 var url = string.Format("{0}://{1}", Request.Scheme, Request.Host.Value);
                 await organisationUserService.InviteUserAsync(organisationUser, organisationUserService.OrganisationId, organisationUserService.UserId, url);
                 return Ok();
@@ -47,6 +50,7 @@ namespace SkaiLab.Invoice.Controllers
         {
             try
             {
+                EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
                 var url = string.Format("{0}://{1}", Request.Scheme, Request.Host.Value);
                 await organisationUserService.ResentInviatationAsync(organisationUserService.OrganisationId, organisationUserService.UserId, email, url);
                 return Ok();
@@ -62,7 +66,7 @@ namespace SkaiLab.Invoice.Controllers
         {
             try
             {
-               
+                EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
                 return Ok(organisationUserService.GetOrganisationUser(organisationUserService.OrganisationId,organisationUserService.UserId,email));
             }
             catch (Exception ex)
@@ -76,6 +80,7 @@ namespace SkaiLab.Invoice.Controllers
         {
             try
             {
+                EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
                 organisationUserService.RemoveOrganisationUser(organisationUserService.OrganisationId, organisationUserService.UserId, email);
                 return Ok();
             }
@@ -90,6 +95,7 @@ namespace SkaiLab.Invoice.Controllers
         {
             try
             {
+                EnsureHasPermission((int)MenuFeatureEnum.ManageOrganisactionSetting);
                 var url = string.Format("{0}://{1}", Request.Scheme, Request.Host.Value);
                 await organisationUserService.UpdateUserRoleAsync(organisationUserService.OrganisationId, organisationUserService.UserId, organisationUser);
                 return Ok();

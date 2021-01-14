@@ -34,9 +34,6 @@ export class NewUserComponent extends ParentComponent implements OnInit {
             this.handleError(err);
         })
     }
-    nameChange() {
-        this.organisationUser.user.name = this.organisationUser.user.firstName + " " + this.organisationUser.user.lastName;
-    }
     onRoleChange(isAdministrator: boolean) {
         this.organisationUser.isAdministrator = isAdministrator;
         this.organisationUser.menuFeatures.forEach(it => {

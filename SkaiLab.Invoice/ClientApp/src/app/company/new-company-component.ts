@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { BuyLicenseModalComponent } from '../modal/buy-license-component';
+import { LicenseExpireModalComponent } from '../modal/license-expire-component';
 import { Currency } from '../models/currency';
+import { CreateCompanyResultEnum } from '../models/enum';
 import { Organisation } from '../models/organisation';
 import { OrganisationType } from '../models/organisationType';
 import { Utility } from '../models/utility';
@@ -26,6 +29,7 @@ export class NewCompanyComponent implements OnInit {
     constructor(private router: Router,
         private organisationTypeService: OrganisationTypeService,
         private currencyService: CurrecyService,
+        private modalService: NgbModal,  
         private organisationService: OrganisationService) {
     }
     ngOnInit(): void {
@@ -99,7 +103,23 @@ export class NewCompanyComponent implements OnInit {
         }
         this.showLoading=true;
         this.organisationService.add(this.organisation).subscribe(result=>{
-            window.location.reload();
+            this.showLoading=false;
+            this.modalRef.close();
+            if(result.code==CreateCompanyResultEnum.Success){
+                window.location.reload();
+            }
+            else if(result.code==CreateCompanyResultEnum.LimitCreateNumberOfOrganisation){
+                alert(result.errorText);
+            }
+            else if(result.code==CreateCompanyResultEnum.LicenseExpireOrIncomple){
+                const modalRef = this.modalService.open(LicenseExpireModalComponent);
+                modalRef.componentInstance.init(modalRef,result.userId);
+            }
+            else if(result.code==CreateCompanyResultEnum.UserNoLicense){
+                const modalRef = this.modalService.open(BuyLicenseModalComponent);
+                modalRef.componentInstance.init(modalRef,result.userId);
+            }
+           
         },err=>{
             this.showLoading=false;
             alert(err);

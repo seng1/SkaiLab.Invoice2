@@ -1,0 +1,131 @@
+﻿@model SkaiLab.Invoice.Models.PaymentCheckout
+@inject SkaiLab.Invoice.Models.IAppResource ShareLocalizer
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Pages/Shared/_checkout.cshtml";
+}
+@{
+    <input type="hidden" id="hdData" value="@SkaiLab.Invoice.Models.Utils.SerializeObject(Model)" />
+}
+<link rel="stylesheet" href="https://payway-staging.ababank.com/checkout-popup.html?file=css" />
+<style>
+    .panel-wrapper .panel-body {
+        min-height:250px !important;
+    }
+</style>
+<div class="container-fluid background">
+    <div class="row padding-top-20">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-8 offset-md-1 offset-lg-1 offset-xl-2 padding-horizontal-40">
+            <div class="row">
+                <div class="col-12 main-wrapper">
+                    <div class="row">
+
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="row panel-wrapper">
+                                <div class="col-12 panel-header creditcard-header">
+                                    <div class="row">
+                                        <div class="col-12 creditcard-title">
+                                            <span class="description">@ShareLocalizer.GetResource("Popular Payments")</span><br><span class="emphasized">@ShareLocalizer.GetResource("Choose the payment method below.")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 panel-body creditcard-body">
+                                    <form action="#" method="post" target="_self">
+                                        <div class="list-group">
+                                            <a href="#" id="btnPayway" class="list-group-item list-group-item-action flex-column align-items-start">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1"><img src="~/image/Payway__Master-Visa__Vertical10.png" style="width:100px"/> ABA PayWay</h5>
+                                                </div>
+                                                <small>
+                                                   @ShareLocalizer.GetResource("Pay with QR Code via ABA Mobile App on your phone. or Pay with Visa, MasterCard and many other credit and debit cards.")
+                                                </small>
+                                            </a>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-12 panel-footer creditcard-footer">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div id="template" class="row panel-wrapper">
+                                <div class="col-12 panel-header basket-header">
+                                    <div class="row">
+                                        <div class="col-6 basket-title">
+                                            <span class="description">@ShareLocalizer.GetResource("review your")</span><br><span class="emphasized">@ShareLocalizer.GetResource("Cart Summary")</span>
+                                        </div>
+                                    </div>
+                                    <div class="row column-titles padding-top-10">
+                                        <div class="col-7 align-center"><span>@ShareLocalizer.GetResource("Name")</span></div>
+                                        <div class="col-2 align-center"><span>@ShareLocalizer.GetResource("Quantity")</span></div>
+                                        <div class="col-3 align-right"><span>@ShareLocalizer.GetResource("Price")</span></div>
+                                    </div>
+                                </div>
+                                <div class="col-12 panel-body basket-body">
+                                    <div class="row product">
+                                        <div class="col-7">@Model.UserLicenseInformationDetail.PaymentDescription</div>
+                                        <div class="col-2 align-right">1</div>
+                                        <div class="col-3 align-right">@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.UserLicenseInformationDetail.TotalIncludeTax)</div>
+                                    </div>
+
+                                </div>
+                                <div class="col-12 panel-footer basket-footer">
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-8 align-right description"><div class="dive">@ShareLocalizer.GetResource("Sub Total")</div></div>
+                                        <div class="col-4 align-right"><span class="emphasized">@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.UserLicenseInformationDetail.Total)</span></div>
+                                        @if (Model.UserLicenseInformationDetail.TotalDiscount != null)
+                                        {
+                                            <div class="col-8 align-right description"><div class="dive">@ShareLocalizer.GetResource("Discount") (@Model.UserLicenseInformationDetail.DiscountRate%)</div></div>
+                                            <div class="col-4 align-right"><span class="emphasized">@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.UserLicenseInformationDetail.TotalDiscount.Value)</span></div>
+                                            <div class="col-8 align-right description"><div class="dive">@ShareLocalizer.GetResource("Total after discount")</div></div>
+                                            <div class="col-4 align-right"><span class="emphasized">@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.UserLicenseInformationDetail.TotalAfterDiscount)</span></div>
+                                        }
+                                        @if (Model.UserLicenseInformationDetail.IsTax)
+                                        {
+                                            <div class="col-8 align-right description"><div class="dive">@ShareLocalizer.GetResource("Tax (10%)")</div></div>
+                                            <div class="col-4 align-right"><span class="emphasized">@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.UserLicenseInformationDetail.TaxAmount)</span></div>
+                                        }
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-8 align-right description"><div class="dive">@ShareLocalizer.GetResource("Total")</div></div>
+                                        <div class="col-4 align-right"><span class="emphasized">@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.UserLicenseInformationDetail.TotalIncludeTax)</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="aba_main_modal" class="aba-modal">
+    <div class="aba-modal-content">
+        <form method="POST" target="aba_webservice" action="@Model.PayWayCreateTransaction.ApiUrl" id="aba_merchant_request">
+            <input type="hidden" name="hash" value="@Model.PayWayCreateTransaction.Hash" id="hash" />
+            <input type="hidden" name="tran_id" value="@Model.PayWayCreateTransaction.TransactionId" id="tran_id" />
+            <input type="hidden" name="amount" value="@Model.PayWayCreateTransaction.Amount" id="amount" />
+            <input type="hidden" name="firstname" id="firstname" value="@Model.PayWayCreateTransaction.Firstname" />
+            <input type="hidden" name="lastname" id="lastname" value="@Model.PayWayCreateTransaction.Lastname" />
+            <input type="hidden" name="phone" id="phone" value="@Model.PayWayCreateTransaction.Phone" />
+            <input type="hidden" name="email" id="email" value="@Model.PayWayCreateTransaction.Email" />
+            <input type="hidden" name="currency" value="USD" />
+            <input type="hidden" name="return_params" value="amount" />
+            @*<input type="hidden" name="continue_success_url" value="https://khdomain-uat.azurewebsites.net/buydomain/PurchasThank" />*@
+        </form>
+    </div>
+</div>
+@section Scripts
+    {
+    <script src="https://payway-staging.ababank.com/checkout-popup.html?file=js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnPayway").click(function () {
+                window.AbaPayway.checkout();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,67 @@
+<div role="document" class="modal-dialog modal-full-height modal-notify modal-info">
+  <div class="modal-content">
+    <div class="modal-header">
+      <p class="heading lead">{{ 'textTranslate.youDontHaveLicense' | translate }}</p>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="close()">
+        <span aria-hidden="true" class="white-text">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h2 style="text-align:center">{{ 'textTranslate.toCreateCompanyYouNeedLicense' | translate }}</h2>
+      <div style="text-align:center">
+        <span class="text">{{ 'textTranslate.payMonthly' | translate }}  &nbsp; &nbsp;</span>
+        <label class="switch">
+          <input type="checkbox" checked (change)="onSubscriptionTypeChange()">
+          <span class="slider round"></span>
+        </label>
+        <span class="text"> &nbsp; &nbsp;{{ 'textTranslate.payYearly' | translate }} </span>
+      </div>
+      <div class="columns">
+        <ul class="price">
+          <li class="header">{{ 'textTranslate.basic' | translate }}</li>
+          <li class="grey" *ngIf="yearSelected">${{basicPlan.yearlyPrice}}/{{ 'textTranslate.year' | translate }} ({{ 'textTranslate.saveMoneyPlan' | translate }} {{basicPlan.yearlySavePercent}}%)</li>
+          <li class="grey" *ngIf="!yearSelected">${{basicPlan.montlyPrice}}/{{ 'textTranslate.month' | translate }}</li>
+          <li>{{ 'textTranslate.unlimitedInvoiceAndQuote' | translate }}</li>
+          <li>{{ 'textTranslate.unlimitedPurchaseAndBill' | translate }}</li>
+          <li>{{ 'textTranslate.taxSupport' | translate }}</li>
+          <li>{{ 'textTranslate.multipleCurrenciesSupport' | translate }}</li>
+          <li>{{ 'textTranslate.trackInventory' | translate }}</li>
+          <li>{{ 'textTranslate.payroll' | translate }}</li>
+          <li>{{ 'textTranslate.reports' | translate }}</li>
+          <li>{{ 'textTranslate.upToTwoCompanies' | translate }}</li>
+          <li class="grey" *ngIf="!showLoading"><a (click)="onBuy(basicPlan)">{{ 'textTranslate.purchaseNow' | translate }}</a></li>
+        </ul>
+        <loading-component *ngIf="showLoading"></loading-component>
+      </div>
+
+      <div class="columns">
+        <ul class="price">
+          <li class="header" style="background-color:#4CAF50">{{ 'textTranslate.standard' | translate }}</li>
+          <li class="grey" *ngIf="yearSelected">${{standardPlan.yearlyPrice}}/{{ 'textTranslate.year' | translate }} ({{ 'textTranslate.saveMoneyPlan' | translate }} {{standardPlan.yearlySavePercent}}%)</li>
+          <li class="grey" *ngIf="!yearSelected">${{standardPlan.montlyPrice}}/{{ 'textTranslate.month' | translate }}</li>
+          <li>{{ 'textTranslate.allSimpleBasicFeaturesPlus' | translate }}</li>
+          <li>{{ 'textTranslate.upToFourcompanies' | translate }}</li>
+          <li>{{ 'textTranslate.upToFourUsers' | translate }}</li>
+          <li class="grey" *ngIf="!showLoading"><a (click)="onBuy(standardPlan)">{{ 'textTranslate.purchaseNow' | translate }}</a></li>
+        </ul>
+        <loading-component *ngIf="showLoading"></loading-component>
+      </div>
+
+      <div class="columns">
+        <ul class="price">
+          <li class="header">{{ 'textTranslate.premium' | translate }}</li>
+          <li class="grey" *ngIf="yearSelected">${{preiumPlan.yearlyPrice}}/{{ 'textTranslate.year' | translate }} ({{ 'textTranslate.saveMoneyPlan' | translate }} {{preiumPlan.yearlySavePercent}}%)</li>
+          <li class="grey" *ngIf="!yearSelected">${{preiumPlan.montlyPrice}}/{{ 'textTranslate.month' | translate }}</li>
+          <li>{{ 'textTranslate.allSimpleBasicFeaturesPlus' | translate }}</li>
+          <li>{{ 'textTranslate.unlimitedCompaniess' | translate }}</li> 
+          <li>{{ 'textTranslate.unlimitedUsers' | translate }}</li>
+          <li class="grey" *ngIf="!showLoading"><a (click)="onBuy(preiumPlan)" >{{ 'textTranslate.purchaseNow' | translate }}</a></li>
+        </ul>
+        <loading-component *ngIf="showLoading"></loading-component>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="close()">{{ 'textTranslate.close' | translate}}</button>
+    </div>
+  </div>
+</div>

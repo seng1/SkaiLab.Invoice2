@@ -19,16 +19,29 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
     {
         private readonly IOrganisationUserService organisationUserService;
         private readonly UserManager<ApplicationUser> userManager;
-        public InviteModel(IOrganisationUserService organisationUserService,UserManager<ApplicationUser> userManager)
+        private readonly IAppResource appResource;
+        public InviteModel(IOrganisationUserService organisationUserService,UserManager<ApplicationUser> userManager, IAppResource appResource)
         {
             this.organisationUserService = organisationUserService;
             this.userManager = userManager;
+            this.appResource = appResource;
         }
         [BindProperty]
         public InputModel Input { get; set; }
         public OrganisationUser OrganisationUser { get; set; }
-        public async Task<IActionResult> OnGetAsync(string token)
+        public List<string> Errors { get; set; }
+        public string Culture { get; set; }
+        public string Name { get; set; }
+        public string Token { get; set; }
+        public string ReturnUrl { get; set; }
+        public async Task<IActionResult> OnGetAsync(string token, string culture = null,string name=null, string returnUrl = null)
         {
+            Errors = new List<string>();
+            Culture = culture ?? "en-US";
+            Name = name;
+            Token = token;
+            returnUrl = returnUrl ?? Url.Content("~/");
+            ReturnUrl = returnUrl;
             OrganisationUser = organisationUserService.GetOrganisationUser(token);
             if (OrganisationUser == null)
             {
@@ -47,13 +60,29 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
             HttpContext.Session.SetString("Token", token);
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string token, string culture = null, string name = null, string returnUrl = null)
         {
-            OrganisationUser = organisationUserService.GetOrganisationUser(HttpContext.Session.GetString("Token"));
+            Errors = new List<string>();
+            Culture = culture??"en-US";
+            Name = name;
+            returnUrl = returnUrl ?? Url.Content("~/");
+            ReturnUrl = returnUrl;
+            Token = token;
+            OrganisationUser = organisationUserService.GetOrganisationUser(token);
             if (ModelState.IsValid)
             {
-                await  organisationUserService.ConfirmationInvitationAsync(OrganisationUser.OrganisationId, OrganisationUser.User.Email, Input.Password,userManager);
+                await  organisationUserService.ConfirmationInvitationAsync(OrganisationUser.OrganisationId, OrganisationUser.User.Email, Input.Password,userManager,Input.PhoneNumber);
                 return RedirectToPage("Login");
+            }
+            if (!ModelState.IsValid)
+            {
+                foreach (var r in ModelState.Values)
+                {
+                    foreach (var t in r.Errors)
+                    {
+                        Errors.Add(appResource.GetResource(t.ErrorMessage));
+                    }
+                }
             }
             // If we got this far, something failed, redisplay form
             return Page();
@@ -62,7 +91,7 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
         {
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The Password must be at least 6 and at max 100 characters long.")]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -71,6 +100,11 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage = "Phone number is require.")]
+            [DataType(DataType.Text)]
+            [Display(Name = "Phone number")]
+            public string PhoneNumber { get; set; }
         }
     }
 }

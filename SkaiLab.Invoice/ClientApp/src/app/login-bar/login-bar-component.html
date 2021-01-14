@@ -1,5 +1,14 @@
-<div class="header-left" *ngIf="permission.readWritePurchaseSale">
-    <div class="dropdown for-notification">
+<div class="header-left" >
+    <div class="dropdown for-notification" *ngIf="userLicenseInformation.isTrail">
+        <i class="fa fa-times" style="cursor: pointer;" (click)="onHideTrail()" aria-hidden="true"></i> {{ 'textTranslate.youAreUsingTrailLicenseWillExpireOn' | translate }} {{userLicenseInformation.expireDate | date:'dd/MM/yyyy'}}. <a href="{{purchaseUrl}}">{{ 'textTranslate.purchaseNow' | translate }}</a>
+    </div>
+    <div class="dropdown for-notification" *ngIf="userLicenseInformation.isUserHasLicense && !userLicenseInformation.isTrail && !userLicenseInformation.isUserCompleteLicense">
+        <i class="fa fa-times" style="cursor: pointer;" (click)="onHideCompleteLicense()" aria-hidden="true"></i> {{ 'textTranslate.youAreNotCompletePurchaseYet' | translate }} <a href="{{purchaseUrl}}">{{ 'textTranslate.completeNow' | translate }}</a>
+    </div>
+    <div class="dropdown for-notification" *ngIf="userLicenseInformation.isAlertRenewLicense">
+        <i class="fa fa-times" style="cursor: pointer;" (click)="onHideCompleteLicense()" aria-hidden="true"></i> {{ 'textTranslate.yourLicenseWillExpireOn' | translate }} {{userLicenseInformation.expireDate | date:'dd/MM/yyyy'}}. <a href="{{purchaseUrl}}">{{ 'textTranslate.renewNow' | translate }}</a>
+    </div>
+    <div class="dropdown for-notification" >
         <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-plus"></i>
@@ -7,23 +16,26 @@
         <div class="dropdown-menu" aria-labelledby="notification" x-placement="bottom-start"
             style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 56px, 0px);">
             <p class="red">{{ 'textTranslate.createNew' | translate }}</p>
-            <a class="dropdown-item media" [routerLink]='["/quote-new"]'>
+            <a class="dropdown-item media" [routerLink]='["/quote-new"]' *ngIf="permission.readWritePurchaseSale">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <p>{{ 'textTranslate.quote' | translate }}</p>
             </a>
-            <a class="dropdown-item media" [routerLink]='["/order-new"]'>
+            <a class="dropdown-item media" [routerLink]='["/order-new"]' *ngIf="permission.readWritePurchaseSale">
                 <i class="fa fa-shopping-cart"></i>
                 <p>{{ 'textTranslate.purchseOrder' | translate }}</p>
             </a>
-            <a class="dropdown-item media" [routerLink]='["/vendor-bill-new"]'>
+            <a class="dropdown-item media" [routerLink]='["/vendor-bill-new"]' *ngIf="permission.readWritePurchaseSale">
                 <i class="fa fa-money"></i>
                 <p>{{ 'textTranslate.bill' | translate }}</p>
             </a>
-            <a class="dropdown-item media" [routerLink]='["/invoice-new"]'>
+            <a class="dropdown-item media" [routerLink]='["/invoice-new"]' *ngIf="permission.readWritePurchaseSale">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <p>{{ 'textTranslate.invoice' | translate }}</p>
             </a>
-           
+            <a class="dropdown-item media" (click)="onCreateCompany()">
+                <i class="fas fa-building"></i>
+                <p>{{ 'textTranslate.organisation' | translate }}</p>
+            </a>
            
         </div>
     </div>

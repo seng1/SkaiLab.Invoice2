@@ -15,9 +15,9 @@ namespace SkaiLab.Invoice.Service
         Currency GetBaseCurrency(string organisationId);
         List<Organsation> GetOrganisations(string userId);
         Organsation GetWorkingOrganisation(string userId);
-        void Create(Organsation organsation, string userId);
+        int Create(Organsation organsation, string userId);
         void ChangeWorkingOrganisation(string organisationId, string userId);
         List<Organsation> GetOrganisationsWithSameBaseCurrency(string organisationId,string userId);
-
+        int GetMaximumCreateOrganisationByUser(string userId);
     }
 }

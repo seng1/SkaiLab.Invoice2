@@ -17,24 +17,38 @@ namespace SkaiLab.Invoice.Controllers
 {
 
     [Route("api/[controller]")]
-    [Authorize]
+   
     public class AccountController : Controller
     {
         private readonly IOrganisationService _organisationService;
-        public AccountController(IOrganisationService organisationService)
+        private readonly IUserService userService;
+        public AccountController(IOrganisationService organisationService, IUserService userService)
         {
             _organisationService = organisationService;
+            this.userService = userService;
         }
+        [Authorize]
         [HttpGet("[action]")]
         public IActionResult GetOrganisations()
         {
             return Ok(_organisationService.GetOrganisations(_organisationService.UserId));
         }
+        [Authorize]
         [HttpGet("[action]")]
         public IActionResult GetWorkingOrganisation()
         {
             return Ok(_organisationService.GetWorkingOrganisation(_organisationService.UserId));
         }
-
+        [HttpGet("[action]")]
+        public async Task<IActionResult> SendNewCode(string id)
+        {
+            await userService.SendNewCodeAsync(id);
+            return Ok();
+        }
+        [HttpGet("[action]")]
+        public IActionResult GetUserLicenseInformation()
+        {
+            return Ok(userService.GetUserLicenseInformation(userService.UserId));
+        }
     }
 }

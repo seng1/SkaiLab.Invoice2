@@ -24,30 +24,6 @@
                     </div>
                     <div class="col-md-3 col-sm-12">
                         <div class="form-group">
-                            <span for="firstName">{{ 'textTranslate.firstName' | translate }} <span class="text-danger"> * </span></span>
-                            <input type="text" class="form-control" name="firstName"
-                                [(ngModel)]="organisationUser.user.firstName" (ngModelChange)="nameChange()"
-                                #firstName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && firstName.invalid }"
-                                required />
-                            <div *ngIf="firstName.invalid" class="invalid-feedback">
-                                <div *ngIf="firstName.errors.required">{{ 'textTranslate.firstNameRequire' | translate }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-12">
-                        <div class="form-group">
-                            <span for="lastName">{{ 'textTranslate.lastName' | translate }} <span class="text-danger"> * </span></span>
-                            <input type="text" class="form-control" name="lastName"
-                                [(ngModel)]="organisationUser.user.lastName" (ngModelChange)="nameChange()"
-                                #lastName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }"
-                                required />
-                            <div *ngIf="lastName.invalid" class="invalid-feedback">
-                                <div *ngIf="lastName.errors.required">{{ 'textTranslate.lastNameRequire' | translate }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-12">
-                        <div class="form-group">
                             <span for="name">{{ 'textTranslate.displayName' | translate }} <span class="text-danger"> * </span></span>
                             <input type="text" class="form-control" name="name" [(ngModel)]="organisationUser.user.name"
                                 #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />

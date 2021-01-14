@@ -150,6 +150,17 @@ namespace SkaiLab.Invoice.Service
             return context.OrganisationUserMenuFeature.Any(u => u.UserId == userId && u.OrganisationId == organisationId && menuFeatureIds.Any(t=>t==u.MenuFeatureId));
         }
 
+        public bool IsValidLicense(string organisationId)
+        {
+            using var context = Context();
+            var organisationUser = context.OrganisationUser.FirstOrDefault(u => u.OrganisationId == organisationId && u.IsOwner);
+            if (organisationUser.User.UserPlan.Expire == null || organisationUser.User.UserPlan.Expire<CurrentCambodiaTime)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public string UserId => dataContext.UserId;
         public string OrganisationId => dataContext.OrganisationId;
 

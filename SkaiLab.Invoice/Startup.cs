@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using SkaiLab.Invoice.Service.Subscription;
 
 namespace SkaiLab.Invoice
 {
@@ -142,6 +143,10 @@ namespace SkaiLab.Invoice
             services.AddSingleton<IMenuService, MenuService>();
             services.AddSingleton<IOrganisationUserService, OrganisationUserService>();
             services.AddSingleton<IAppResource, SharedResources>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IPaymentService, PaymentService>();
+            services.AddSingleton<IPaywayService, PaywayService>();
+            services.AddSingleton<IPlanService, PlanService>();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";

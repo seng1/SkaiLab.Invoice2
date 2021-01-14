@@ -18,5 +18,6 @@ namespace SkaiLab.Invoice.Service
         bool CheckPermission(string userId, string organisationId, int[] menuFeatureIds);
         string Language { get; }
         bool IsKhmer { get; }
+        bool IsValidLicense(string organisationId);
     }
 }

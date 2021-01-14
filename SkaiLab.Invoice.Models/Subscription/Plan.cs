@@ -9,8 +9,11 @@ namespace SkaiLab.Invoice.Models.Subscription
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Price { get; set; }
-        public double? YearDiscountRate { get; set; }
+        public double MontlyPrice { get; set; }
+        public double MontlyRenewPrice { get; set; }
+        public double YearlyPrice { get; set; }
+        public double YearlyRenewPrice { get; set; }
         public int ProjectPlanId { get; set; }
+        public double YearlySavePercent { get; set; }
     }
 }

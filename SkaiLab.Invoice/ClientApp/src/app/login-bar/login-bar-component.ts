@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
+import { NewCompanyComponent } from '../company/new-company-component';
 import { Permission } from '../models/permission';
 import { User } from '../models/user';
+import { UserLicenseInformation } from '../models/user-license-information';
 import { MenuService } from '../service/menu-service';
 import { UserService } from '../service/user-service';
 
@@ -15,8 +19,15 @@ export class LoginBarComponent implements OnInit {
   loaded: boolean = false;
   user: User = new User();
   permission:Permission=new Permission();
-  constructor(private authorize: AuthorizeService,private translate: TranslateService, private userService: UserService,private menuService:MenuService) {
-   
+  purchaseUrl:string="";
+  userLicenseInformation:UserLicenseInformation=new UserLicenseInformation();
+  constructor(private authorize: AuthorizeService,
+    private translate: TranslateService, 
+    private userService: UserService,
+    private modalService: NgbModal,
+    @Inject(DOCUMENT) private document: Document,
+      private menuService:MenuService) {
+      this.purchaseUrl = document.location.protocol +'//'+ document.location.host+"/MakePayment?id=";
   }
   ngOnInit(): void {
     this.authorize.isAuthenticated().subscribe(result => {
@@ -28,8 +39,18 @@ export class LoginBarComponent implements OnInit {
         this.menuService.getPermission().subscribe(result=>{
           this.permission=result;
         })
+        this.userService.getUserLicenseInformation().subscribe(result=>{
+          this.userLicenseInformation=result;
+          this.purchaseUrl = document.location.protocol +'//'+ document.location.host+"/MakePayment?id="+result.userId+"&culture="+this.getLanguage();
+        });
       }
     })
+  }
+  getLanguage(){
+    if(localStorage.getItem("language")==null || localStorage.getItem("language")=="en"){
+      return "en-US";
+    }
+    return localStorage.getItem("language");
   }
   getDisplayName(): String {
    let name:String="";
@@ -59,6 +80,16 @@ export class LoginBarComponent implements OnInit {
     this.userService.updateUserLanguage(this.user).subscribe(result=>{
       window.location.reload();
     });
+  }
+  onHideTrail(){
+    this.userLicenseInformation.isTrail=false;
+  }
+  onHideCompleteLicense(){
+    this.userLicenseInformation.isUserCompleteLicense=true;
+  }
+  onCreateCompany(){
+    const modalRef = this.modalService.open(NewCompanyComponent, { size: 'xl' as 'lg' });
+    modalRef.componentInstance.init(modalRef);
   }
 }
 

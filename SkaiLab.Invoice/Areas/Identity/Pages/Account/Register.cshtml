@@ -1,12 +1,12 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = @ShareLocalizer.GetResource("Register");
     Layout = "~/Pages/Shared/_AccounntLayout.cshtml";
 }
 @inject SkaiLab.Invoice.Models.IAppResource ShareLocalizer
-<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-    <div class="container  unified_container ">
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post" asp-action="./Register?culture=@Model.Culture&offerType=@Model.OfferType&subscriptionType=@Model.SubscriptionType">
+    <div class="container unified_container ">
         <div class="row">
             <div class="col-lg-6">
                 <div class="panel panel-default">
@@ -19,41 +19,41 @@
                                         @ViewData["Title"]
                                     </h2>
                                 </div>
-                                <div asp-validation-summary="All" class="text-danger"></div>
+                                @if (Model.Errors.Any())
+                                {
+                                    <div class="text-danger validation-summary-errors">
+                                        <ul>
+                                            @foreach(var error in Model.Errors)
+                                            {
+                                                <li>@error</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
                                 <div class="entry">
                                     <div class="entry-item">
-                                        <label for="name">
-                                            <span class="text-danger"> * </span>
-                                            Name
-                                        </label>
-                                        <input asp-for="Input.LastName" type="text" class="input-text" placeholder="​Name" />
+    
+                                        <input asp-for="Input.Name" type="text" autocomplete="off" class="input-text" placeholder="​@ShareLocalizer.GetResource("Name")" />
                                     </div>
                                     <div class="entry-item">
-                                        <div class="password-label">
-                                            <label for="password">ពាក្យសម្ងាត់</label>
-                                            <a id="forgotPassword" tabindex="2" href="/skaimarket.onmicrosoft.com/B2C_1A_B2C_1_khdomain_B2C_SIgnInSignUp/api/CombinedSigninAndSignup/forgotPassword?csrf_token=SFRYR1VFRWJTbnRrbnU1Uk9SUVVBOHR2dm1qaERGQWIrYVBUeE9ZbW1pNTlkYTRGRlZNdkVzZzVpSG5jS3kyWTRoa2lwSGRvMzRJVk1OWGlHNnFSUXc9PTsyMDIwLTEyLTI1VDA3OjE3OjMyLjE3NjQ0NDRaO241dk95KzQrYXNKZTR1QTIvOWxxS3c9PTt7Ik9yY2hlc3RyYXRpb25TdGVwIjoxfQ==&amp;tx=StateProperties=eyJUSUQiOiIzMzg1Y2FmOS03NGMyLTRhNjItYWI2YS1jNzdjYjNhZDIxMDgifQ&amp;p=B2C_1A_B2C_1_khdomain_B2C_SIgnInSignUp">ភ្លេចពាក្យសម្ងាត់?</a>
-                                        </div>
-                                        <div class="error itemLevel" aria-hidden="true" style="display: none;">
-                                            <p role="alert"></p>
-                                        </div>
-                                        <input type="password" id="password" name="Password" placeholder="ពាក្យសម្ងាត់" tabindex="1">
+                                        <input asp-for="Input.PhoneNumber" type="text" autocomplete="off" class="input-text" placeholder="​@ShareLocalizer.GetResource("Phone Number")" />
                                     </div>
-                                    <div class="working"></div>
-                                    <div class="rememberMe">
-                                        <input id="rememberMe" type="checkbox" name="rememberMe" tabindex="1">
-                                        <label for="rememberMe">ចាំខ្ញុំរចូលលើកក្រោយ</label>
+                                    <div class="entry-item">
+                                        <input asp-for="Input.Email" type="text" class="input-text" placeholder="​@ShareLocalizer.GetResource("Email")" />
                                     </div>
+                                    <div class="entry-item">
+                                     
+                                        <input type="password" class="input-text" autocomplete="off" asp-for="Input.Password" placeholder="​@ShareLocalizer.GetResource("Password")">
+                                    </div>
+                                    <div class="entry-item">
+                                      
+                                        <input type="password" class="input-text" autocomplete="off" asp-for="Input.ConfirmPassword"  placeholder="​@ShareLocalizer.GetResource("Confirm Password")">
+                                    </div>
+
                                     <div class="buttons">
-                                        <button id="next" tabindex="1">ចូល</button>
+
+                                        <button id="next">​@ShareLocalizer.GetResource("Next")</button>
                                     </div>
-                                </div>
-                                <div class="divider">
-                                    <h2>ឬ</h2>
-                                </div>
-                                <div class="create">
-                                    <p>
-                                        មិនមានគណនី?<a id="createAccount" tabindex="1" href="/skaimarket.onmicrosoft.com/B2C_1A_B2C_1_khdomain_B2C_SIgnInSignUp/api/CombinedSigninAndSignup/unified?local=signup&amp;csrf_token=SFRYR1VFRWJTbnRrbnU1Uk9SUVVBOHR2dm1qaERGQWIrYVBUeE9ZbW1pNTlkYTRGRlZNdkVzZzVpSG5jS3kyWTRoa2lwSGRvMzRJVk1OWGlHNnFSUXc9PTsyMDIwLTEyLTI1VDA3OjE3OjMyLjE3NjQ0NDRaO241dk95KzQrYXNKZTR1QTIvOWxxS3c9PTt7Ik9yY2hlc3RyYXRpb25TdGVwIjoxfQ==&amp;tx=StateProperties=eyJUSUQiOiIzMzg1Y2FmOS03NGMyLTRhNjItYWI2YS1jNzdjYjNhZDIxMDgifQ&amp;p=B2C_1A_B2C_1_khdomain_B2C_SIgnInSignUp">ចុះឈ្មោះឥឡូវនេះ</a>
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -63,80 +63,3 @@
         </div>
     </div>
 </form>
-@*<div class="login">
-        <h1>@ViewData["Title"]</h1>
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label for="name">First name <span class="text-danger"> * </span></label>
-                <input asp-for="Input.FirstName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="name">Last name <span class="text-danger"> * </span></label>
-                <input asp-for="Input.LastName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="name">Phone number name <span class="text-danger"> * </span></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="name">Organisation Name <span class="text-danger"> * </span></label>
-                <input asp-for="Input.OrganisationDisplayName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="name">This organisation declare tax?(it cannot change)?</label>
-                <input asp-for="Input.TaxDeclare" type="checkbox" checked="checked" />
-            </div>
-            <div class="form-group">
-                <label for="name">Currency</label>
-                <select asp-for="Input.BaseCurrencyId" class="form-control" asp-items="@(new SelectList(Model.Currencies,"Id","Name"))"></select>
-            </div>
-            <div class="form-group">
-                <label for="name">Email <span class="text-danger"> * </span></label>
-                <input asp-for="Input.Email" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="name">Password <span class="text-danger"> * </span></label>
-                <input asp-for="Input.Password" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="name">Confirm password <span class="text-danger"> * </span></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-            </div>
-            <label class="hvr-sweep-to-bottom">
-                <input type="submit" value="Register" />
-            </label>
-            <h3 style="text-align:center">Already a member ? <a asp-page="./login">Sign in now!</a>  </h3>
-        </form>
-        @if (Model.ExternalLogins != null && Model.ExternalLogins.Any())
-        {
-            <h2 style="margin-top:10px;text-align:center">Or</h2>
-            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                <div class="buttons">
-                    <ul>
-                        @foreach (var provider in Model.ExternalLogins)
-                        {
-                            @if (@provider.Name == "Facebook")
-                            {
-                                <li>
-                                    <button type="submit" class="button-facebook" name="provider" value="@provider.Name"><span class="face"> <i class="fa fa-facebook" aria-hidden="true"></i></span>Login to Facebook</button>
-                                </li>
-                            }
-                            @if (@provider.Name == "Google")
-                            {
-                                <li>
-                                    <button type="submit" class="buttons-google" name="provider" value="@provider.Name"><span class="google"><i class="fa fa-google" aria-hidden="true"></i> </span>Login to Google</button>
-                                </li>
-                            }
-                            @if (@provider.Name == "Microsoft")
-                            {
-                                <li>
-                                    <button type="submit" class="buttons-microsoft" name="provider" value="@provider.Name"><span class="microsoft"><i class="fa fa-windows" aria-hidden="true"></i> </span>Login to Microsoft</button>
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </form>
-        }
-    </div>*@
