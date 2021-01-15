@@ -99,6 +99,7 @@ namespace SkaiLab.Invoice.Service
         }
         protected List<Models.Currency> GetCurrenciesWithExchangeRate(InvoiceContext context, string organisationId)
         {
+
             var currencies = context.OrganisationCurrency.Where(u => u.OrganisationId == organisationId)
                 .Select(u => new Models.Currency
                 {
@@ -106,15 +107,15 @@ namespace SkaiLab.Invoice.Service
                     Id = u.CurrencyId,
                     Name = u.Currency.Name,
                     Symbole = u.Currency.Symbole,
-                    ExchangeRates = u.ExchangeRateFromOrganisationCurrency.Select(u => new CurrencyExchangeRate
+                    ExchangeRates =u.Currency.ExchangeRateFromCurrency.Select(u=>new CurrencyExchangeRate
                     {
-                        CurrencyId = u.ToOrganisationCurrencyId,
+                        CurrencyId = u.ToCurrencyId,
                         Currency = new Models.Currency
                         {
-                            Code = u.ToOrganisationCurrency.Currency.Code,
-                            Id = u.ToOrganisationCurrency.CurrencyId,
-                            Name = u.ToOrganisationCurrency.Currency.Name,
-                            Symbole = u.ToOrganisationCurrency.Currency.Symbole
+                            Code = u.ToCurrency.Code,
+                            Id = u.ToCurrencyId,
+                            Name = u.ToCurrency.Name,
+                            Symbole = u.ToCurrency.Symbole
                         },
                         ExchangeRate = u.ExchangeRate1
                     }).ToList()

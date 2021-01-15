@@ -525,6 +525,9 @@
   <data name="User with thi email doesn't exist" xml:space="preserve">
     <value>អ្នកប្រើប្រាស់ជាមួយអ៊ីមែលនេះមិនមានទេ</value>
   </data>
+  <data name="Users" xml:space="preserve">
+    <value>អ្នកប្រើប្រាស់</value>
+  </data>
   <data name="Vendors" xml:space="preserve">
     <value>អ្នកលក់</value>
   </data>

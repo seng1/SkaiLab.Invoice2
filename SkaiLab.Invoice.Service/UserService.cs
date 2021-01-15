@@ -38,7 +38,7 @@ namespace SkaiLab.Invoice.Service
                 Id = Guid.NewGuid().ToString(),
                 Contact = new Dal.Models.Contact
                 {
-                    PhoneNumber = user.PhoneNumber,
+                    PhoneNumber = context.AspNetUserClaims.FirstOrDefault(u => u.UserId == user.Id && u.ClaimType == ClaimTypes.MobilePhone).ClaimValue,
                     Email = user.Email,
                     ContactName = context.AspNetUserClaims.FirstOrDefault(u => u.UserId == user.Id && u.ClaimType == ClaimTypes.Name).ClaimValue,
                     Website = "",
@@ -103,17 +103,19 @@ namespace SkaiLab.Invoice.Service
                     context.OrganisationCurrency.Add(taxCurrency);
                     context.ExchangeRate.Add(new Dal.Models.ExchangeRate
                     {
-                        FromOrganisationCurrency=baseCurency,
+                        FromCurrencyId=baseCurency.CurrencyId,
                         IsAuto=false,
-                        ToOrganisationCurrency=taxCurrency,
-                        ExchangeRate1=4000
+                        ToCurrencyId=taxCurrency.CurrencyId,
+                        ExchangeRate1=4000,
+                        Organisation=organisation
                     });
                     context.ExchangeRate.Add(new Dal.Models.ExchangeRate
                     {
-                        FromOrganisationCurrency = taxCurrency,
+                        FromCurrencyId = taxCurrency.CurrencyId,
                         IsAuto = false,
-                        ToOrganisationCurrency = baseCurency,
-                        ExchangeRate1 =(decimal) 0.00025
+                        ToCurrencyId = baseCurency.CurrencyId,
+                        ExchangeRate1 =(decimal) 0.00025,
+                        Organisation=organisation
                     });
                 }
             }
@@ -121,6 +123,48 @@ namespace SkaiLab.Invoice.Service
             if (plain.IsTrail)
             {
                 plain.Expire = CurrentCambodiaTime.AddMonths(1);
+            }
+            if (isTax)
+            {
+                context.Tax.Add(new Dal.Models.Tax
+                {
+                    Name = "អាករលើតម្លៃបន្ថែម​(១០%)/Tax (10%)",
+                    TaxComponent = new List<Dal.Models.TaxComponent>
+                    {
+                        new Dal.Models.TaxComponent
+                        {
+                            Rate=10,
+                            Name=$"អាករលើតម្លៃបន្ថែម​(១០%){Environment.NewLine}Tax (10%)"
+                        }
+                    },
+                    Organisation = organisation
+                });
+                context.Tax.Add(new Dal.Models.Tax
+                {
+                    Name = "ពន្ធកាត់ទុក (១៤%)/Withholding Tax(14%)",
+                    TaxComponent = new List<Dal.Models.TaxComponent>
+                    {
+                        new Dal.Models.TaxComponent
+                        {
+                            Rate=14,
+                            Name=$"ពន្ធកាត់ទុក (១៤%){Environment.NewLine}Withholding Tax(14%)"
+                        }
+                    },
+                    Organisation = organisation
+                });
+                context.Tax.Add(new Dal.Models.Tax
+                {
+                    Name = "ពន្ធកាត់ទុក (១៥%)/Withholding Tax(15%)",
+                    TaxComponent = new List<Dal.Models.TaxComponent>
+                    {
+                        new Dal.Models.TaxComponent
+                        {
+                            Rate=15,
+                            Name=$"ពន្ធកាត់ទុក (១៥%){Environment.NewLine}Withholding Tax(15%)"
+                        }
+                    },
+                    Organisation = organisation
+                });
             }
             context.Organisation.Add(organisation);
             context.SaveChanges();

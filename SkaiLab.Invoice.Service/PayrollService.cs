@@ -21,7 +21,7 @@ namespace SkaiLab.Invoice.Service
               
                 var taxSalary = context.TaxSalary.FirstOrDefault();
                
-                var exchangeRate = organisation.OrganisationBaseCurrency.TaxCurrencyId == organisation.OrganisationBaseCurrency.BaseCurrencyId ? 1 : context.ExchangeRate.FirstOrDefault(u => u.FromOrganisationCurrency.CurrencyId == organisation.OrganisationBaseCurrency.BaseCurrencyId && u.ToOrganisationCurrency.CurrencyId == organisation.OrganisationBaseCurrency.TaxCurrencyId).ExchangeRate1;
+                var exchangeRate = organisation.OrganisationBaseCurrency.TaxCurrencyId == organisation.OrganisationBaseCurrency.BaseCurrencyId ? 1 : context.ExchangeRate.FirstOrDefault(u => u.FromCurrencyId == organisation.OrganisationBaseCurrency.BaseCurrencyId && u.ToCurrencyId == organisation.OrganisationBaseCurrency.TaxCurrencyId).ExchangeRate1;
                 var payroll= new PayrollMonthTax
                 {
                     AdditionalBenefitsRate=taxSalary.AdditionalBenefits,

@@ -35,9 +35,10 @@ namespace SkaiLab.Invoice.Service
                 context.ExchangeRate.Add(new Dal.Models.ExchangeRate
                 {
                     ExchangeRate1 = (decimal)exchangeRate.ExchangeRate,
-                    FromOrganisationCurrency = organisationCurrency,
+                    FromCurrencyId = organisationCurrency.CurrencyId,
                     IsAuto = exchangeRate.IsAuto,
-                    ToOrganisationCurrency = context.OrganisationCurrency.FirstOrDefault(u => u.OrganisationId == organisationId && u.CurrencyId == exchangeRate.CurrencyId)
+                    ToCurrencyId = context.OrganisationCurrency.FirstOrDefault(u => u.OrganisationId == organisationId && u.CurrencyId == exchangeRate.CurrencyId).CurrencyId,
+                    OrganisationId=organisationId
                 });
             }
             context.SaveChanges();
@@ -46,17 +47,17 @@ namespace SkaiLab.Invoice.Service
         public List<Currency> GetCurrencies(string organisationId)
         {
             using var context = Context();
-            var exchangeRates = context.ExchangeRate.Where(u => u.FromOrganisationCurrency.OrganisationId == organisationId)
+            var exchangeRates = context.ExchangeRate.Where(u => u.OrganisationId == organisationId)
                 .Select(u=>new
                 {
-                    u.FromOrganisationCurrencyId,
-                    CurrencyCode=u.FromOrganisationCurrency.Currency.Code,
+                    u.FromCurrencyId,
+                    CurrencyCode=u.FromCurrency.Code,
                     u.ExchangeRate1,
-                    ToCurrencyCode=u.ToOrganisationCurrency.Currency.Code
+                    ToCurrencyCode=u.ToCurrency.Code
                 }).ToList()
                 .Select(u => new
                 {
-                    u.FromOrganisationCurrencyId,
+                    u.FromCurrencyId,
                     ExchangeRateText =$"1 {u.CurrencyCode} = {FormatCurrency(u.ExchangeRate1)} {u.ToCurrencyCode}"
                 }).ToList();
             var currencies = context.OrganisationCurrency.Where(u=>u.OrganisationId==organisationId).ToList().Select(u => new Currency
@@ -65,7 +66,7 @@ namespace SkaiLab.Invoice.Service
                 Id=u.Currency.Id,
                 Name=u.Currency.Name,
                 Symbole=u.Currency.Symbole,
-                ExchangeRateTexts= exchangeRates.Where(t=>t.FromOrganisationCurrencyId==u.Id).Select(u=>u.ExchangeRateText).ToList(),
+                ExchangeRateTexts= exchangeRates.Where(t=>t.FromCurrencyId==u.Id).Select(u=>u.ExchangeRateText).ToList(),
                 Notes=new List<string>()
             }).ToList();
             var baseCurrency = context.OrganisationBaseCurrency.FirstOrDefault(u => u.OrganisationId == organisationId);
@@ -158,7 +159,7 @@ namespace SkaiLab.Invoice.Service
             {
                 throw new Exception("Currency not found");
             }
-            var exchangeRates = context.ExchangeRate.Where(u => u.FromOrganisationCurrencyId == currency.Id);
+            var exchangeRates = context.ExchangeRate.Where(u => u.FromCurrencyId == currency.CurrencyId && u.OrganisationId==organisationId);
             if (!exchangeRates.Any())
             {
                 throw new Exception("Currency exchange rate doesn't exist");
@@ -171,15 +172,15 @@ namespace SkaiLab.Invoice.Service
                 Symbole=currency.Currency.Symbole,
                 ExchangeRates=exchangeRates.Select(u=>new CurrencyExchangeRate
                 {
-                    CurrencyId=u.ToOrganisationCurrency.CurrencyId,
+                    CurrencyId=u.ToCurrencyId,
                     ExchangeRate=u.ExchangeRate1,
                     IsAuto=u.IsAuto,
                     Currency=new Currency
                     {
-                        Code=u.ToOrganisationCurrency.Currency.Code,
-                        Id=u.ToOrganisationCurrency.CurrencyId,
-                        Name=u.ToOrganisationCurrency.Currency.Name,
-                        Symbole=u.ToOrganisationCurrency.Currency.Symbole
+                        Code=u.ToCurrency.Code,
+                        Id=u.ToCurrencyId,
+                        Name=u.ToCurrency.Name,
+                        Symbole=u.ToCurrency.Symbole
                     }
                 }).ToList()
             };
@@ -193,14 +194,14 @@ namespace SkaiLab.Invoice.Service
             {
                 throw new Exception("No Currency to update");
             }
-            var exchangeRates = context.ExchangeRate.Where(u => u.FromOrganisationCurrencyId == currency.Id);
+            var exchangeRates = context.ExchangeRate.Where(u => u.FromCurrencyId == currency.Id);
             if (!exchangeRates.Any())
             {
                 throw new Exception("No currency exchange rate doesn't exist");
             }
             foreach(var exchangeRate in exchangeRates.ToList())
             {
-                var ex = currency.ExchangeRates.FirstOrDefault(u => u.CurrencyId == exchangeRate.ToOrganisationCurrency.CurrencyId);
+                var ex = currency.ExchangeRates.FirstOrDefault(u => u.CurrencyId == exchangeRate.ToCurrencyId);
                 exchangeRate.ExchangeRate1 = ex.ExchangeRate;
                 exchangeRate.IsAuto = ex.IsAuto;
             }

@@ -9,6 +9,8 @@ namespace SkaiLab.Invoice.Dal.Models
         {
             Customer = new HashSet<Customer>();
             CustomerTransaction = new HashSet<CustomerTransaction>();
+            ExchangeRateFromCurrency = new HashSet<ExchangeRate>();
+            ExchangeRateToCurrency = new HashSet<ExchangeRate>();
             Expense = new HashSet<Expense>();
             OrganisationBaseCurrencyBaseCurrency = new HashSet<OrganisationBaseCurrency>();
             OrganisationBaseCurrencyTaxCurrency = new HashSet<OrganisationBaseCurrency>();
@@ -24,6 +26,8 @@ namespace SkaiLab.Invoice.Dal.Models
 
         public virtual ICollection<Customer> Customer { get; set; }
         public virtual ICollection<CustomerTransaction> CustomerTransaction { get; set; }
+        public virtual ICollection<ExchangeRate> ExchangeRateFromCurrency { get; set; }
+        public virtual ICollection<ExchangeRate> ExchangeRateToCurrency { get; set; }
         public virtual ICollection<Expense> Expense { get; set; }
         public virtual ICollection<OrganisationBaseCurrency> OrganisationBaseCurrencyBaseCurrency { get; set; }
         public virtual ICollection<OrganisationBaseCurrency> OrganisationBaseCurrencyTaxCurrency { get; set; }

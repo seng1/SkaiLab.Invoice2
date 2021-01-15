@@ -181,7 +181,7 @@ namespace SkaiLab.Invoice.Dal.Models
             modelBuilder.Entity<AspNetUserTokensCode>(entity =>
             {
                 entity.HasKey(e => e.UserId)
-                    .HasName("PK__AspNetUs__1788CC4C2F449891");
+                    .HasName("PK__AspNetUs__1788CC4C81A9128E");
 
                 entity.Property(e => e.Code)
                     .IsRequired()
@@ -194,7 +194,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.AspNetUserTokensCode)
                     .HasForeignKey<AspNetUserTokensCode>(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AspNetUse__UserI__41B8C09B");
+                    .HasConstraintName("FK__AspNetUse__UserI__39AD8A7F");
             });
 
             modelBuilder.Entity<AspNetUsers>(entity =>
@@ -216,7 +216,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.Bill)
                     .HasForeignKey<Bill>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Bill__Id__37703C52");
+                    .HasConstraintName("FK__Bill__Id__3AA1AEB8");
             });
 
             modelBuilder.Entity<Contact>(entity =>
@@ -268,7 +268,7 @@ namespace SkaiLab.Invoice.Dal.Models
             modelBuilder.Entity<Coupon>(entity =>
             {
                 entity.HasKey(e => e.Code)
-                    .HasName("PK__Coupon__A25C5AA6F9DBC14A");
+                    .HasName("PK__Coupon__A25C5AA66E1950D5");
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(50)
@@ -341,7 +341,7 @@ namespace SkaiLab.Invoice.Dal.Models
             modelBuilder.Entity<CustomerTransaction>(entity =>
             {
                 entity.HasIndex(e => new { e.OrganisationId, e.Number })
-                    .HasName("UQ__Customer__A5A95CC40668054F")
+                    .HasName("UQ__Customer__A5A95CC404AB9CB0")
                     .IsUnique();
 
                 entity.Property(e => e.BaseCurrencyExchangeRate).HasColumnType("decimal(18, 6)");
@@ -382,7 +382,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.CustomerTransaction)
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__CustomerT__Curre__3D2915A8");
+                    .HasConstraintName("FK__CustomerT__Curre__3E723F9C");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CustomerTransaction)
@@ -393,7 +393,7 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.HasOne(d => d.Organisation)
                     .WithMany(p => p.CustomerTransaction)
                     .HasForeignKey(d => d.OrganisationId)
-                    .HasConstraintName("FK__CustomerT__Organ__3F115E1A");
+                    .HasConstraintName("FK__CustomerT__Organ__405A880E");
             });
 
             modelBuilder.Entity<CustomerTransactionAttachment>(entity =>
@@ -505,7 +505,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Employee)
                     .HasForeignKey(d => d.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Employee__Countr__45BE5BA9");
+                    .HasConstraintName("FK__Employee__Countr__4707859D");
 
                 entity.HasOne(d => d.Gender)
                     .WithMany(p => p.Employee)
@@ -534,29 +534,40 @@ namespace SkaiLab.Invoice.Dal.Models
 
             modelBuilder.Entity<ExchangeRate>(entity =>
             {
-                entity.HasKey(e => new { e.FromOrganisationCurrencyId, e.ToOrganisationCurrencyId });
+                entity.HasKey(e => new { e.FromCurrencyId, e.ToCurrencyId, e.OrganisationId })
+                    .HasName("PK__Exchange__9A173047BCF86A67");
+
+                entity.Property(e => e.OrganisationId)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ExchangeRate1)
                     .HasColumnName("ExchangeRate")
                     .HasColumnType("decimal(18, 6)");
 
-                entity.HasOne(d => d.FromOrganisationCurrency)
-                    .WithMany(p => p.ExchangeRateFromOrganisationCurrency)
-                    .HasForeignKey(d => d.FromOrganisationCurrencyId)
+                entity.HasOne(d => d.FromCurrency)
+                    .WithMany(p => p.ExchangeRateFromCurrency)
+                    .HasForeignKey(d => d.FromCurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ExchangeR__FromO__1332DBDC");
+                    .HasConstraintName("FK__ExchangeR__FromC__4BCC3ABA");
 
-                entity.HasOne(d => d.ToOrganisationCurrency)
-                    .WithMany(p => p.ExchangeRateToOrganisationCurrency)
-                    .HasForeignKey(d => d.ToOrganisationCurrencyId)
+                entity.HasOne(d => d.Organisation)
+                    .WithMany(p => p.ExchangeRate)
+                    .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ExchangeR__ToOrg__14270015");
+                    .HasConstraintName("FK__ExchangeR__Organ__4CC05EF3");
+
+                entity.HasOne(d => d.ToCurrency)
+                    .WithMany(p => p.ExchangeRateToCurrency)
+                    .HasForeignKey(d => d.ToCurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ExchangeR__ToCur__4DB4832C");
             });
 
             modelBuilder.Entity<Expense>(entity =>
             {
                 entity.HasIndex(e => new { e.OrganisationId, e.Number })
-                    .HasName("UQ__Expense__A5A95CC48490AB4D")
+                    .HasName("UQ__Expense__A5A95CC45443266D")
                     .IsUnique();
 
                 entity.Property(e => e.ApprovedBy)
@@ -614,25 +625,25 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Expense)
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Expense__Currenc__4C6B5938");
+                    .HasConstraintName("FK__Expense__Currenc__4EA8A765");
 
                 entity.HasOne(d => d.ExpenseStatus)
                     .WithMany(p => p.Expense)
                     .HasForeignKey(d => d.ExpenseStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Expense__Expense__4D5F7D71");
+                    .HasConstraintName("FK__Expense__Expense__4F9CCB9E");
 
                 entity.HasOne(d => d.Organisation)
                     .WithMany(p => p.Expense)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Expense__Organis__4E53A1AA");
+                    .HasConstraintName("FK__Expense__Organis__5090EFD7");
 
                 entity.HasOne(d => d.Vendor)
                     .WithMany(p => p.Expense)
                     .HasForeignKey(d => d.VendorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Expense__VendorI__4F47C5E3");
+                    .HasConstraintName("FK__Expense__VendorI__51851410");
             });
 
             modelBuilder.Entity<ExpenseAttachentFile>(entity =>
@@ -647,7 +658,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.ExpenseAttachentFile)
                     .HasForeignKey(d => d.ExpenseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ExpenseAt__Expen__503BEA1C");
+                    .HasConstraintName("FK__ExpenseAt__Expen__52793849");
             });
 
             modelBuilder.Entity<ExpenseItem>(entity =>
@@ -683,13 +694,13 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.ExpenseProductItem)
                     .HasForeignKey(d => d.LocationId)
-                    .HasConstraintName("FK__ExpensePr__Locat__531856C7");
+                    .HasConstraintName("FK__ExpensePr__Locat__5555A4F4");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ExpenseProductItem)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ExpensePr__Produ__540C7B00");
+                    .HasConstraintName("FK__ExpensePr__Produ__5649C92D");
             });
 
             modelBuilder.Entity<ExpenseStatus>(entity =>
@@ -718,13 +729,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.Invoice)
                     .HasForeignKey<Invoice>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Invoice__Id__55F4C372");
+                    .HasConstraintName("FK__Invoice__Id__5832119F");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Invoice)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Invoice__StatusI__56E8E7AB");
+                    .HasConstraintName("FK__Invoice__StatusI__592635D8");
             });
 
             modelBuilder.Entity<InvoiceQuote>(entity =>
@@ -735,13 +746,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.InvoiceQuote)
                     .HasForeignKey<InvoiceQuote>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__InvoiceQuote__Id__58D1301D");
+                    .HasConstraintName("FK__InvoiceQuote__Id__5B0E7E4A");
 
                 entity.HasOne(d => d.Quote)
                     .WithMany(p => p.InvoiceQuote)
                     .HasForeignKey(d => d.QuoteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__InvoiceQu__Quote__57DD0BE4");
+                    .HasConstraintName("FK__InvoiceQu__Quote__5A1A5A11");
             });
 
             modelBuilder.Entity<InvoiceStatus>(entity =>
@@ -756,7 +767,7 @@ namespace SkaiLab.Invoice.Dal.Models
             modelBuilder.Entity<Location>(entity =>
             {
                 entity.HasIndex(e => new { e.OrganisationId, e.Name })
-                    .HasName("UQ__Location__15141E92B2AD2DC1")
+                    .HasName("UQ__Location__15141E9245728993")
                     .IsUnique();
 
                 entity.Property(e => e.Name)
@@ -772,7 +783,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Location)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Location__Organi__59C55456");
+                    .HasConstraintName("FK__Location__Organi__5C02A283");
             });
 
             modelBuilder.Entity<MaritalStatus>(entity =>
@@ -826,7 +837,7 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.HasOne(d => d.Contact)
                     .WithMany(p => p.Organisation)
                     .HasForeignKey(d => d.ContactId)
-                    .HasConstraintName("FK__Organisat__Conta__5AB9788F");
+                    .HasConstraintName("FK__Organisat__Conta__5CF6C6BC");
 
                 entity.HasOne(d => d.OrganisationType)
                     .WithMany(p => p.Organisation)
@@ -837,7 +848,7 @@ namespace SkaiLab.Invoice.Dal.Models
             modelBuilder.Entity<OrganisationBaseCurrency>(entity =>
             {
                 entity.HasKey(e => e.OrganisationId)
-                    .HasName("PK__Organisa__722346DCF9CABD58");
+                    .HasName("PK__Organisa__722346DCBA15CC54");
 
                 entity.Property(e => e.OrganisationId)
                     .HasMaxLength(100)
@@ -847,25 +858,25 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.OrganisationBaseCurrencyBaseCurrency)
                     .HasForeignKey(d => d.BaseCurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__BaseC__5CA1C101");
+                    .HasConstraintName("FK__Organisat__BaseC__5EDF0F2E");
 
                 entity.HasOne(d => d.Organisation)
                     .WithOne(p => p.OrganisationBaseCurrency)
                     .HasForeignKey<OrganisationBaseCurrency>(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__Organ__5D95E53A");
+                    .HasConstraintName("FK__Organisat__Organ__5FD33367");
 
                 entity.HasOne(d => d.TaxCurrency)
                     .WithMany(p => p.OrganisationBaseCurrencyTaxCurrency)
                     .HasForeignKey(d => d.TaxCurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__TaxCu__5E8A0973");
+                    .HasConstraintName("FK__Organisat__TaxCu__60C757A0");
             });
 
             modelBuilder.Entity<OrganisationCurrency>(entity =>
             {
                 entity.HasIndex(e => new { e.OrganisationId, e.CurrencyId })
-                    .HasName("UQ__Organisa__636736726785E5C2")
+                    .HasName("UQ__Organisa__63673672C3828BB3")
                     .IsUnique();
 
                 entity.Property(e => e.OrganisationId)
@@ -877,19 +888,19 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.OrganisationCurrency)
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__Curre__5F7E2DAC");
+                    .HasConstraintName("FK__Organisat__Curre__61BB7BD9");
 
                 entity.HasOne(d => d.Organisation)
                     .WithMany(p => p.OrganisationCurrency)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__Organ__607251E5");
+                    .HasConstraintName("FK__Organisat__Organ__62AFA012");
             });
 
             modelBuilder.Entity<OrganisationInvitingUser>(entity =>
             {
                 entity.HasKey(e => new { e.OrganisationId, e.Email })
-                    .HasName("PK__Organisa__38BE568F77C61C76");
+                    .HasName("PK__Organisa__38BE568F02D6F5AD");
 
                 entity.Property(e => e.OrganisationId)
                     .HasMaxLength(100)
@@ -913,13 +924,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.OrganisationInvitingUser)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__Organ__6166761E");
+                    .HasConstraintName("FK__Organisat__Organ__63A3C44B");
             });
 
             modelBuilder.Entity<OrganisationInvitingUserMenuFeature>(entity =>
             {
                 entity.HasKey(e => new { e.OrganisationId, e.Email, e.MenuFeatureId })
-                    .HasName("PK__Organisa__0040F186A6A995E6");
+                    .HasName("PK__Organisa__0040F18662CF1B62");
 
                 entity.Property(e => e.OrganisationId)
                     .HasMaxLength(100)
@@ -939,7 +950,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.OrganisationInvitingUserMenuFeature)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__Organ__634EBE90");
+                    .HasConstraintName("FK__Organisat__Organ__658C0CBD");
             });
 
             modelBuilder.Entity<OrganisationInvoiceSetting>(entity =>
@@ -952,7 +963,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.OrganisationInvoiceSetting)
                     .HasForeignKey<OrganisationInvoiceSetting>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisation__Id__6442E2C9");
+                    .HasConstraintName("FK__Organisation__Id__668030F6");
             });
 
             modelBuilder.Entity<OrganisationType>(entity =>
@@ -967,7 +978,7 @@ namespace SkaiLab.Invoice.Dal.Models
             modelBuilder.Entity<OrganisationUser>(entity =>
             {
                 entity.HasKey(e => new { e.OrganisationId, e.UserId })
-                    .HasName("PK__Organisa__A35BCA1848D8BF51");
+                    .HasName("PK__Organisa__A35BCA18BBFABB03");
 
                 entity.Property(e => e.OrganisationId)
                     .HasMaxLength(100)
@@ -979,19 +990,19 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.OrganisationUser)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__Organ__65370702");
+                    .HasConstraintName("FK__Organisat__Organ__6774552F");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.OrganisationUser)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__UserI__662B2B3B");
+                    .HasConstraintName("FK__Organisat__UserI__68687968");
             });
 
             modelBuilder.Entity<OrganisationUserMenuFeature>(entity =>
             {
                 entity.HasKey(e => new { e.OrganisationId, e.UserId, e.MenuFeatureId })
-                    .HasName("PK__Organisa__9BA56D1122BDDA71");
+                    .HasName("PK__Organisa__9BA56D119B8AB7FC");
 
                 entity.Property(e => e.OrganisationId)
                     .HasMaxLength(100)
@@ -1007,19 +1018,19 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.OrganisationUserMenuFeature)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__Organ__681373AD");
+                    .HasConstraintName("FK__Organisat__Organ__6A50C1DA");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.OrganisationUserMenuFeature)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Organisat__UserI__690797E6");
+                    .HasConstraintName("FK__Organisat__UserI__6B44E613");
             });
 
             modelBuilder.Entity<PayrollEmployee>(entity =>
             {
                 entity.HasIndex(e => new { e.EmployeeId, e.PayrollMonthId })
-                    .HasName("UQ__PayrollE__B712A6542E3A6429")
+                    .HasName("UQ__PayrollE__B712A654474A0B88")
                     .IsUnique();
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
@@ -1032,13 +1043,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.PayrollEmployee)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PayrollEm__Emplo__69FBBC1F");
+                    .HasConstraintName("FK__PayrollEm__Emplo__6C390A4C");
 
                 entity.HasOne(d => d.PayrollMonth)
                     .WithMany(p => p.PayrollEmployee)
                     .HasForeignKey(d => d.PayrollMonthId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PayrollEm__Payro__6AEFE058");
+                    .HasConstraintName("FK__PayrollEm__Payro__6D2D2E85");
             });
 
             modelBuilder.Entity<PayrollEmployeeNoneTax>(entity =>
@@ -1053,7 +1064,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.PayrollEmployeeNoneTax)
                     .HasForeignKey<PayrollEmployeeNoneTax>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PayrollEmplo__Id__6BE40491");
+                    .HasConstraintName("FK__PayrollEmplo__Id__6E2152BE");
             });
 
             modelBuilder.Entity<PayrollEmployeeTax>(entity =>
@@ -1072,13 +1083,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.PayrollEmployeeTax)
                     .HasForeignKey<PayrollEmployeeTax>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PayrollEmplo__Id__6CD828CA");
+                    .HasConstraintName("FK__PayrollEmplo__Id__6F1576F7");
             });
 
             modelBuilder.Entity<PayrollMonth>(entity =>
             {
                 entity.HasIndex(e => new { e.OrganisationId, e.Month })
-                    .HasName("UQ__PayrollM__5D8A0CCBC739B4D3")
+                    .HasName("UQ__PayrollM__5D8A0CCBDF063CB8")
                     .IsUnique();
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
@@ -1100,7 +1111,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.PayrollMonth)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PayrollMo__Organ__6DCC4D03");
+                    .HasConstraintName("FK__PayrollMo__Organ__70099B30");
             });
 
             modelBuilder.Entity<PayrollMonthTaxSalary>(entity =>
@@ -1117,7 +1128,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.PayrollMonthTaxSalary)
                     .HasForeignKey<PayrollMonthTaxSalary>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PayrollMonth__Id__6EC0713C");
+                    .HasConstraintName("FK__PayrollMonth__Id__70FDBF69");
             });
 
             modelBuilder.Entity<PayrollMonthTaxSalaryRange>(entity =>
@@ -1130,13 +1141,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.PayrollMonthTaxSalaryRange)
                     .HasForeignKey(d => d.PayrollMonthTax)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PayrollMo__Payro__6FB49575");
+                    .HasConstraintName("FK__PayrollMo__Payro__71F1E3A2");
             });
 
             modelBuilder.Entity<PaywayTransactionLog>(entity =>
             {
                 entity.HasKey(e => new { e.TransactionId, e.UserPaymentId })
-                    .HasName("PK__PaywayTr__CDAC3561BE616B13");
+                    .HasName("PK__PaywayTr__CDAC35616FAA6EE0");
 
                 entity.Property(e => e.TransactionId)
                     .HasMaxLength(100)
@@ -1150,7 +1161,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.PaywayTransactionLog)
                     .HasForeignKey(d => d.UserPaymentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PaywayTra__UserP__7EC1CEDB");
+                    .HasConstraintName("FK__PaywayTra__UserP__72E607DB");
             });
 
             modelBuilder.Entity<PersistedGrants>(entity =>
@@ -1186,13 +1197,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Plan)
                     .HasForeignKey(d => d.ProjectPlanId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Plan__ProjectPla__308E3499");
+                    .HasConstraintName("FK__Plan__ProjectPla__756D6ECB");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasIndex(e => new { e.OrganisationId, e.Code })
-                    .HasName("UQ__Product__08068377B7C65DC8")
+                    .HasName("UQ__Product__08068377A44098E1")
                     .IsUnique();
 
                 entity.Property(e => e.Code).HasMaxLength(100);
@@ -1212,7 +1223,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Product__Organis__70A8B9AE");
+                    .HasConstraintName("FK__Product__Organis__74CE504D");
             });
 
             modelBuilder.Entity<ProductInventory>(entity =>
@@ -1222,32 +1233,32 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.HasOne(d => d.DefaultLocation)
                     .WithMany(p => p.ProductInventory)
                     .HasForeignKey(d => d.DefaultLocationId)
-                    .HasConstraintName("FK__ProductIn__Defau__719CDDE7");
+                    .HasConstraintName("FK__ProductIn__Defau__75C27486");
 
                 entity.HasOne(d => d.IdNavigation)
                     .WithOne(p => p.ProductInventory)
                     .HasForeignKey<ProductInventory>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductInven__Id__72910220");
+                    .HasConstraintName("FK__ProductInven__Id__76B698BF");
             });
 
             modelBuilder.Entity<ProductInventoryBalance>(entity =>
             {
                 entity.HasIndex(e => new { e.ProductId, e.LocationId })
-                    .HasName("UQ__ProductI__DA732C85CFEFEE9E")
+                    .HasName("UQ__ProductI__DA732C8563638315")
                     .IsUnique();
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.ProductInventoryBalance)
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductIn__Locat__73852659");
+                    .HasConstraintName("FK__ProductIn__Locat__77AABCF8");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductInventoryBalance)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductIn__Produ__74794A92");
+                    .HasConstraintName("FK__ProductIn__Produ__789EE131");
             });
 
             modelBuilder.Entity<ProductInventoryHistory>(entity =>
@@ -1270,13 +1281,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.ProductInventoryHistory)
                     .HasForeignKey(d => d.LocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductIn__Locat__756D6ECB");
+                    .HasConstraintName("FK__ProductIn__Locat__7993056A");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductInventoryHistory)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductIn__Produ__76619304");
+                    .HasConstraintName("FK__ProductIn__Produ__7A8729A3");
             });
 
             modelBuilder.Entity<ProductInventoryHistoryIn>(entity =>
@@ -1287,7 +1298,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.ProductInventoryHistoryIn)
                     .HasForeignKey<ProductInventoryHistoryIn>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductInven__Id__7755B73D");
+                    .HasConstraintName("FK__ProductInven__Id__7B7B4DDC");
             });
 
             modelBuilder.Entity<ProductInventoryHistoryOut>(entity =>
@@ -1298,13 +1309,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.ProductInventoryHistoryOut)
                     .HasForeignKey<ProductInventoryHistoryOut>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductInven__Id__793DFFAF");
+                    .HasConstraintName("FK__ProductInven__Id__7D63964E");
 
                 entity.HasOne(d => d.InventoryIn)
                     .WithMany(p => p.ProductInventoryHistoryOut)
                     .HasForeignKey(d => d.InventoryInId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ProductIn__Inven__7849DB76");
+                    .HasConstraintName("FK__ProductIn__Inven__7C6F7215");
             });
 
             modelBuilder.Entity<ProductPurchaseInformation>(entity =>
@@ -1366,7 +1377,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.PurchaseOrder)
                     .HasForeignKey<PurchaseOrder>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PurchaseOrde__Id__7E02B4CC");
+                    .HasConstraintName("FK__PurchaseOrde__Id__02284B6B");
             });
 
             modelBuilder.Entity<Quote>(entity =>
@@ -1430,7 +1441,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Quote)
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Quote__CurrencyI__7EF6D905");
+                    .HasConstraintName("FK__Quote__CurrencyI__031C6FA4");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Quote)
@@ -1442,13 +1453,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Quote)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Quote__Organisat__00DF2177");
+                    .HasConstraintName("FK__Quote__Organisat__0504B816");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Quote)
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Quote__StatusId__01D345B0");
+                    .HasConstraintName("FK__Quote__StatusId__05F8DC4F");
             });
 
             modelBuilder.Entity<QuoteAttachment>(entity =>
@@ -1463,7 +1474,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.QuoteAttachment)
                     .HasForeignKey(d => d.QuoteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__QuoteAtta__Quote__02C769E9");
+                    .HasConstraintName("FK__QuoteAtta__Quote__06ED0088");
             });
 
             modelBuilder.Entity<QuoteItem>(entity =>
@@ -1538,7 +1549,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Tax)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Tax__Organisatio__078C1F06");
+                    .HasConstraintName("FK__Tax__Organisatio__0BB1B5A5");
             });
 
             modelBuilder.Entity<TaxComponent>(entity =>
@@ -1551,7 +1562,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.TaxComponent)
                     .HasForeignKey(d => d.TaxId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TaxCompon__TaxId__0880433F");
+                    .HasConstraintName("FK__TaxCompon__TaxId__0CA5D9DE");
             });
 
             modelBuilder.Entity<TaxSalary>(entity =>
@@ -1591,25 +1602,25 @@ namespace SkaiLab.Invoice.Dal.Models
                 entity.HasOne(d => d.CouponCodeNavigation)
                     .WithMany(p => p.UserPayment)
                     .HasForeignKey(d => d.CouponCode)
-                    .HasConstraintName("FK__UserPayme__Coupo__6E8B6712");
+                    .HasConstraintName("FK__UserPayme__Coupo__0D99FE17");
 
                 entity.HasOne(d => d.Plan)
                     .WithMany(p => p.UserPayment)
                     .HasForeignKey(d => d.PlanId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPayme__PlanI__6D9742D9");
+                    .HasConstraintName("FK__UserPayme__PlanI__0E8E2250");
 
                 entity.HasOne(d => d.SubscriptionType)
                     .WithMany(p => p.UserPayment)
                     .HasForeignKey(d => d.SubscriptionTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPayme__Subsc__6CA31EA0");
+                    .HasConstraintName("FK__UserPayme__Subsc__0F824689");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserPayment)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPayme__UserI__6BAEFA67");
+                    .HasConstraintName("FK__UserPayme__UserI__10766AC2");
             });
 
             modelBuilder.Entity<UserPaymentInvoice>(entity =>
@@ -1628,7 +1639,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.UserPaymentInvoice)
                     .HasForeignKey<UserPaymentInvoice>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPaymentI__Id__02925FBF");
+                    .HasConstraintName("FK__UserPaymentI__Id__116A8EFB");
             });
 
             modelBuilder.Entity<UserPaymentPayWayDetail>(entity =>
@@ -1655,13 +1666,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.UserPaymentPayWayDetail)
                     .HasForeignKey<UserPaymentPayWayDetail>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPaymentP__Id__0662F0A3");
+                    .HasConstraintName("FK__UserPaymentP__Id__1352D76D");
             });
 
             modelBuilder.Entity<UserPaymentPayway>(entity =>
             {
                 entity.HasIndex(e => e.TransactionId)
-                    .HasName("UQ__UserPaym__55433A6A4A4B5286")
+                    .HasName("UQ__UserPaym__55433A6ADA373562")
                     .IsUnique();
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -1675,7 +1686,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.UserPaymentPayway)
                     .HasForeignKey<UserPaymentPayway>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPaymentP__Id__7BE56230");
+                    .HasConstraintName("FK__UserPaymentP__Id__125EB334");
             });
 
             modelBuilder.Entity<UserPlan>(entity =>
@@ -1688,25 +1699,25 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.UserPlan)
                     .HasForeignKey(d => d.PlanId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPlan__PlanId__4589517F");
+                    .HasConstraintName("FK__UserPlan__PlanId__0F2D40CE");
 
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.UserPlan)
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPlan__Projec__44952D46");
+                    .HasConstraintName("FK__UserPlan__Projec__153B1FDF");
 
                 entity.HasOne(d => d.Subcription)
                     .WithMany(p => p.UserPlan)
                     .HasForeignKey(d => d.SubcriptionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPlan__Subcri__4A4E069C");
+                    .HasConstraintName("FK__UserPlan__Subcri__162F4418");
 
                 entity.HasOne(d => d.User)
                     .WithOne(p => p.UserPlan)
                     .HasForeignKey<UserPlan>(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserPlan__UserId__43A1090D");
+                    .HasConstraintName("FK__UserPlan__UserId__17236851");
             });
 
             modelBuilder.Entity<Vendor>(entity =>
@@ -1737,7 +1748,7 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.Vendor)
                     .HasForeignKey(d => d.ContactId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Vendor__ContactI__09746778");
+                    .HasConstraintName("FK__Vendor__ContactI__18178C8A");
 
                 entity.HasOne(d => d.Currency)
                     .WithMany(p => p.Vendor)
@@ -1760,13 +1771,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithOne(p => p.VendorExpense)
                     .HasForeignKey<VendorExpense>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__VendorExpens__Id__0D44F85C");
+                    .HasConstraintName("FK__VendorExpens__Id__1AF3F935");
             });
 
             modelBuilder.Entity<WorkingOrganisation>(entity =>
             {
                 entity.HasKey(e => e.UserId)
-                    .HasName("PK__WorkingO__1788CC4CC376231C");
+                    .HasName("PK__WorkingO__1788CC4C261FF0EF");
 
                 entity.Property(e => e.OrganisationId)
                     .IsRequired()
@@ -1777,13 +1788,13 @@ namespace SkaiLab.Invoice.Dal.Models
                     .WithMany(p => p.WorkingOrganisation)
                     .HasForeignKey(d => d.OrganisationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__WorkingOr__Organ__0E391C95");
+                    .HasConstraintName("FK__WorkingOr__Organ__1BE81D6E");
 
                 entity.HasOne(d => d.User)
                     .WithOne(p => p.WorkingOrganisation)
                     .HasForeignKey<WorkingOrganisation>(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__WorkingOr__UserI__0F2D40CE");
+                    .HasConstraintName("FK__WorkingOr__UserI__1CDC41A7");
             });
 
             OnModelCreatingPartial(modelBuilder);

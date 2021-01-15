@@ -284,8 +284,8 @@ namespace SkaiLab.Invoice.Service
             {
                 throw new Exception("User already invited");
             }
-            var ownerUser = context.OrganisationUser.FirstOrDefault(u => u.OrganisationId == organisationId && u.IsOwner);
             var totalInvitedUser = context.OrganisationUser.Where(u => u.OrganisationId == organisationId).Count();
+            totalInvitedUser += context.OrganisationInvitingUser.Where(u => u.OrganisationId == organisationId).Count();
             var totalUserCanAdd = GetTotalUsersCanAssign(organisationId, context);
             if (totalInvitedUser >= totalUserCanAdd)
             {

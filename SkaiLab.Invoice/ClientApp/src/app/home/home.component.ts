@@ -30,7 +30,10 @@ export class HomeComponent extends ParentComponent implements OnInit {
   options = {
     responsive: true,
     legend: {
-      onClick: (e) => e.stopPropagation()
+      onClick: (e) => e.stopPropagation(),
+      labels:{
+        fontFamily: this.getFontName()
+      }
     },
     animation: {
       duration: 500,
@@ -63,7 +66,12 @@ export class HomeComponent extends ParentComponent implements OnInit {
       }
     }
   };
-  
+  getFontName():string{
+    if(localStorage.getItem("language")==null || localStorage.getItem("language")=="en"){
+      return 'Roboto';
+    }
+    return 'Battambang';
+  }
   constructor(private organisationService: OrganisationService, 
     private userService: UserService,
     private chartService:ChartService,
