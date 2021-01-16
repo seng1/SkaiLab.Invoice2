@@ -17,6 +17,7 @@ export class TopBarComponent extends ParentComponent  implements OnInit {
   organisations:Organisation[]=[];
   workingOrganisationId:string="";
   looping:number=0;
+  isNavExpand:boolean=false;
   constructor(private router:Router,private authorize: AuthorizeService,private userService:UserService, private modalService: NgbModal,private organisationService:OrganisationService){
     super("");
     this.workingOrganisationId=this.userService.getWorkingOrganisationId();
@@ -68,6 +69,12 @@ export class TopBarComponent extends ParentComponent  implements OnInit {
     });
   }
   menuToggleClick(){
+    this.isNavExpand=!this.isNavExpand;
+    var isExpandValue =1;
+    if(!this.isNavExpand){
+      isExpandValue=0;
+    }
+    localStorage.setItem("isNavExpand",isExpandValue.toString());
     var windowWidth = $(window).width();   		 
 		if (windowWidth<1010) { 
 			$('body').removeClass('open'); 

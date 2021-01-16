@@ -739,3 +739,6 @@ a:not([href]) :hover{
 .sub-nav-last-menu{
   top: -119px !important;
 }
+.open aside.left-panel .navbar .navbar-nav li a span{
+  display:none;
+}

@@ -42,6 +42,9 @@ export class ParentComponent {
             this.permission = result;
         });
     }
+    openFileFromUrl(fileUrl:string){
+        Utility.download_file(fileUrl);
+    }
     ShowBackButton() {
         $("#backButton").show();
     }
@@ -110,7 +113,7 @@ export class ParentComponent {
         this.showProgressBar();
         printService.print(id, reportTypeId, fileName).subscribe(result => {
             this.hideProgressBar();
-            window.open(result.result, "_blank");
+            this.openFileFromUrl(result.result);
         }, err => {
             this.handleError(err);
         })

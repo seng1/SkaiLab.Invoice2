@@ -83,6 +83,8 @@ export class LoginBarComponent implements OnInit {
   }
   onHideTrail(){
     this.userLicenseInformation.isTrail=false;
+    this.userLicenseInformation.isUserCompleteLicense=true;
+    
   }
   onHideCompleteLicense(){
     this.userLicenseInformation.isUserCompleteLicense=true;

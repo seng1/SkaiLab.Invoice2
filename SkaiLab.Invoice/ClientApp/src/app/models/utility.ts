@@ -25,11 +25,29 @@ export class Utility {
         }
         return true;
     }
+    /* Helper function */
+static download_file(fileURL) {
+    if(this.isSafari){
+        var windowReference = window.open();
+        windowReference.location = fileURL;
+    }
+    else{
+        window.open(fileURL, "_blank");
+    }
+   
+}
     static hideProgressBar():void {
         $("#preloader").hide();
     }
     static showProgressBar():void {
         $("#preloader").show();
+    }
+    static isSafari():boolean{
+        if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) 
+        {
+            return true;          
+        }
+        return false;
     }
     static getBillDateTypeFilter(): DateTypeFilter[] {
         let result: DateTypeFilter[] = [];

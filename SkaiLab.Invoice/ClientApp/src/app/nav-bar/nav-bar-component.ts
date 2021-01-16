@@ -12,6 +12,7 @@ import { MenuService } from '../service/menu-service';
 export class NavBarComponent  implements OnInit {
   menus:Menu[]=[];
   menuLoaded:boolean=false;
+  isExpand:boolean =false;
   constructor(private router:Router,private menuService:MenuService,private authorize: AuthorizeService){
 
   }
@@ -67,6 +68,14 @@ export class NavBarComponent  implements OnInit {
       return "sub-menu children dropdown-menu khmer-sub-nav-last-menu";
     }
     return "sub-menu children dropdown-menu sub-nav-last-menu";
+  }
+  showSafariNoExpand():boolean{
+    if(Utility.isSafari){
+      if(localStorage.getItem("isNavExpand")==null || localStorage.getItem('isNavExpand')=="0"){
+        return true;
+      }
+    }
+    return false;
   }
 }
 
