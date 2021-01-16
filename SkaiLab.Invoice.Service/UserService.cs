@@ -128,39 +128,39 @@ namespace SkaiLab.Invoice.Service
             {
                 context.Tax.Add(new Dal.Models.Tax
                 {
-                    Name = "អាករលើតម្លៃបន្ថែម​(១០%)/Tax (10%)",
+                    Name = "អាករលើតម្លៃបន្ថែម​(១០%)",
                     TaxComponent = new List<Dal.Models.TaxComponent>
                     {
                         new Dal.Models.TaxComponent
                         {
                             Rate=10,
-                            Name=$"អាករលើតម្លៃបន្ថែម​(១០%){Environment.NewLine}Tax (10%)"
+                            Name=$"អាករលើតម្លៃបន្ថែម​(១០%)"
                         }
                     },
                     Organisation = organisation
                 });
                 context.Tax.Add(new Dal.Models.Tax
                 {
-                    Name = "ពន្ធកាត់ទុក (១៤%)/Withholding Tax(14%)",
+                    Name = "ពន្ធកាត់ទុក (១៤%)",
                     TaxComponent = new List<Dal.Models.TaxComponent>
                     {
                         new Dal.Models.TaxComponent
                         {
                             Rate=14,
-                            Name=$"ពន្ធកាត់ទុក (១៤%){Environment.NewLine}Withholding Tax(14%)"
+                            Name=$"ពន្ធកាត់ទុក (១៤%)"
                         }
                     },
                     Organisation = organisation
                 });
                 context.Tax.Add(new Dal.Models.Tax
                 {
-                    Name = "ពន្ធកាត់ទុក (១៥%)/Withholding Tax(15%)",
+                    Name = "ពន្ធកាត់ទុក (១៥%)",
                     TaxComponent = new List<Dal.Models.TaxComponent>
                     {
                         new Dal.Models.TaxComponent
                         {
                             Rate=15,
-                            Name=$"ពន្ធកាត់ទុក (១៥%){Environment.NewLine}Withholding Tax(15%)"
+                            Name=$"ពន្ធកាត់ទុក (១៥%)"
                         }
                     },
                     Organisation = organisation

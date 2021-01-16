@@ -2,6 +2,7 @@ import { Data } from "@angular/router";
 import { DateTypeFilter } from "./date-type-filter";
 import { BillDateTypeFilterEnum, DashboardPeriodEnum, ExepnseStatusEnum, InvoiceDateTypeFilterEnum, PurchaseOrderDateTypeFilterEnum, QuoteEnum, QuoteFilterEnum } from "./enum";
 import { DashboardPeriodFilter } from "./filter";
+import $ from 'jquery';
 
 export class Utility {
     static getPurchaseDateTypeFilter(): DateTypeFilter[] {
@@ -18,11 +19,17 @@ export class Utility {
         }
         return result;
     }
-   static  isKhmer():boolean{
+    static  isKhmer():boolean{
         if(localStorage.getItem("language")==null || localStorage.getItem("language")!="km-KH"){
             return false;
         }
         return true;
+    }
+    static hideProgressBar():void {
+        $("#preloader").hide();
+    }
+    static showProgressBar():void {
+        $("#preloader").show();
     }
     static getBillDateTypeFilter(): DateTypeFilter[] {
         let result: DateTypeFilter[] = [];

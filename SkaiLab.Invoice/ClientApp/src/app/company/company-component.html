@@ -27,9 +27,9 @@
                              />
                         </div>
                         <div class="form-group" *ngIf="organisation.declareTax">
-                            <label for="bussinessRegistrationNumber">{{ 'textTranslate.legalName' | translate }}</label>
+                            <label for="bussinessRegistrationNumber">{{ 'textTranslate.businessRegistrationNumber' | translate }}</label>
                             <input type="text" class="form-control" name="bussinessRegistrationNumber"
-                            [(ngModel)]="organisation.bussinessRegistrationNumber" #legalName="ngModel"
+                            [(ngModel)]="organisation.bussinessRegistrationNumber" #bussinessRegistrationNumber="ngModel"
                              />
                         </div>
                         <div class="form-group">
@@ -66,6 +66,7 @@
                             [(ngModel)]="organisation.legalName" #legalName="ngModel"
                              />
                         </div>
+
                         <div class="form-group" *ngIf="organisation.declareTax">
                             <label for="taxNumber">{{ 'textTranslate.taxNumber' | translate }}</label>
                             <input type="text" class="form-control" name="taxNumber"

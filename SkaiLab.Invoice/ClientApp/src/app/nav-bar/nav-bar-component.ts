@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizeService } from 'src/api-authorization/authorize.service';
 import { Menu } from '../models/menu';
+import { Utility } from '../models/utility';
 import { MenuService } from '../service/menu-service';
 
 @Component({
@@ -57,6 +58,15 @@ export class NavBarComponent  implements OnInit {
       this.router.navigate([menu.routeLink])
     }
    
+  }
+  getSubMenuClass(index:number):string{
+    if(index<this.menus.length-1){
+      return "sub-menu children dropdown-menu";
+    }
+    if(Utility.isKhmer()){
+      return "sub-menu children dropdown-menu khmer-sub-nav-last-menu";
+    }
+    return "sub-menu children dropdown-menu sub-nav-last-menu";
   }
 }
 

@@ -730,3 +730,12 @@ a:not([href]) :hover{
 .data-table-padding{
   padding: 0 !important;
 }
+.open aside.left-panel .navbar .navbar-nav li.menu-item-has-children.show .sub-menu{
+  width: 200px !important;
+}
+.khmer-sub-nav-last-menu{
+  top: -145px !important;
+}
+.sub-nav-last-menu{
+  top: -119px !important;
+}

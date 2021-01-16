@@ -66,7 +66,7 @@ namespace SkaiLab.Invoice.Service
                 Id=u.Currency.Id,
                 Name=u.Currency.Name,
                 Symbole=u.Currency.Symbole,
-                ExchangeRateTexts= exchangeRates.Where(t=>t.FromCurrencyId==u.Id).Select(u=>u.ExchangeRateText).ToList(),
+                ExchangeRateTexts= exchangeRates.Where(t=>t.FromCurrencyId==u.CurrencyId).Select(u=>u.ExchangeRateText).ToList(),
                 Notes=new List<string>()
             }).ToList();
             var baseCurrency = context.OrganisationBaseCurrency.FirstOrDefault(u => u.OrganisationId == organisationId);

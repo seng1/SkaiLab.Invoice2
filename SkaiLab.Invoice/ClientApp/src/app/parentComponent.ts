@@ -25,10 +25,10 @@ export class ParentComponent {
         this.hideBackButton();
     }
     hideProgressBar() {
-        $("#preloader").hide();
+        Utility.hideProgressBar();
     }
     showProgressBar() {
-        $("#preloader").show();
+        Utility.showProgressBar();
     }
     setPageTitle(title: string) {
         $("#title").html(title);

@@ -141,14 +141,16 @@ namespace SkaiLab.Invoice.Service
                     FromCurrencyId = baseCurrency.CurrencyId,
                     ToCurrencyId = taxCurrency.CurrencyId,
                     IsAuto = false,
-                    ExchangeRate1 = organsation.OrganisationBaseCurrency.TaxExchangeRate
+                    ExchangeRate1 = organsation.OrganisationBaseCurrency.TaxExchangeRate,
+                    Organisation=newOrganisation
                 });
                 context.ExchangeRate.Add(new Dal.Models.ExchangeRate
                 {
                     FromCurrencyId = taxCurrency.CurrencyId,
                     ToCurrencyId = baseCurrency.CurrencyId,
                     IsAuto = false,
-                    ExchangeRate1 =1/ organsation.OrganisationBaseCurrency.TaxExchangeRate
+                    ExchangeRate1 =1/ organsation.OrganisationBaseCurrency.TaxExchangeRate,
+                    Organisation=newOrganisation
                 });
             }
             else
@@ -173,39 +175,39 @@ namespace SkaiLab.Invoice.Service
             {
                 context.Tax.Add(new Dal.Models.Tax
                 {
-                    Name = "អាករលើតម្លៃបន្ថែម​(១០%)/Tax (10%)",
+                    Name = "អាករលើតម្លៃបន្ថែម​(១០%)",
                     TaxComponent = new List<Dal.Models.TaxComponent>
                     {
                         new Dal.Models.TaxComponent
                         {
                             Rate=10,
-                            Name=$"អាករលើតម្លៃបន្ថែម​(១០%){Environment.NewLine}Tax (10%)"
+                            Name=$"អាករលើតម្លៃបន្ថែម​(១០%)"
                         }
                     },
                     Organisation=newOrganisation
                 });
                 context.Tax.Add(new Dal.Models.Tax
                 {
-                    Name = "ពន្ធកាត់ទុក (១៤%)/Withholding Tax(14%)",
+                    Name = "ពន្ធកាត់ទុក (១៤%)",
                     TaxComponent = new List<Dal.Models.TaxComponent>
                     {
                         new Dal.Models.TaxComponent
                         {
                             Rate=14,
-                            Name=$"ពន្ធកាត់ទុក (១៤%){Environment.NewLine}Withholding Tax(14%)"
+                            Name=$"ពន្ធកាត់ទុក (១៤%)"
                         }
                     },
                     Organisation = newOrganisation
                 });
                 context.Tax.Add(new Dal.Models.Tax
                 {
-                    Name = "ពន្ធកាត់ទុក (១៥%)/Withholding Tax(15%)",
+                    Name = "ពន្ធកាត់ទុក (១៥%)",
                     TaxComponent = new List<Dal.Models.TaxComponent>
                     {
                         new Dal.Models.TaxComponent
                         {
                             Rate=15,
-                            Name=$"ពន្ធកាត់ទុក (១៥%){Environment.NewLine}Withholding Tax(15%)"
+                            Name=$"ពន្ធកាត់ទុក (១៥%)"
                         }
                     },
                     Organisation = newOrganisation

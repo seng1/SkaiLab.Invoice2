@@ -15,7 +15,8 @@ import { OrganisationTypeService } from '../service/organisation-type-service';
 
 @Component({
     selector: 'new-company-component',
-    templateUrl: './new-company-component.html'
+    templateUrl: './new-company-component.html',
+    styleUrls: ['./new-company-component.css'],
 })
 export class NewCompanyComponent implements OnInit {
     private modalRef: NgbModalRef;
@@ -101,10 +102,12 @@ export class NewCompanyComponent implements OnInit {
         if (this.form.invalid) {
             return;
         }
+        Utility.showProgressBar();
         this.showLoading=true;
         this.organisationService.add(this.organisation).subscribe(result=>{
             this.showLoading=false;
             this.modalRef.close();
+            Utility.showProgressBar();
             if(result.code==CreateCompanyResultEnum.Success){
                 window.location.reload();
             }
@@ -122,6 +125,7 @@ export class NewCompanyComponent implements OnInit {
            
         },err=>{
             this.showLoading=false;
+            Utility.hideProgressBar();
             alert(err);
         })
     }
