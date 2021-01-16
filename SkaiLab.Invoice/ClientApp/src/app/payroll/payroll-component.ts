@@ -198,7 +198,7 @@ export class PayrollComponent extends ParentComponent implements OnInit {
         this.showProgressBar();
         this.printService.printPayslip(p.id,"Payroll" + this.filter.monthFilter.name+".pdf").subscribe(result=>{
             this.hideProgressBar();
-            window.open(result.result, "_blank");
+            this.openFileFromUrl(result.result);
         },err=>{
             this.handleError(err);
         })
@@ -211,7 +211,7 @@ export class PayrollComponent extends ParentComponent implements OnInit {
         })
         this.printService.printPayslips(this.filter.monthFilter.name,ids).subscribe(result=>{
             this.hideProgressBar();
-            window.open(result.result, "_blank");
+            this.openFileFromUrl(result.result);
         },err=>{
             this.handleError(err);
         })

@@ -3,6 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Invoice } from '../models/customer-transaction';
 import { PrintService } from '../service/print-service';
 import $ from 'jquery';
+import { Utility } from '../models/utility';
 @Component({
     selector: 'print-receipt-component',
     templateUrl: './print-receipt-component.html'
@@ -26,7 +27,7 @@ export class PrintReceiptComponent {
         this.modalRef.close();
         $("#preloader").show();
         this.printService.printReceipt(this.invoice.id,"Receipt-"+this.invoice.number,this.purpose).subscribe(result=>{
-            window.open(result.result, "_blank");
+           Utility.download_file(result.result);
             $("#preloader").hide();
         },err=>{
             $("#preloader").hide();

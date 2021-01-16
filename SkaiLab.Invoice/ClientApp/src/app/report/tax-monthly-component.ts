@@ -76,7 +76,8 @@ export class TaxMonthlyReportComponent extends ParentComponent implements OnInit
         this.showProgressBar();
         this.printService.downloadTax(this.filter.monthFilter.id).subscribe(result=>{
             this.hideProgressBar();
-            window.open(result.result, "_blank");
+            this.openFileFromUrl(result.result);
+            
         },err=>{
             this.handleError(err);
         })
