@@ -14,11 +14,11 @@
                             <span for="email">{{ 'textTranslate.email' | translate }} <span class="text-danger"> * </span></span>
                             <input type="email" class="form-control" name="email"
                                 [(ngModel)]="organisationUser.user.email"
-                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email="ngModel"
-                                [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" required />
+                                 #email="ngModel"
+                                [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" email required />
                             <div *ngIf="email.invalid" class="invalid-feedback">
                                 <div *ngIf="email.errors.required">{{ 'textTranslate.emailRequire' | translate }}</div>
-                                <div *ngIf="email.errors.pattern">{{ 'textTranslate.emailNotValid' | translate }}</div>
+                                <div *ngIf="email.errors?.email">{{ 'textTranslate.emailNotValid' | translate }}</div>
                             </div>
                         </div>
                     </div>

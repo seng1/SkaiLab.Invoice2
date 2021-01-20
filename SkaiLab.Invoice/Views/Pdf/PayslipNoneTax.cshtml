@@ -15,7 +15,14 @@
                             <img src="@Model.Organsation.LogoUrl" data-holder-rendered="true" style="width:100px;height:100px;" />
                         }
                     </div>
-                    <div style="margin-left:150px;margin-top:-100px">
+                    @{
+                        var st = "";
+                        if (!string.IsNullOrEmpty(Model.Organsation.LogoUrl))
+                        {
+                            st = "margin-left:150px;margin-top:-100px";
+                        }
+                    }
+                    <div style="@st">
                         <h2 class="name center khmer-moul">@Model.Organsation.DisplayName</h2>
                         <h2 class="name center khmer-moul"></h2>
                     </div>

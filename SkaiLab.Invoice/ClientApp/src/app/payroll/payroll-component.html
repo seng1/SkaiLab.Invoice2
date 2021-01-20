@@ -55,28 +55,50 @@
                                 <td><input type="checkbox" [(ngModel)]="p.employee.isResidentEmployee" disabled/></td> 
                                 <td >
                                      <input type="number" *ngIf="showGeneratePayroll" class="form-control" style="min-width:100px;" [(ngModel)]="p.salary" (ngModelChange)="onSalaryChange(p)"/>
-                                     <span *ngIf="!showGeneratePayroll">{{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}</span>
+                                     <span *ngIf="!showGeneratePayroll">
+                                        {{formatMoney(p.salary,payroll.currency.code)}}
+                                        </span>
                                  </td>    
                                 <td><input type="checkbox" disabled  [(ngModel)]="p.employee.isConfederationThatHosts" *ngIf="p.employee.isResidentEmployee"/><span *ngIf="!p.employee.isResidentEmployee">-</span></td>  
                                 <td><span *ngIf="p.employee.isResidentEmployee">{{p.numberOfChilds}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>      
-                                <td>{{payroll.currency.symbole}}{{p.deductSalary | number:'1.2-2'}}</td>    
-                                <td>{{payroll.currency.symbole}}{{p.salary-p.deductSalary | number:'1.2-2'}}</td>         
+                                <td>
+                                    {{formatMoney(p.deductSalary,payroll.currency.code)}}
+                                </td>    
+                                <td>
+                                    {{formatMoney(p.salary-p.deductSalary,payroll.currency.code)}}
+                                </td>         
                                 <td>
                                     <input type="number" *ngIf="p.employee.isResidentEmployee&&showGeneratePayroll"  style="min-width:100px;"  class="form-control" [(ngModel)]="p.otherBenefit" (ngModelChange)="onOtherBenefitChange(p)" />
-                                    <span *ngIf="p.employee.isResidentEmployee&&!showGeneratePayroll">{{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}</span>
+                                    <span *ngIf="p.employee.isResidentEmployee&&!showGeneratePayroll">
+                                        {{formatMoney(p.otherBenefit,payroll.currency.code)}}
+                                    </span>
                                     <span *ngIf="!p.employee.isResidentEmployee">-</span>
                                 </td>    
-                                <td><span *ngIf="p.employee.isResidentEmployee">{{payroll.currency.symbole}}{{p.otherBenefitTaxDeduct | number:'1.2-2'}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>           
-                                <td>{{payroll.currency.symbole}}{{getTotalNet(p) | number:'1.2-2'}}</td>         
-                                <td>{{payroll.currency.symbole}}{{getTotalTax(p) | number:'1.2-2'}}</td> 
-                                <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalNet(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
-                                <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalTax(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
-                                <td>{{payroll.currency.symbole}}{{getTotalNet(p)+getTotalTax(p) | number:'1.2-2'}}</td>  
+                                <td><span *ngIf="p.employee.isResidentEmployee">
+                                    {{formatMoney(p.otherBenefitTaxDeduct,payroll.currency.code)}}
+                                </span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>           
+                                <td>
+                                    {{formatMoney(getTotalNet(p),payroll.currency.code)}}
+                                </td>         
+                                <td>
+                                    {{formatMoney(getTotalTax(p),payroll.currency.code)}}
+                                </td> 
+                                <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">
+                                    {{formatMoney(getTotalNet(p)*payroll.exchangeRate,payroll.taxCurrency.code)}}
+                                    </td> 
+                                <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">
+                                    {{formatMoney(getTotalTax(p)*payroll.exchangeRate,payroll.taxCurrency.code)}}
+                                  </td> 
+                                <td>
+                                    {{formatMoney(getTotalNet(p)+getTotalTax(p),payroll.currency.code)}}
+                                </td>  
                                 <td *ngIf="payroll.id!=0">   <button type="button" class="btn btn-primary" (click)="onGenerateEmployeePaySlip(p)" > <i class="fa fa-download"></i></button></td>
                             </tr>
                             <tr class="bold">
                                 <td [attr.colspan]="getTotalColSpan()" class="rigth">{{ 'textTranslate.total' | translate }}:</td>
-                                <td>{{payroll.currency.symbole}}{{getTotalExpense() | number:'1.2-2'}}</td>
+                                <td>
+                                    {{formatMoney(getTotalExpense(),payroll.currency.code)}}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -108,26 +130,49 @@
                                 <tr *ngFor="let p of payroll.payrolls">
                                     <td>{{p.employee.displayName}}</td>     
                                     <td><span *ngIf="p.employee.isResidentEmployee">Yes</span><span *ngIf="!p.employee.isResidentEmployee">No</span>  </td> 
-                                    <td>{{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}</td>  
+                                    <td>
+                                        {{formatMoney(p.salary,payroll.currency.code)}}
+                                       </td>  
                                     <td>
                                         <span *ngIf="p.employee.isConfederationThatHosts && p.employee.isResidentEmployee">Yes</span>
                                         <span *ngIf="!p.employee.isConfederationThatHosts && p.employee.isResidentEmployee">No</span> 
                                         <span *ngIf="!p.employee.isResidentEmployee" class="center">-</span>
                                      </td> 
                                     <td><span *ngIf="p.employee.isResidentEmployee">{{p.numberOfChilds}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>      
-                                    <td>{{payroll.currency.symbole}}{{p.deductSalary | number:'1.2-2'}}</td>    
-                                    <td>{{payroll.currency.symbole}}{{p.salary-p.deductSalary | number:'1.2-2'}}</td>         
-                                    <td> <span *ngIf="p.employee.isResidentEmployee">{{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span></td>           
-                                    <td><span *ngIf="p.employee.isResidentEmployee">{{payroll.currency.symbole}}{{p.otherBenefitTaxDeduct | number:'1.2-2'}}</span><span *ngIf="!p.employee.isResidentEmployee"  class="center">-</span></td>           
-                                    <td>{{payroll.currency.symbole}}{{getTotalNet(p) | number:'1.2-2'}}</td>         
-                                    <td>{{payroll.currency.symbole}}{{getTotalTax(p) | number:'1.2-2'}}</td> 
-                                    <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalNet(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
-                                    <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">{{getTotalTax(p)*payroll.exchangeRate | number:'1.2-2'}}{{payroll.taxCurrency.symbole}}</td> 
-                                    <td>{{payroll.currency.symbole}}{{getTotalNet(p)+getTotalTax(p) | number:'1.2-2'}}</td>  
+                                    <td>
+                                        {{formatMoney(p.deductSalary,payroll.currency.code)}}
+                                    </td>    
+                                    <td>
+                                        {{formatMoney(p.salary-p.deductSalary,payroll.currency.code)}}
+                                    </td>         
+                                    <td> <span *ngIf="p.employee.isResidentEmployee">
+                                        {{formatMoney(p.otherBenefit,payroll.currency.code)}}</span><span *ngIf="!p.employee.isResidentEmployee">-</span>
+                                    </td>           
+                                    <td><span *ngIf="p.employee.isResidentEmployee">
+                                        {{formatMoney(p.otherBenefitTaxDeduct,payroll.currency.code)}}
+                                    </span><span *ngIf="!p.employee.isResidentEmployee"  class="center">-</span></td>           
+                                    <td>
+                                        {{formatMoney(getTotalNet(p),payroll.currency.code)}}
+                                    </td>         
+                                    <td>
+                                        {{formatMoney(getTotalTax(p),payroll.currency.code)}}
+                                    </td> 
+                                    <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">
+                                       
+                                        {{formatMoney(getTotalNet(p)*payroll.exchangeRate,payroll.taxCurrency.code)}}
+                                    </td> 
+                                    <td *ngIf="payroll.currency.id!=payroll.taxCurrency.id">
+                                        {{formatMoney(getTotalTax(p)*payroll.exchangeRate,payroll.taxCurrency.code)}}
+                                      </td> 
+                                    <td>
+                                        {{formatMoney(getTotalNet(p)+getTotalTax(p),payroll.currency.code)}}
+                                    </td>  
                                 </tr>
                                 <tr class="bold">
                                     <td [attr.colspan]="getTotalColSpan()" class="rigth">{{ 'textTranslate.total' | translate }}:</td>
-                                    <td>{{payroll.currency.symbole}}{{getTotalExpense() | number:'1.2-2'}}</td>
+                                    <td>
+                                        {{formatMoney(getTotalExpense(),payroll.currency.code)}}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

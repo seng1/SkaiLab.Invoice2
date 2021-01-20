@@ -79,15 +79,21 @@
                     <div class="col-md-3 col-sm-12">
                         <div class="form-group">
                             <label for="email1">{{ 'textTranslate.email' | translate }}</label>
-                            <input type="email" class="form-control" name="email1" [(ngModel)]="vendor.contact.email" #email1="ngModel"
+                            <input type="email" [ngClass]="{ 'is-invalid': f.submitted && email1.invalid }" class="form-control" name="email1" [(ngModel)]="vendor.contact.email" #email1="ngModel" email
                              />
+                             <div *ngIf="email1.invalid" class="invalid-feedback">
+                                <div *ngIf="email1.errors?.email">{{ 'textTranslate.emailNotValid' | translate }}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-12">
                         <div class="form-group">
                             <label for="website1">{{ 'textTranslate.website' | translate }}</label>
-                            <input type="text" class="form-control" name="website1" [(ngModel)]="vendor.contact.website" #website1="ngModel"
+                            <input type="text"  [ngClass]="{ 'is-invalid': f.submitted && website1.invalid }" class="form-control" url name="website1" [(ngModel)]="vendor.contact.website" #website1="ngModel"
                              />
+                             <div *ngIf="website1.invalid" class="invalid-feedback">
+                                <div *ngIf="website1.errors?.url">{{ 'textTranslate.websiteNotValid' | translate }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>

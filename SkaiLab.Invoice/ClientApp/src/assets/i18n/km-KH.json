@@ -291,6 +291,8 @@
 		"payMonthly":"បង់ប្រចាំខែ",
 		"payYearly":"បង់ប្រចាំឆ្នាំ",
 		"year":"ឆ្នាំ",
-		"saveMoneyPlan":"ចំនេញ"
+		"saveMoneyPlan":"ចំនេញ",
+		"thisFieldMustGreaterOrEqualZero":"តម្លៃនេះត្រូវតែ>=០",
+		"websiteNotValid":"គេហទំព័រមិនត្រឹមត្រូវតាមទម្រង់ទេ"
 	}
 }

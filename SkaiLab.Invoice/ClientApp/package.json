@@ -45,6 +45,7 @@
     "jspdf": "^2.1.1",
     "ng-multiselect-dropdown": "^0.2.10",
     "ng2-charts": "^2.4.2",
+    "ng2-validation": "^4.2.0",
     "ngx-select-dropdown": "^1.4.4",
     "normalize.css": "^8.0.1",
     "oidc-client": "^1.9.1",

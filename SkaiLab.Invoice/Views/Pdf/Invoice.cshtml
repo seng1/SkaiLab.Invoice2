@@ -17,7 +17,14 @@
                             <img src="@Model.Organisation.LogoUrl" data-holder-rendered="true" style="width:100px;height:100px;" />
                         }
                     </div>
-                    <div style="margin-left:150px;margin-top:-100px">
+                    @{
+                        var st = "";
+                        if (!string.IsNullOrEmpty(Model.Organisation.LogoUrl))
+                        {
+                            st = "margin-left:150px;margin-top:-100px";
+                        }
+                    }
+                    <div style="@st">
                         @if (isTax && (!string.IsNullOrEmpty(Model.Organisation.LegalName) || !string.IsNullOrEmpty(Model.Organisation.LegalLocalName)))
                         {
                             if (!string.IsNullOrEmpty(Model.Organisation.LegalLocalName))
@@ -156,8 +163,7 @@
                         </table>
                     </td>
                     <td style="text-align:right">
-
-                        <h2 class="invoice-id">@Model.Number</h2>
+                        <div class="date">លេខ​វិ​ក័​យ​ប័ត្រ/Invoice No: @Model.Number</div>
                         <div class="date">កាលបរិច្ឆេទ/Date: @Model.Date.ToString("dd/MM/yyyy")</div>
                     </td>
                 </tr>
@@ -212,8 +218,12 @@
                                 </td>
                                 <td class="text-left">
                                     @quoteItem.Product.ProductSaleInformation.Title
-                                    <br />
-                                    @quoteItem.Product.ProductSaleInformation.Description
+                                    @if (!string.IsNullOrEmpty(quoteItem.Product.ProductSaleInformation.Description))
+                                    {
+                                        <br /><span style="font-size:8px"> @quoteItem.Product.ProductSaleInformation.Description</span>
+                                    }
+                                    
+                            
                                 </td>
                                 <td class="text-center">
                                     @quoteItem.Quantity
@@ -277,7 +287,7 @@
                             <td colspan="@totalColSpan" rowspan="@totalRow" class="no-border">
                                 <div style="white-space:pre-wrap;text-align:left">@Model.TermAndCondition</div>
                             </td>
-                            <td colspan="2">សរុបរង</td>
+                            <td colspan="2">សរុប</td>
                             <td>@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.Total, @Model.Currency.Symbole)</td>
                         </tr>
                         foreach (var d in dic)
@@ -290,7 +300,7 @@
                         }
 
                         <tr>
-                            <td colspan="2">សរុប</td>
+                            <td colspan="2">សរុបរូម</td>
                             <td> @SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.TotalIncludeTax, @Model.Currency.Symbole)</td>
                         </tr>
                         @if (Model.CustomerTransactionItems.Any(t => t.Tax != null) && Model.CurrencyId != Model.Organisation.TaxCurrency.Id)

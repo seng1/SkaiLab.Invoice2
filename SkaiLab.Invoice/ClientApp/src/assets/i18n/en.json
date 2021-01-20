@@ -291,7 +291,10 @@
 		"payMonthly":"Pay monthly",
 		"payYearly":"Pay yearly",
 		"year":"year",
-		"saveMoneyPlan":"save"
+		"saveMoneyPlan":"save",
+		"thisFieldMustGreaterOrEqualZero":"This field must >=0",
+		"websiteNotValid":"Website is not valid format"
+		
 		
 	}
 }

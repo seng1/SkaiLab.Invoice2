@@ -14,7 +14,7 @@
                 <button type="submit" *ngIf="allowSave()" (click)="onSave(false)" class="btn btn-primary">{{ 'textTranslate.save' | translate }}</button>
                 <button type="submit" *ngIf="allowSave()" (click)="onSave(true)" class="btn btn-primary">{{ 'textTranslate.saveAndPrint' | translate }}</button>
                 <button type="submit" class="btn btn-primary" (click)="onPrintReceipt()" *ngIf="!allowSave()">{{ 'textTranslate.printReceipt' | translate }}</button>
-                <button type="submit" *ngIf="!allowSave()" (click)="print()" class="btn btn-primary">{{ 'textTranslate.print' | translate }}</button>
+                <button type="submit" *ngIf="!allowSave()" (click)="onPrint()" class="btn btn-primary">{{ 'textTranslate.print' | translate }}</button>
                 <a href="javascript:history.back()" class="btn btn-secondary">{{ 'textTranslate.cancel' | translate }}</a>
             </div>
         </div>
@@ -173,8 +173,9 @@
                                         
                                     </div>
                                 </td>
-                                <td class="small-font  text-table-padding">{{ orderItem.lineTotal | number:'1.2-2' }}
-                                    {{invoice.currency.symbole}}</td>
+                                <td class="small-font  text-table-padding">
+                                    {{formatMoney(orderItem.lineTotal,invoice.currency.code)}}
+                                </td>
                                 <td class="small-font  text-table-padding"> <span class="pointer" (click)="onRemvoePurchaseOrderItem(orderItem)"><i
                                             class="fa fa-times"></i></span></td>
                             </tr>
@@ -183,8 +184,9 @@
                             <tr *ngFor="let subTotal of subTotals">
                                 <td  [attr.colspan]="getSubTotalColSpan()" style="text-align: right;" class="small-font">{{subTotal.label}}
                                 </td>
-                                <td class="small-font">{{ subTotal.amount | number:'1.2-2' }}
-                                    {{subTotal.currency.symbole}}</td>
+                                <td class="small-font">
+                                    {{formatMoney(subTotal.amount,subTotal.currency.code)}}
+                                </td>
                             </tr>
                         </tfoot>
                     </table>

@@ -1,5 +1,5 @@
 @media (min-width: 576px){
     .modal-dialog {
-      max-width: 95% !important;
+      max-width: 100% !important;
   }
 }

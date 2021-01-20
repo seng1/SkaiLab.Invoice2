@@ -52,8 +52,11 @@
                     <div class="col-md-4 col-sm-12">
                         <div class="form-group">
                             <label for="email">{{ 'textTranslate.email' | translate }}</label>
-                            <input type="text" class="form-control" name="email" [(ngModel)]="employee.email"
-                                #email="ngModel"  />
+                            <input type="email" class="form-control" name="email" [(ngModel)]="employee.email" 
+                                #email="ngModel" [ngClass]="{ 'is-invalid': f.submitted && email.invalid }" email/>
+                                <div *ngIf="email.invalid" class="invalid-feedback">
+                                    <div *ngIf="email.errors?.email">{{ 'textTranslate.emailNotValid' | translate }}</div>
+                                </div>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-12">
@@ -94,10 +97,11 @@
                     <div class="col-md-4 col-sm-12">
                         <div class="form-group">
                             <label for="salary">{{ 'textTranslate.salary' | translate }}<span class="text-danger"> * </span></label>
-                            <input type="number" class="form-control" name="salary" [(ngModel)]="employee.salary"
+                            <input type="number" class="form-control" name="salary" [(ngModel)]="employee.salary" [min]="0" 
                                 #salary="ngModel" [ngClass]="{ 'is-invalid': f.submitted && salary.invalid }"  required/>
                                 <div *ngIf="salary.invalid" class="invalid-feedback">
                                     <div *ngIf="salary.errors.required">{{ 'textTranslate.salaryRequire' | translate }}</div>
+                                    <div *ngIf="salary.errors?.min">{{ 'textTranslate.thisFieldMustGreaterOrEqualZero' | translate }}</div>
                                 </div>
                         </div>
                     </div>
@@ -122,9 +126,10 @@
                         <div class="form-group">
                             <label for="numberOfChild">{{ 'textTranslate.numberOfChild' | translate }}<span class="text-danger"> * </span></label>
                             <input type="number" class="form-control" name="numberOfChild" [ngClass]="{ 'is-invalid': f.submitted && numberOfChild.invalid }"  [(ngModel)]="employee.numberOfChild"
-                                #numberOfChild="ngModel"  required/>
+                                #numberOfChild="ngModel"  [min]="0"  required/>
                                 <div *ngIf="numberOfChild.invalid" class="invalid-feedback">
                                     <div *ngIf="numberOfChild.errors.required">{{ 'textTranslate.numberOfChildRequire' | translate }}</div>
+                                    <div *ngIf="numberOfChild.errors?.min">{{ 'textTranslate.thisFieldMustGreaterOrEqualZero' | translate }}</div>
                                 </div>
 
                         </div>

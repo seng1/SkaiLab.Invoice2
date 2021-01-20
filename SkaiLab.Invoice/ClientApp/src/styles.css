@@ -734,10 +734,10 @@ a:not([href]) :hover{
   width: 200px !important;
 }
 .khmer-sub-nav-last-menu{
-  top: -145px !important;
+  top: -160px !important;
 }
 .sub-nav-last-menu{
-  top: -119px !important;
+  top: -180px !important;
 }
 .open aside.left-panel .navbar .navbar-nav li a span{
   display:none;

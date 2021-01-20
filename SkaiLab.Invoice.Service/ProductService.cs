@@ -182,8 +182,8 @@ namespace SkaiLab.Invoice.Service
                     ProductPurchaseInformation=new ProductSalePurchaseDetail
                     {
                         Description = u.ProductPurchaseInformation.Description,
-                        Price = u.ProductSaleInformation.Price,
-                        TaxId = u.ProductSaleInformation.TaxId,
+                        Price = u.ProductPurchaseInformation.Price,
+                        TaxId = u.ProductPurchaseInformation.TaxId,
                         Title=u.ProductPurchaseInformation.Title
                     },
                     TrackInventory=u.ProductInventory!=null,

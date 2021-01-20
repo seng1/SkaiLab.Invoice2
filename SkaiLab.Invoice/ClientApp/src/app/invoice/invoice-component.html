@@ -58,14 +58,13 @@
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-md-8 col-sm-12">
                     <button type="submit" class="btn btn-primary btn-sm" (click)="onPrint()" *ngIf="showPrintButton()">{{ 'textTranslate.print' | translate }}</button>
-                    <button type="submit" class="btn btn-primary btn-sm" *ngIf="showPayButton()" (click)="pay()">{{ 'textTranslate.print' | translate }}</button>
+                    <button type="submit" class="btn btn-primary btn-sm" *ngIf="showPayButton()" (click)="pay()">{{ 'textTranslate.pay' | translate }}</button>
                     <button type="submit" class="btn btn-primary btn-sm" (click)="onPrintReceipt()" *ngIf="showPrintReceiptButton()">{{ 'textTranslate.printReceipt' | translate }}</button>
                 </div>
                 <div class="col-md-4 col-sm-12" *ngIf="getTotalSelectedItems()>0">
                     <div style="float: right;">
-                        {{getTotalSelectedItems()}} items, {{getTotalSelectedAmount() | number:'1.2-2'}}{{baseCurrency.symbole}}
+                        {{getTotalSelectedItems()}} items,  {{formatMoney(getTotalSelectedAmount(),baseCurrency.code)}}
                     </div>
-                  
                 </div>
             </div>
             <div class=" table-responsive">
@@ -97,7 +96,9 @@
                            <td>{{invoice.date | date:'d/M/yyyy'}}</td>
                            <td>{{invoice.dueDate | date:'d/M/yyyy'}}</td>
                            <td *ngIf="filter.statusId==0">{{invoice.status.name}}</td>
-                           <td>{{invoice.totalIncludeTax | number:'1.2-2'}} {{invoice.currency.symbole}}</td>
+                           <td>
+                            {{formatMoney(invoice.totalIncludeTax,invoice.currency.code)}}
+                           </td>
                         </tr>
                     </tbody>
                     <tfoot>

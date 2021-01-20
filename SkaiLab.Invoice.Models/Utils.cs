@@ -15,11 +15,7 @@ namespace SkaiLab.Invoice.Models
     {
         public static string FormatCurrency(decimal price,string currencySymble)
         {
-            if(currencySymble== "៛")
-            {
-                return String.Format("{0:#,##0}", price)+ currencySymble;
-            }
-            return String.Format("{0:#,##0.00}", price)+ currencySymble;
+            return $"{price:#,##0.00} {currencySymble}";
         }
 
         public static DateTime? RessetFilterFromDate(DateTime? fromDate)

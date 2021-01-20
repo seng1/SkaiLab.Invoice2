@@ -17,7 +17,14 @@
                             <img src="@Model.Organisation.LogoUrl" data-holder-rendered="true" style="width:100px;height:100px;" />
                         }
                     </div>
-                    <div style="margin-left:150px;margin-top:-100px">
+                    @{ 
+                        var st = "";
+                        if (!string.IsNullOrEmpty(Model.Organisation.LogoUrl))
+                        {
+                            st = "margin-left:150px;margin-top:-100px";
+                        }
+                    }
+                    <div style="@st">
                         @if (isTax && (!string.IsNullOrEmpty(Model.Organisation.LegalName) || !string.IsNullOrEmpty(Model.Organisation.LegalLocalName)))
                         {
                             if (!string.IsNullOrEmpty(Model.Organisation.LegalLocalName))
@@ -199,8 +206,10 @@
                                     </td>
                                     <td class="text-left">
                                         @quoteItem.Product.ProductSaleInformation.Title
-                                        <br />
-                                        @quoteItem.Product.ProductSaleInformation.Description
+                                        @if (!string.IsNullOrEmpty(quoteItem.Product.ProductSaleInformation.Description))
+                                        {
+                                            <br /><span style="font-size:8px"> @quoteItem.Product.ProductSaleInformation.Description</span>
+                                        }
                                     </td>
                                     <td class="text-center">
                                         @quoteItem.Quantity
@@ -228,10 +237,10 @@
                     <tfoot>
                         @{
                             int totalRow = 2;
-                            int colSpan = 1;
+                            int colSpan = 4;
                             if (!Model.QuoteItems.Any(t => t.DiscountRate != null))
                             {
-                                colSpan = 2;
+                                colSpan = 3;
                             }
                             var dic = new Dictionary<string, decimal>();
                             @if (Model.QuoteItems.Any(t => t.Tax != null))
@@ -259,33 +268,33 @@
 
                             }
                             <tr>
-                                <td colspan="3" rowspan="@totalRow" class="no-border">
+                                <td colspan="@colSpan" rowspan="@totalRow" class="no-border">
                                     <div style="white-space:pre-wrap;text-align:left">@Model.TermAndCondition</div>
                                 </td>
-                                <td colspan="@colSpan">សរុបរង</td>
+                                <td >សរុប</td>
                                 <td>@SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.Total, @Model.Currency.Symbole)</td>
                             </tr>
                             foreach (var d in dic)
                             {
                                 <tr>
-
-                                    <td colspan="@colSpan">@d.Key</td>
+                                    <td >@d.Key</td>
                                     <td> @SkaiLab.Invoice.Models.Utils.FormatCurrency(d.Value, @Model.Currency.Symbole)</td>
                                 </tr>
                             }
 
                             <tr>
-                                <td colspan="@colSpan">សរុប</td>
+                                
+                                <td>សរុបរូម</td>
                                 <td> @SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.TotalIncludeTax, @Model.Currency.Symbole)</td>
                             </tr>
                             @if (Model.QuoteItems.Any(t => t.Tax != null) && Model.CurrencyId != Model.Organisation.TaxCurrency.Id)
                             {
                                 <tr>
-                                    <td colspan="@colSpan">អត្រាប្តូរប្រាក់</td>
+                                    <td >អត្រាប្តូរប្រាក់</td>
                                     <td> @SkaiLab.Invoice.Models.Utils.FormatCurrency(@Model.TaxCurrencyExchangeRate.Value, @Model.Organisation.TaxCurrency.Symbole)</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="@colSpan">សរុបរៀល</td>
+                                    <td >សរុបរៀល</td>
                                     <td>
                                         @{
                                             var total = Model.TaxCurrencyExchangeRate * Model.TotalIncludeTax;

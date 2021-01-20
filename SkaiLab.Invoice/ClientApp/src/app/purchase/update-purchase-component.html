@@ -214,8 +214,9 @@
                                             {{ c.name }}</option>
                                     </select>
                                 </td>
-                                <td class="small-font text-table-padding">{{ orderItem.lineTotal | number:'1.2-2' }}
-                                    {{purchaseOrder.currency.symbole}}</td>
+                                <td class="small-font text-table-padding">
+                                    {{formatMoney(orderItem.lineTotal,purchaseOrder.currency.code)}}
+                                </td>
                                 <td class="small-font text-table-padding" *ngIf="!isDisable()"> <span class="pointer"
                                         (click)="onRemvoePurchaseOrderItem(orderItem)"><i
                                             class="fa fa-times"></i></span></td>
@@ -226,8 +227,7 @@
                                 <td [attr.colspan]="getSubTotalColSpan()" style="text-align: right;" class="small-font">
                                     {{subTotal.label}}
                                 </td>
-                                <td class="small-font">{{ subTotal.amount | number:'1.2-2' }}
-                                    {{subTotal.currency.symbole}}</td>
+                                <td class="small-font">{{formatMoney(subTotal.amount,subTotal.currency.code)}}</td>
                             </tr>
                         </tfoot>
                     </table>

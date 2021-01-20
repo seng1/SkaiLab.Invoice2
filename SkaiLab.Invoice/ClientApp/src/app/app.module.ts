@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CustomFormsModule } from 'ng2-validation'
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NavBarComponent } from './nav-bar/nav-bar-component';
@@ -122,6 +122,7 @@ import { GlobaltranslateService } from './service/global-translate-service';
 import { LicenseExpireModalComponent } from './modal/license-expire-component';
 import { BuyLicenseModalComponent } from './modal/buy-license-component';
 import { PlanService } from './service/planservice';
+import { LoadingStaticPositionComponent } from './loading/loading-static-position-component';
 
 @NgModule({
   declarations: [
@@ -196,12 +197,15 @@ import { PlanService } from './service/planservice';
     LoginBarComponent,
     MyProfileComponent,
     LicenseExpireModalComponent,
-    BuyLicenseModalComponent
+    BuyLicenseModalComponent,
+    LoadingStaticPositionComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
+    CustomFormsModule,
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,

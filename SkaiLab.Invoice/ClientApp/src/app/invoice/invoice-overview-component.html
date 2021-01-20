@@ -16,7 +16,7 @@
             <a [routerLink]='["/quote"]'>{{ 'textTranslate.quotes' | translate }}</a>
             <div class="row" *ngIf="quoteOverviews.length==0">
                 <div class="col-md-12 col-sm-12">
-                    <loading-component ></loading-component>
+                    <loading-static-position-component></loading-static-position-component>
                 </div>
             </div>
             <div class="row">
@@ -46,7 +46,7 @@
             <a [routerLink]='["/invoice"]'>{{ 'textTranslate.invoices' | translate }}</a>
             <div class="row" *ngIf="invoiceOverviews.length==0">
                 <div class="col-md-12 col-sm-12">
-                    <loading-component ></loading-component>
+                    <loading-static-position-component ></loading-static-position-component>
                 </div>
             </div>
             <div class="row">

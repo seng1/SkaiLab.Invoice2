@@ -38,14 +38,18 @@
                                 <td>{{p.employee.displayName}}</td>     
                                 <td >
                                      <input type="number" *ngIf="showGeneratePayroll" class="form-control" style="min-width:100px;" [(ngModel)]="p.salary" />
-                                     <span *ngIf="!showGeneratePayroll">{{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}</span>
+                                     <span *ngIf="!showGeneratePayroll">
+                                        {{formatMoney(p.salary,payroll.currency.code)}}
+                                        </span>
                                  </td>    
                                  <td>
                                     <input type="number" *ngIf="showGeneratePayroll" class="form-control" style="min-width:100px;" [(ngModel)]="p.otherBenefit" />
-                                    <span *ngIf="!showGeneratePayroll">{{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}</span>
+                                    <span *ngIf="!showGeneratePayroll">
+                                        {{formatMoney(p.otherBenefit,payroll.currency.code)}}
+                                    </span>
                                  </td>
                                  <td>
-                                    {{payroll.currency.symbole}}{{getPayrollTotal(p) | number:'1.2-2'}}
+                                    {{formatMoney(getPayrollTotal(p),payroll.currency.code)}}
                                  </td>
                                  <td *ngIf="payroll.id!=0">   <button type="button" class="btn btn-primary" (click)="onGenerateEmployeePaySlip(p)" > <i class="fa fa-download"></i></button></td>
                             </tr>
@@ -53,7 +57,9 @@
                                 <td colspan="3" class="rigth">
                                     {{ 'textTranslate.total' | translate }}: 
                                 </td>
-                                <td>{{payroll.currency.symbole}}{{getTotal() | number:'1.2-2'}}</td>
+                                <td>
+                                    {{formatMoney(getTotal(),payroll.currency.code)}}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -75,20 +81,24 @@
                                 <tr *ngFor="let p of payroll.payrolls">
                                     <td>{{p.employee.displayName}}</td>     
                                     <td >
-                                        {{payroll.currency.symbole}}{{p.salary | number:'1.2-2'}}
+                                        {{formatMoney(p.salary,payroll.currency.code)}}
+                                      
                                      </td>    
                                      <td>
-                                        {{payroll.currency.symbole}}{{p.otherBenefit | number:'1.2-2'}}
+                                        {{formatMoney(p.otherBenefit,payroll.currency.code)}}
+                                       
                                      </td>
                                      <td>
-                                        {{payroll.currency.symbole}}{{getPayrollTotal(p) | number:'1.2-2'}}
+                                        {{formatMoney(getPayrollTotal(p),payroll.currency.code)}}
                                      </td>
                                 </tr>
                                 <tr class="bold">
                                     <td colspan="3" class="rigth">
                                         {{ 'textTranslate.total' | translate }}:
                                     </td>
-                                    <td>{{payroll.currency.symbole}}{{getTotal() | number:'1.2-2'}}</td>
+                                    <td>
+                                        {{formatMoney(getTotal(),payroll.currency.code)}}
+                                       </td>
                                 </tr>
                             </tbody>
                         </table>

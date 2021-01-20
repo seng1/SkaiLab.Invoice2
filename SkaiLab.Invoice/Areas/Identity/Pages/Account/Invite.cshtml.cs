@@ -52,7 +52,7 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
                 return Redirect(Utils.ReturnToError(Url, HttpContext, "The Url is not valid or already expire."));
             }
             var userdb =await userManager.FindByEmailAsync(OrganisationUser.User.Email);
-            if (userdb != null)
+            if (userdb != null && OrganisationUser !=null && OrganisationUser.User!=null)
             {
                 organisationUserService.ConfirmationInvitation(OrganisationUser.OrganisationId, OrganisationUser.User.Email);
                 return RedirectToPage("Login");
@@ -71,7 +71,7 @@ namespace SkaiLab.Invoice.Areas.Identity.Pages.Account
             OrganisationUser = organisationUserService.GetOrganisationUser(token);
             if (ModelState.IsValid)
             {
-                await  organisationUserService.ConfirmationInvitationAsync(OrganisationUser.OrganisationId, OrganisationUser.User.Email, Input.Password,userManager,Input.PhoneNumber);
+                await organisationUserService.ConfirmationInvitationAsync(OrganisationUser.OrganisationId, OrganisationUser.User.Email, Input.Password, userManager, Input.PhoneNumber);
                 return RedirectToPage("Login");
             }
             if (!ModelState.IsValid)

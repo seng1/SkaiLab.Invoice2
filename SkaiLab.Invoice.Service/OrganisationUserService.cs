@@ -59,6 +59,7 @@ namespace SkaiLab.Invoice.Service
             var organisationUser = context.OrganisationInvitingUser.FirstOrDefault(u => u.OrganisationId == organisationId && u.Email.ToLower() == email.ToLower());
             var user = new ApplicationUser { UserName = email, Email = email };
             var result = await userManager.CreateAsync(user, password);
+            user =await userManager.FindByEmailAsync(user.Email);
             var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
             await userManager.ConfirmEmailAsync(user, code);
             await userManager.AddClaimsAsync(user, new List<Claim>
@@ -396,8 +397,9 @@ namespace SkaiLab.Invoice.Service
             inviteUser.Token = Guid.NewGuid().ToString();
             context.SaveChanges();
             var userName = context.AspNetUserClaims.FirstOrDefault(u => u.UserId == userId && u.ClaimType == ClaimTypes.Name).ClaimValue;
+            var invitingUser = context.OrganisationInvitingUser.FirstOrDefault(u => u.Email == email && u.OrganisationId == organisationId);
             var organisation = context.Organisation.FirstOrDefault(u => u.Id == organisationId).DisplayName;
-            webUrl += "/Identity/Account/Invite?token=" + inviteUser.Token+"&name="+userName;
+            webUrl += "/Identity/Account/Invite?token=" + inviteUser.Token+"&name="+ invitingUser.DisplayName;
             string subject = $"{userName} អញ្ជើញអ្នកចូលរួមប្រើ Skai Account របស់ក្រុមហ៊ុន {organisation}({userName} invite to join  Skai Account for company {organisation})";
             string body = $"You have invite to join Skai Account for company {organisation}. Please click <a href='{webUrl}'>here</a>​ to join.";
             string bodyKh = $"អ្នកបានអញ្ជើញឱ្យចូលរួម Skai Account សម្រាប់ក្រុមហ៊ុន {organisation}។ សូមចុច <a href='{webUrl}'>ត្រង់នេះ</a>​ ដើម្បីចូលរួម។";

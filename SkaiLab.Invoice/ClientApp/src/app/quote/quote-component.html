@@ -67,7 +67,7 @@
                         </div>
                         <div class="col-md-4 col-sm-12" *ngIf="getTotalSelectedItems()>0">
                             <div style="float: right;">
-                                {{getTotalSelectedItems()}} items, {{getTotalSelectedAmount() | number:'1.2-2'}}{{baseCurrency.symbole}}
+                                {{getTotalSelectedItems()}} items,{{formatMoney(getTotalSelectedAmount(),baseCurrency.code)}}
                             </div>
                           
                         </div>
@@ -103,7 +103,7 @@
                            <td>{{quote.date | date:'d/M/yyyy'}}</td>
                            <td>{{quote.expireDate | date:'d/M/yyyy'}}</td>
                            <td *ngIf="filter.statusId==0">{{quote.status.name}}</td>
-                           <td>{{quote.totalIncludeTax | number:'1.2-2'}} {{quote.currency.symbole}}</td>
+                           <td>{{formatMoney(quote.totalIncludeTax,quote.currency.code)}}</td>
                         </tr>
                     </tbody>
                     <tfoot>

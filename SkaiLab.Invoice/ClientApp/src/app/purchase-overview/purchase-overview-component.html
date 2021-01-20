@@ -17,7 +17,7 @@
         </div>
         <div class="row" *ngIf="billOverviews.length==0">
             <div class="col-md-12 col-sm-12">
-                <loading-component *ngIf="billOverviews.length==0"></loading-component>
+                <loading-static-position-component *ngIf="billOverviews.length==0"></loading-static-position-component>
             </div>
         </div>
         <div class="row">
@@ -46,7 +46,7 @@
             <a [routerLink]='["/order"]'>{{ 'textTranslate.purchaseorders' | translate }}</a>
             <div class="row" *ngIf="purchaseOverviews.length==0">
                 <div class="col-md-12 col-sm-12">
-                    <loading-component *ngIf="purchaseOverviews.length==0"></loading-component>
+                    <loading-static-position-component *ngIf="purchaseOverviews.length==0"></loading-static-position-component>
                 </div>
             </div>
             <div class="row">

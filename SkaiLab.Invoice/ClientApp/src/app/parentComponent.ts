@@ -70,6 +70,9 @@ export class ParentComponent {
     isKhmer():boolean{
         return Utility.isKhmer();
     }
+    formatMoney(value:number,currencyCode:string):string{
+        return Utility.formatMoney(value,currencyCode);
+    }
     showErrorTexts(errrorText: string[]) {
         let d = document;
         if (d.getElementById("modalContainer")) {

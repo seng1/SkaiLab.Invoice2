@@ -49,6 +49,10 @@ export class Utility {
         }
         return false;
     }
+    static formatMoney(value:number,currencyCode:string):string{
+        
+        return​​​ currencyCode+ " "+ new Intl.NumberFormat(undefined,{ minimumFractionDigits: 2 }).format(value)
+    }
     static getBillDateTypeFilter(): DateTypeFilter[] {
         let result: DateTypeFilter[] = [];
         if (this.isKhmer()) {

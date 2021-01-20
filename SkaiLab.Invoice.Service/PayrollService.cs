@@ -477,7 +477,7 @@ namespace SkaiLab.Invoice.Service
         public void CreatePayroll(PayrollMonthNoneTax payrollNoneTax, string organisationId, string month)
         {
             using var context = Context();
-            if (!context.Organisation.FirstOrDefault(u => u.Id == organisationId).DeclareTax)
+            if (context.Organisation.FirstOrDefault(u => u.Id == organisationId).DeclareTax)
             {
                 throw new Exception("This organisation is declare tax");
             }

@@ -150,24 +150,36 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-md-3 col-sm-12">
                         <div class="form-group">
                             <label for="contactName1">{{ 'textTranslate.contactName' | translate }}</label>
                             <input type="text" class="form-control" name="contactName"
                                 [(ngModel)]="organisation.contact.contactName" #contactName1="ngModel" />
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-md-3 col-sm-12">
                         <div class="form-group">
                             <label for="phoneNumber1">{{ 'textTranslate.phoneNumber' | translate }}</label>
                             <input type="text" class="form-control" name="phoneNumber1"
                                 [(ngModel)]="organisation.contact.phoneNumber" #phoneNumber1="ngModel" />
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-md-3 col-sm-12">
                         <label for="email1">{{ 'textTranslate.email' | translate }}</label>
-                        <input type="text" class="form-control" name="email1" [(ngModel)]="organisation.contact.email"
-                            #email1="ngModel" />
+                        <input type="text" class="form-control" name="email1" [(ngModel)]="organisation.contact.email" #email1="ngModel"
+                        [ngClass]="{ 'is-invalid': f.submitted && email1.invalid }" email
+                         />
+                         <div *ngIf="email1.invalid" class="invalid-feedback">
+                            <div *ngIf="email1.errors?.email">{{ 'textTranslate.emailNotValid' | translate }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <label for="website1">{{ 'textTranslate.website' | translate }}</label>
+                        <input type="text" class="form-control" name="website1" [(ngModel)]="organisation.contact.website" #website1="ngModel"
+                        [ngClass]="{ 'is-invalid': f.submitted && website1.invalid }" url />
+                        <div *ngIf="website1.invalid" class="invalid-feedback">
+                            <div *ngIf="website1.errors?.url">{{ 'textTranslate.websiteNotValid' | translate }}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
